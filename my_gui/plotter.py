@@ -17,6 +17,8 @@ ani = None
 class PlotFrame(tkinter.Frame):
     """"""
 
+    TAB_PALETTE = ['tab:blue', 'tab:orange', 'tab:green']
+
     def __init__(self, parent, database, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
@@ -110,7 +112,7 @@ class PlotFrame(tkinter.Frame):
         self.btn_start.pack(side=tkinter.LEFT)
         self.btn_stop.pack(side=tkinter.LEFT)
 
-        self.fig = Figure(figsize=(10, 5), dpi=100)
+        self.fig = Figure(figsize=(10, 8))#
 
         self.plots = {
             'batt': {
@@ -301,7 +303,7 @@ class PlotFrame(tkinter.Frame):
             self.updateables.extend(ext)
             idx = idx + increment
 
-        self.fig.tight_layout(pad=1)
+        self.fig.tight_layout()
         # vert = 1
         # hor = int(len(self.plots.keys()) / vert)
         # for idx, key in enumerate(self.plots.keys()):
@@ -411,14 +413,20 @@ class PlotFrame(tkinter.Frame):
 
         self.plots[plot_key]['voltage']['axes'] = plot
 
-        lines = []
-        for line in self.plots[plot_key]['voltage']['lines'].keys():
+        animated = []
+        for idx, line in enumerate(self.plots[plot_key]['voltage']['lines'].keys()):
             self.plots[plot_key]['voltage']['lines'][line]['ax'], = plot.plot(self.datas[plot_key]['t'],
                                                                               self.datas[plot_key][line], label=
                                                                               self.plots[plot_key]['voltage']['lines'][
                                                                                   line]['label'])
 
-            lines.append(self.plots[plot_key]['voltage']['lines'][line]['ax'])
+            self.plots[plot_key]['voltage']['lines'][line]['annotation'] = self.plots[plot_key]['voltage'][
+                'axes'].annotate(
+                f'{self.datas[plot_key][line][-1]:.2f}', xy=(-49, 0), xytext=(1, 2 + idx * 10),
+                textcoords='offset points', animated=True, color=PlotFrame.TAB_PALETTE[idx], weight='heavy')
+
+            animated.append(self.plots[plot_key]['voltage']['lines'][line]['ax'])
+            animated.append(self.plots[plot_key]['voltage']['lines'][line]['annotation'])
 
         # TODO: kiszervezni a hatarertekeket
         self.plots[plot_key]['voltage']['axes'].set_ylim([0, 14])
@@ -429,7 +437,7 @@ class PlotFrame(tkinter.Frame):
         # plot.set_title(self.plots[plot]['voltage']['title'])
         # plot.legend()
 
-        return 1, lines
+        return 1, animated
 
     def update_batt(self, new_data):
         data_type = new_data['type']
@@ -450,6 +458,8 @@ class PlotFrame(tkinter.Frame):
             if line != 't':
                 # plot_dict['voltage']['lines'][line]['ax'].set_xdata(self.datas[data_type]['t'])
                 plot_dict['voltage']['lines'][line]['ax'].set_ydata(self.datas[data_type][line])
+                plot_dict['voltage']['lines'][line]['annotation'].set_text(f'{self.datas[data_type][line][-1]:.2f}')
+
 
         # plot_dict['voltage']['axes'].relim()
         # plot_dict['voltage']['axes'].autoscale_view()
@@ -467,12 +477,20 @@ class PlotFrame(tkinter.Frame):
 
         self.plots[key]['detection']['lines']['ax'] = bar_plot.bar(np.arange(0, 32, 1), [1, 0] * 16, animated=True)
 
-        lines = self.plots[key]['detection']['lines']['ax'].patches
+        animated = self.plots[key]['detection']['lines']['ax'].patches
         for i in range(1, 4):
-            self.plots[key]['position']['lines'][f'pos{i}']['ax'], = pos_plot.plot(self.datas[key]['t'],
+            line = f'pos{i}'
+            self.plots[key]['position']['lines'][line]['ax'], = pos_plot.plot(self.datas[key]['t'],
                                                                                    self.datas[key][f'pos{i}'],
                                                                                    animated=True)
-            lines.append(self.plots[key]['position']['lines'][f'pos{i}']['ax'])
+
+            self.plots[key]['position']['lines'][line]['annotation'] = self.plots[key]['position'][
+                'axes'].annotate(
+                f'{self.datas[key][line][-1]:.2f}', xy=(-49, 0), xytext=(1, 2 + (i-1) * 10),
+                textcoords='offset points', animated=True, color=PlotFrame.TAB_PALETTE[i-1], weight='heavy')
+
+            animated.append(self.plots[key]['position']['lines'][line]['ax'])
+            animated.append(self.plots[key]['position']['lines'][line]['annotation'])
             # self.plots[key]['position']['lines'][f'pos{i}']['ax']._animated=True
 
         # for bars in self.plots[key]['detection']['lines']['ax'].patches:
@@ -481,7 +499,7 @@ class PlotFrame(tkinter.Frame):
         self.plots[key]['position']['axes'].set_ylim([0, 31])
         self.plots[key]['position']['axes'].set_xlim([-self.DATAPOINT_NO + 1, 0])
 
-        return 2, lines
+        return 2, animated
 
     def update_line(self, new_data):
         data_type = new_data['type']
@@ -501,9 +519,11 @@ class PlotFrame(tkinter.Frame):
             rect.set_height(int(d))
 
         for i in range(1, 4):
-            self.datas[data_type][f'pos{i}'].append(new_data[f'pos{i}'])
-            plot_dict['position']['lines'][f'pos{i}']['ax'].set_xdata(self.datas[data_type]['t'])
-            plot_dict['position']['lines'][f'pos{i}']['ax'].set_ydata(self.datas[data_type][f'pos{i}'])
+            line = f'pos{i}'
+            self.datas[data_type][line].append(new_data[line])
+            # plot_dict['position']['lines'][f'pos{i}']['ax'].set_xdata(self.datas[data_type]['t'])
+            plot_dict['position']['lines'][line]['ax'].set_ydata(self.datas[data_type][line])
+            plot_dict['position']['lines'][line]['annotation'].set_text(f'{self.datas[data_type][line][-1]:.2f}')
 
         # plot_dict['position']['axes'].relim()
         # plot_dict['position']['axes'].autoscale_view()
@@ -541,26 +561,51 @@ class PlotFrame(tkinter.Frame):
         self.plots[key]['current']['lines']['setpoint']['ax'], = current_plot.plot(self.datas['speed']['current']['t'],
                                                                                    self.datas['speed']['current'][
                                                                                        'setpoint'])
+        self.plots[key]['current']['lines']["current"]['annotation'] = self.plots[key]['current']['axes'].annotate(
+            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -400), xytext=(1, 2), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
+        self.plots[key]['current']['lines']["setpoint"]['annotation'] = self.plots[key]['current']['axes'].annotate(
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -400), xytext=(1, 12), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
         self.plots[key]['speed']['lines']['current']['ax'], = speed_plot.plot(self.datas['speed']['speed']['t'],
                                                                               self.datas['speed']['speed']['current'])
         self.plots[key]['speed']['lines']['setpoint']['ax'], = speed_plot.plot(self.datas['speed']['speed']['t'],
                                                                                self.datas['speed']['speed']['setpoint'])
+        self.plots[key]['speed']['lines']["current"]['annotation'] = self.plots[key]['speed']['axes'].annotate(
+            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -500), xytext=(1, 2), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
+        self.plots[key]['speed']['lines']["setpoint"]['annotation'] = self.plots[key]['speed']['axes'].annotate(
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -500), xytext=(1, 12), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
         self.plots[key]['distance']['lines']['current']['ax'], = distance_plot.plot(
             self.datas['speed']['distance']['t'], self.datas['speed']['distance']['current'])
         self.plots[key]['distance']['lines']['setpoint']['ax'], = distance_plot.plot(
             self.datas['speed']['distance']['t'], self.datas['speed']['distance']['setpoint'])
+        self.plots[key]['distance']['lines']["current"]['annotation'] = self.plots[key]['distance']['axes'].annotate(
+            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, 0), xytext=(1, 2), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
+        self.plots[key]['distance']['lines']["setpoint"]['annotation'] = self.plots[key]['distance']['axes'].annotate(
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, 0), xytext=(1, 12), textcoords='offset points',
+            animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
-        lines = [self.plots[key]['current']['lines']['current']['ax'],
-                 self.plots[key]['current']['lines']['setpoint']['ax'],
-                 self.plots[key]['speed']['lines']['current']['ax'],
-                 self.plots[key]['speed']['lines']['setpoint']['ax'],
-                 self.plots[key]['distance']['lines']['current']['ax'],
-                 self.plots[key]['distance']['lines']['setpoint']['ax']
-                 ]
+        animated = [self.plots[key]['current']['lines']['current']['ax'],
+                    self.plots[key]['current']['lines']['setpoint']['ax'],
+                    self.plots[key]['speed']['lines']['current']['ax'],
+                    self.plots[key]['speed']['lines']['setpoint']['ax'],
+                    self.plots[key]['distance']['lines']['current']['ax'],
+                    self.plots[key]['distance']['lines']['setpoint']['ax'],
 
-        return 3, lines
+                    self.plots[key]['current']['lines']["current"]['annotation'],
+                    self.plots[key]['current']['lines']["setpoint"]['annotation'],
+                    self.plots[key]['speed']['lines']["current"]['annotation'],
+                    self.plots[key]['speed']['lines']["setpoint"]['annotation'],
+                    self.plots[key]['distance']['lines']["current"]['annotation'],
+                    self.plots[key]['distance']['lines']["setpoint"]['annotation']
+                    ]
+
+        return 3, animated
 
     def update_speed(self, new_data):
         data_type = new_data['type']
@@ -601,6 +646,8 @@ class PlotFrame(tkinter.Frame):
                     if line != 't':
                         # plot_dict[plot]['lines'][line]['ax'].set_xdata(self.datas[data_type][plot]['t'])
                         plot_dict[plot]['lines'][line]['ax'].set_ydata(self.datas[data_type][plot][line])
+                        plot_dict[plot]['lines'][line]['annotation'].set_text(
+                            f'{self.datas[data_type][plot][line][-1]:.2f}')
 
             # plot_dict[plot]['axes'].relim()
             # plot_dict[plot]['axes'].autoscale_view()
