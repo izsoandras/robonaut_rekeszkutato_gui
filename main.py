@@ -168,7 +168,7 @@ if __name__=="__main__":
     with open('skill_course_2021_hor.json') as f:
         point_coords = json.load(f)
 
-    image_frame = my_gui.SkillCourseFrame(param_tab, 'skill_course_2021_hor.png', point_coords, highlightthickness=0)
+    image_frame = my_gui.SkillCourseFrame(param_tab, 'skill_course_2021_hor.jpg', point_coords, highlightthickness=0)
     # param_frame.pack(side=tk.RIGHT, fill=tk.Y)
     image_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 

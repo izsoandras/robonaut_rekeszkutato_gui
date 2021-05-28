@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 import my_mqtt.navigation
 import my_mqtt.commands
 import my_mqtt.telemetry
+import multiprocessing
 from queue import Queue
 
 
@@ -35,15 +36,30 @@ class SkillCourseFrame(tk.Frame):
         self.goal_marker_color = 'gold'
         self.goal_marker_tag = 'goal'
         self.points = points
+        self.nav_data = {
+            'position': 0,
+            'next_goal': 0,
+            'last_gate': 0,
+            'orient': 1,
+            'dir':1
+        }
 
         # Create canvas with the image
-        self.canvas_img = ImageTk.PhotoImage(Image.open(image_path))
-        self.canvas = tk.Canvas(self, width=self.canvas_img.width(), height=self.canvas_img.height(),
+        self.image_path = image_path
+        self.base_img = Image.open(image_path)
+        self.base_width, self.base_height = self.base_img.size
+        self.canvas_img = ImageTk.PhotoImage(self.base_img)
+        self.canvas = tk.Canvas(self, width=self.canvas_img.width(), bg='#f0f0f0', height=self.canvas_img.height(),
                                 scrollregion=(0, 0, self.canvas_img.width(), self.canvas_img.height()))
-        self.canvas_img = ImageTk.PhotoImage(Image.open(image_path))
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.canvas_img)
+
+        self.image_id = self.canvas.create_image(0, 0, anchor=tk.NW, image=self.canvas_img)
 
         self.speed_text = self.canvas.create_text(200,40,text='Speed: 0', font='Arial 26 bold')
+        self.is_resized = True
+        self.resized_img = self.base_img
+        self.ratio = 1
+        self.prev_ratio = 1
+        self.resize_process = multiprocessing.Process()
 
         x0 = 10
         y0 = 10
@@ -92,15 +108,17 @@ class SkillCourseFrame(tk.Frame):
         self.pos_marker_sign_text = self.canvas.create_text(self.points[0][0], self.points[0][1], text='+', font='Arial 22 bold', tag='pos_sign')
 
         # Add scroll function
-        self.sb_canvasscrolly = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
-        # self.sb_canvasscrollx = tk.Scrollbar(self, orient=tk.HORIZONTAL, command=self.canvas.xview)
-        # self.canvas.configure(yscrollcommand=self.sb_canvasscrolly.set, xscrollcommand=self.sb_canvasscrollx.set)
-        self.canvas.configure(yscrollcommand=self.sb_canvasscrolly.set)
+        # self.sb_canvasscrolly = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
+        # # self.sb_canvasscrollx = tk.Scrollbar(self, orient=tk.HORIZONTAL, command=self.canvas.xview)
+        # # self.canvas.configure(yscrollcommand=self.sb_canvasscrolly.set, xscrollcommand=self.sb_canvasscrollx.set)
+        # self.canvas.configure(yscrollcommand=self.sb_canvasscrolly.set)
 
         # Build GUI
-        self.sb_canvasscrolly.pack(side=tk.RIGHT, fill=tk.Y)
+        # self.sb_canvasscrolly.pack(side=tk.RIGHT, fill=tk.Y)
         # self.sb_canvasscrollx.pack(side=tk.BOTTOM, fill=tk.X)
         self.canvas.pack(side=tk.LEFT, expand=True, fill=tk.BOTH, anchor=tk.NW)
+
+        self.bind('<Configure>', self.resizer)
 
         self.master.after(self.VIEW_UPDATE_PERIOD, self.update_vew)
 
@@ -113,6 +131,30 @@ class SkillCourseFrame(tk.Frame):
                 speed_dict = my_mqtt.telemetry.decode_telemetry(message.payload)
                 self.speed_queue.put(int(speed_dict['data']['speed_setp']))
 
+    def resizer(self, e):
+        width_rat = e.width/self.base_width
+        height_rat = e.height/self.base_height
+
+        self.ratio = min(width_rat, height_rat)
+
+        # self.canvas.delete("all")
+
+        # if self.resize_process is not None and self.resize_process.is_alive():
+        #     self.resize_process.kill()
+
+        self.resized_img = ImageTk.PhotoImage(
+            self.base_img.resize((int(self.ratio * self.base_width), int(self.ratio * self.base_height)), Image.ANTIALIAS))
+
+        self.canvas.itemconfigure( self.image_id, image=self.resized_img)
+        self.canvas_img = self.resized_img
+        self.redraw(self.nav_data)
+
+    def resize_worker(self, rat):
+
+        self.resized_img = ImageTk.PhotoImage(
+            self.base_img.resize((int(rat * self.base_width), int(rat * self.base_height)), Image.ANTIALIAS))
+
+        self.ratio = rat
 
     def update_vew(self):
         new_data = None
@@ -120,6 +162,7 @@ class SkillCourseFrame(tk.Frame):
             new_data = self.queue.get()
 
         if new_data is not None:
+            self.nav_data = new_data['data']
             self.redraw(new_data['data'])
 
         new_speed = None
@@ -128,6 +171,15 @@ class SkillCourseFrame(tk.Frame):
 
         if new_speed is not None:
             self.canvas.itemconfigure(self.speed_text, text=f'Speed: {new_speed}')
+
+        # if self.ratio != self.prev_ratio:
+        #     self.ratio = self.prev_ratio
+        #     self.resized_img = ImageTk.PhotoImage(
+        #         self.base_img.resize((int(self.ratio * self.base_width), int(self.ratio * self.base_height)),
+        #                              Image.NEAREST))
+        #
+        #     self.canvas.itemconfigure(self.image_id, image=self.resized_img)
+        #     self.canvas_img = self.resized_img
 
         self.master.after(self.VIEW_UPDATE_PERIOD, self.update_vew)
 
@@ -138,9 +190,9 @@ class SkillCourseFrame(tk.Frame):
 
         pos_last = self.canvas.coords(self.pos_marker)  # (x0, y0, x1, y1) tuple
 
-        self.move_obj(self.points[pos_idx], self.pos_marker_rad, self.pos_marker_tag)
-        self.move_obj(self.points[goal_idx], self.goal_marker_rad, self.goal_marker_tag)
-        self.move_obj(self.points[last_gate_idx], self.last_gate_marker_rad, self.last_gate_marker_tag)
+        self.move_obj([self.ratio * i for i in self.points[pos_idx]], self.ratio * self.pos_marker_rad, self.pos_marker_tag)
+        self.move_obj([self.ratio * i for i in self.points[goal_idx]], self.ratio * self.goal_marker_rad, self.goal_marker_tag)
+        self.move_obj([self.ratio * i for i in self.points[last_gate_idx]], self.ratio * self.last_gate_marker_rad, self.last_gate_marker_tag)
 
         pos_new = self.canvas.coords(self.pos_marker)  # (x0, y0, x1, y1) tuple
 
@@ -175,7 +227,7 @@ class SkillCourseFrame(tk.Frame):
             else:
                 self.canvas.itemconfigure(line, fill=self.dir_non_color)
 
-    def move_obj(self, center: tuple, radius, tag):
+    def move_obj(self, center, radius, tag):
         x0 = center[0] - radius
         y0 = center[1] - radius
         x1 = center[0] + radius
