@@ -9,6 +9,7 @@ import my_mqtt.log
 import my_mqtt.telemetry
 import my_mqtt.commands
 import my_mqtt.navigation
+import os
 
 
 def run(period_sec):
@@ -20,7 +21,8 @@ def run(period_sec):
     # connect(host, port=1883, keepalive=60, bind_address="")
     client.connect('localhost')
 
-    with open('skill_course _routes.json') as course_file:
+    
+    with open('assets/skill_course_routes.json') as course_file:
         course_dict = json.load(course_file)
 
     det_idx = 1

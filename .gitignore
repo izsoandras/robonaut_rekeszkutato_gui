@@ -1,5 +1,5 @@
 # My ignores
-ignore/*
+ignore/
 robot.log
 conf.json
 parameters.json

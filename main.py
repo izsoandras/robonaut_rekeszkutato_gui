@@ -22,6 +22,7 @@ LOGFIELD_LINE_NUM_BASE = 13
 LOGFIELD_LINE_NUM_DIAGRAM = 6
 
 root = tk.Tk()
+
 tabs = None
 plot_tab = None
 
@@ -145,6 +146,7 @@ if __name__=="__main__":
     #
     # Build GUI                                                            # Main window
     root.title('RKI RobonAUT Diagnostics')
+    root.iconbitmap("assets/icon.ico")
 
     # Emergency stop
     btn_emergency = tk.Button(master=root, text="EMERGENCY STOP", command=emergency_stop, bg='red')
@@ -165,10 +167,10 @@ if __name__=="__main__":
     param_tab = tk.Frame(tabs)              # Parameter change tab
     # param_frame = my_gui.SetParamsFrame(param_tab)
 
-    with open('skill_course_2021_hor.json') as f:
+    with open('assets/skill_course_2021_hor.json') as f:
         point_coords = json.load(f)
 
-    image_frame = my_gui.SkillCourseFrame(param_tab, 'skill_course_2021_hor.jpg', point_coords, highlightthickness=0)
+    image_frame = my_gui.SkillCourseFrame(param_tab, 'assets/skill_course_2021_hor.jpg', point_coords, highlightthickness=0)
     # param_frame.pack(side=tk.RIGHT, fill=tk.Y)
     image_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 
