@@ -36,9 +36,11 @@ jobs:
       - name: Run a multi-line script
         run: |
           ls -a
+          ls -a dist
+          ls -a dist/windows/RKID
           
       - name: Create zip
-        run:  zip -r RKID.zip ./dist/RKID
+        run:  zip -r RKID.zip ./dist/windows/RKID
         
       - name: Get date
         run: echo "MY_DATE=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
