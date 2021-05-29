@@ -1,0 +1,10 @@
+{
+  "enable_test_source": true,
+
+  "mqtt_host": "localhost",
+  "mqtt_user": "rekesz",
+  "mqtt_pwd": "12345678",
+
+  "database_host": "localhost",
+  "database_name": "testdb"
+}

@@ -1,7 +1,7 @@
 # My ignores
 ignore/
 robot.log
-conf.json
+#conf.json
 parameters.json
 build/
 dist/
@@ -40,8 +40,7 @@ MANIFEST
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-#*.spec
+#*.manifest
 
 # Installer logs
 pip-log.txt
