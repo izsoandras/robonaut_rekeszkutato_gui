@@ -1,7 +1,7 @@
 # My ignores
 ignore/
 robot.log
-#conf.json
+conf.json
 parameters.json
 build/
 dist/
