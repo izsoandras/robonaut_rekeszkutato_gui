@@ -3,3 +3,4 @@ tk
 paho-mqtt
 influxdb
 matplotlib
+tornado
