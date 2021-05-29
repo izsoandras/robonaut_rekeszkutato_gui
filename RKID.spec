@@ -5,9 +5,9 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\Tarsoly\\Programming\\Python\\robonaut_rekeszkutato_gui'],
+             pathex=['/home/runner/work/robonaut_rekeszkutato_gui/robonaut_rekeszkutato_gui'],
              binaries=[],
-             datas=[('./assets', 'assets/'), ('./conf.json', '.')],
+             datas=[('.\\assets', 'assets/'), ('\\conf.json', '.')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
