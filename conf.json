@@ -1,7 +1,6 @@
 {
   "enable_test_source": false,
 
-  "balage":  "91.82.173.39",
   "mqtt_host": "localhost",
   "mqtt_user": "rekesz",
   "mqtt_pwd": "12345678",
