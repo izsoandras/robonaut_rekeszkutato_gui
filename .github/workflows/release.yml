@@ -43,7 +43,7 @@ jobs:
         run:  zip -r RKID.zip ./dist/windows/RKID
         
       - name: Get date
-        run: echo "MY_DATE=$(date +%Y_%m_%d_%H:%M)" >> $GITHUB_ENV
+        run: echo "MY_DATE=$(date +%Y_%m_%d_%H%M)" >> $GITHUB_ENV
         
       - name: Create release
         uses: ncipollo/release-action@v1
