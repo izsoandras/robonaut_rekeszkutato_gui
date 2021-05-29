@@ -1,5 +1,5 @@
- pip install pillow
- pip install tk
- pip install paho-mqtt
- pip install influxdb
- pip install matplotlib
+pillow
+tk
+paho-mqtt
+influxdb
+matplotlib
