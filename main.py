@@ -12,6 +12,7 @@ import my_mqtt.commands
 from my_mqtt.testing import test_source
 
 import logging
+import os
 
 ENABLE_TEST_SOURCE = False
 
@@ -96,6 +97,9 @@ def on_tab_change(event):
 
 
 if __name__=="__main__":
+    # args_parser = argparse.ArgumentParser()
+    # args_parser.add_argument("--develop", help="Develop mode", action="store_true")
+    # args = args_parser.parse_args()
 
     logger = logging.getLogger('robotlog')
     logger.setLevel(logging.DEBUG)
@@ -191,12 +195,14 @@ if __name__=="__main__":
     logger.info('GUI set up')
 
     # Start test source
-    if ENABLE_TEST_SOURCE:
-        test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
-        test_producer_process.start()
-        logger.info('Test source started')
-    else:
-        logger.info('Test source disabled')
+    # if args.develop:
+    if os.environ.get('RKID_DEVELOP') == '1':
+        if ENABLE_TEST_SOURCE:
+            test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
+            test_producer_process.start()
+            logger.info('Test source started')
+        else:
+            logger.info('Test source disabled')
 
     logger.info('-------SETUP COMPLETE----------')
 

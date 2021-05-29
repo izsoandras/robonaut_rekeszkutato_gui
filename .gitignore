@@ -5,6 +5,8 @@ conf.json
 parameters.json
 build/
 dist/
+design/
+release/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

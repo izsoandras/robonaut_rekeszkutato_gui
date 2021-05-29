@@ -4,7 +4,7 @@ import paho.mqtt.client as mqtt
 import my_mqtt.navigation
 import my_mqtt.commands
 import my_mqtt.telemetry
-import multiprocessing
+
 from queue import Queue
 
 
@@ -59,7 +59,6 @@ class SkillCourseFrame(tk.Frame):
         self.resized_img = self.base_img
         self.ratio = 1
         self.prev_ratio = 1
-        self.resize_process = multiprocessing.Process()
 
         x0 = 10
         y0 = 10

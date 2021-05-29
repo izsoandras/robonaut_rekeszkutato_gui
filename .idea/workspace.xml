@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="18fbb476-96a5-456a-a1dd-eb7280696398" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/design/desktop_app.mdj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_gui/coursedisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_gui/coursedisplay.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_mqtt/testing/test_source.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_mqtt/testing/test_source.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -85,6 +86,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="RKID_DEVELOP" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -114,7 +116,7 @@
       <option name="presentableId" value="Default" />
       <updated>1612791161672</updated>
       <workItem from="1612791172752" duration="7485000" />
-      <workItem from="1622202408399" duration="21959000" />
+      <workItem from="1622202408399" duration="28063000" />
     </task>
     <servers />
   </component>
@@ -187,14 +189,14 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/my_gui/coursedisplay.py</url>
-          <line>186</line>
+          <line>185</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1622285210021" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1622293143028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/desktop_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1612826469039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/desktop_gui$matplotlib_in_tk_example.coverage" NAME="matplotlib_in_tk_example Coverage Results" MODIFIED="1603108689631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

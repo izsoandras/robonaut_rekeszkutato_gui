@@ -21,7 +21,7 @@ def run(period_sec):
     # connect(host, port=1883, keepalive=60, bind_address="")
     client.connect('localhost')
 
-    
+
     with open('assets/skill_course_routes.json') as course_file:
         course_dict = json.load(course_file)
 
