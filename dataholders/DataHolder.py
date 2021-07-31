@@ -3,6 +3,8 @@ import abc
 
 
 class DataHolder(metaclass=abc.ABCMeta):
+    IDX = 'idx'
+
     def __init__(self, fields, size, views=None):
         if views is None:
             views = []
