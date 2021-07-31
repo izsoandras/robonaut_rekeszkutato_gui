@@ -43,6 +43,7 @@ class DataHolder(metaclass=abc.ABCMeta):
         if all(key in self.fields for key in newData.keys()):
             if all(field in list(newData.keys()) for field in self.fields):
                 self.queue.put(newData)
+                self.hasNew = True
             else:
                 raise KeyError(
                     f'NewData does not have every key from fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
