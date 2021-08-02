@@ -34,6 +34,8 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
         msg_type, payload = self.msg_coder.deconstruct_message(message)
         data = self.payload_coders[msg_type].decode(payload)
 
+        self.logger.debug(f'Message received in {client} on topic {message.topic}: {str(message.payload)}')
+
         if self.dataholders is not None:
             self.dataholders[msg_type].pushData(data)
 
