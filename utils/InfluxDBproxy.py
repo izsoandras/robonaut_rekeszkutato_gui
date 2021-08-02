@@ -1,5 +1,8 @@
 from influxdb import InfluxDBClient
 import requests
+import time
+import threading
+import logging
 
 
 class InfluxDBproxy:
@@ -16,12 +19,29 @@ class InfluxDBproxy:
         # switch to database
         self.database.switch_database(dbname)
 
+        self.logger = logging.getLogger('DBproxy')
+        self.logger.setLevel(logging.DEBUG)
+        self.checkThread = threading.Thread(target=self.check_loop)
+        self.checkThread.start()
+
     def check_connection(self):
         try:
             self.database.ping()
+            if not self.isConnected:
+                self.logger.warning('Connected to database')
+
+            self.isConnected = True
             return True
         except requests.exceptions.ConnectTimeout:
+            if self.isConnected:
+                self.logger.warning('Disconnected from database')
+
+            self.isConnected = False
             return False
+
+    def check_loop(self):
+        self.check_connection()
+        time.sleep(3)
 
     def save_data(self, data: dict):
         name = data.pop('name')
