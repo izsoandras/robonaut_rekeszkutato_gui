@@ -1,8 +1,7 @@
 import struct
-from my_mqtt.background_coders import construct_message
 
 
-class MessageCoder:
+class PayloadCoder:
     def __init__(self, name: str, typebyte: int, format: str, names: list, factors: list = None):
 
         try:
@@ -45,10 +44,10 @@ class MessageCoder:
         values = [data[key] for key in self.names]
         payload = struct.pack(self.bytesFormat, *values)
 
-        return construct_message(self.typebyte, payload)
+        return payload
 
-    def decode(self, data_bytes):
-        fields = struct.unpack(self.bytesFormat, data_bytes)
+    def decode(self, payload):
+        fields = struct.unpack(self.bytesFormat, payload)
 
         ret = {}
         for idx, key in enumerate(self.names):
