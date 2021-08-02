@@ -1,10 +1,11 @@
 import paho.mqtt.client as mqtt
 import abc
 import my_mqtt.general
+import logging
 
 
 class MyMQTTlistener(metaclass=abc.ABCMeta):
-    def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None, dataholders: dict = None):
+    def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None, loggername:str = None, dataholders: dict = None):
         self.mqtt_client = mqtt.Client(name)
         self.mqtt_client.on_message = self.on_message
         if username is not None and pwd is not None:
@@ -18,6 +19,9 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
         self.msg_coder = my_mqtt.general.RKIMessageCoder()
         self.payload_coders = None
         self.build_coders(msg_recipes)
+
+        self.logger = logging.getLogger(name)
+        self.logger.setLevel(logging.DEBUG)
 
     def build_coders(self, msg_recipes):
         coders = {}
