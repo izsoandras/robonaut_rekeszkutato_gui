@@ -2,22 +2,22 @@ import struct
 
 
 class PayloadCoder:
-    def __init__(self, name: str, typebyte: int, format: str, names: list, factors: list = None):
+    def __init__(self, name: str, type: int, format: str, field_names: list, factors: list = None):
 
         try:
-            self.checkPattern(name, typebyte, format, names)
+            self.checkPattern(name, type, format, field_names)
         except AssertionError as ae:
             raise ae
 
         self.name = name
-        self.typebyte = typebyte
+        self.typebyte = type
         self.bytesFormat = format
-        self.names = names
+        self.field_names = field_names
 
         if factors is not None:
             self.factors = factors
         else:
-            self.factors = [1] * len(names)
+            self.factors = [1] * len(field_names)
 
     @staticmethod
     def checkPattern(name, typebyte, format, names):
@@ -37,11 +37,11 @@ class PayloadCoder:
             raise AssertionError(f'Pattern {name} does not have enough byte fields given!')
 
     def encode(self, data: dict):
-        excludes = [key for key in self.names if key not in data.keys()]
+        excludes = [key for key in self.field_names if key not in data.keys()]
         if len(excludes) > 0:
             raise KeyError(f'The following fields are missing from the passed {self.name} dictionary: {excludes}')
 
-        values = [data[key] for key in self.names]
+        values = [data[key] for key in self.field_names]
         payload = struct.pack(self.bytesFormat, *values)
 
         return payload
@@ -50,8 +50,9 @@ class PayloadCoder:
         fields = struct.unpack(self.bytesFormat, payload)
 
         ret = {}
-        for idx, key in enumerate(self.names):
+        for idx, key in enumerate(self.field_names):
             ret[key] = fields[idx] * self.factors[idx]
 
+        ret['name'] = self.name
         return ret
 
