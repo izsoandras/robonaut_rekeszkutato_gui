@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation
 import matplotlib.pyplot
 import LineDiagram
+import CompassDiagram
 
 
 class PlotsFrame(tkinter.Frame):
@@ -22,8 +23,13 @@ class PlotsFrame(tkinter.Frame):
         for idx in range(layout[0] * layout[1]):
             if idx < rec_num:
                 plot_rec = recipe['plots'][idx]  # TODO: kiszervezni
-                axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
-                new_plot = LineDiagram.LineDiagram(axes, dataholders, plot_rec)
+                if plot_rec['type'] == 'compass':  # TODO: kiszervezni
+                    axes = self.fig.add_subplot(layout[0], layout[1], idx+1, projection='polar')
+                    new_plot = CompassDiagram.CompassDiagram(axes, dataholders, plot_rec)
+                else:
+                    axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
+                    new_plot = LineDiagram.LineDiagram(axes, dataholders, plot_rec)
+
                 self.plots.append(new_plot)
 
         self.fig.tight_layout()
