@@ -38,7 +38,7 @@
 
     - name: imu
       type: 0x0E
-      format: 'ff'
+      format: '>ff'
       fields: [heading, heading_setp]
 
 - name: param

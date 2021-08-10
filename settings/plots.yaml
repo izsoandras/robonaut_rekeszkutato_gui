@@ -89,12 +89,11 @@ plots:
         legend: 'setpoint'
 
   - title: 'Orientation'
-    type: polar_series
-    ylim:
+    type: compass
     lines:
-      - message: orientation
-        field: orientation
+      - message: imu
+        field: heading
         legend: 'actual'
-      - message: orientation
-        field: orientation_setp
+      - message: imu
+        field: heading_setp
         legend: 'setpoint'
