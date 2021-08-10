@@ -53,7 +53,7 @@ class LineDiagram:
                                                                               weight='heavy')
 
         if has_legend:
-            self.axes.legend()
+            self.axes.legend(loc='upper left', fontsize='x-small')
 
         self.animated = list(self.axs.values()) + list(self.annots.values())
 
