@@ -2,22 +2,22 @@ import struct
 
 
 class PayloadCoder:
-    def __init__(self, name: str, type: int, format: str, field_names: list, factors: list = None):
+    def __init__(self, name: str, type: int, format: str, fields: list, factors: list = None):
 
         try:
-            self.checkPattern(name, type, format, field_names)
+            self.checkPattern(name, type, format, fields)
         except AssertionError as ae:
             raise ae
 
         self.name = name
         self.typebyte = type
         self.bytesFormat = format
-        self.field_names = field_names
+        self.field_names = fields
 
         if factors is not None:
             self.factors = factors
         else:
-            self.factors = [1] * len(field_names)
+            self.factors = [1] * len(fields)
 
     @staticmethod
     def checkPattern(name, typebyte, format, names):

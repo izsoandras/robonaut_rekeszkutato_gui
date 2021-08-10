@@ -26,7 +26,7 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
     def build_coders(self, msg_recipes):
         coders = {}
         for recipe in msg_recipes:
-            coders[recipe[type]] = my_mqtt.general.PayloadCoder(**recipe)
+            coders[recipe['type']] = my_mqtt.general.PayloadCoder(**recipe) # TODO: ne literal legyen
 
         self.payload_coders = coders
 

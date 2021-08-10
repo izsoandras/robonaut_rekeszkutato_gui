@@ -8,16 +8,10 @@ import logging
 class InfluxDBproxy:
     def __init__(self, dbhost: str, dbname: str, measurement_prefix: str):
         self.database = InfluxDBClient(dbhost, timeout=1, retries=1)
+        self.dbname = dbname
         self.prefix = measurement_prefix
         self.isConnected = False
-
-        dbs = self.database.get_list_database()
-        # create database if not exists
-        if not {'name': dbname} in dbs:
-            self.database.create_database(dbname)
-
-        # switch to database
-        self.database.switch_database(dbname)
+        self.isChecked = False
 
         self.logger = logging.getLogger('DBproxy')
         self.logger.setLevel(logging.DEBUG)
@@ -40,8 +34,23 @@ class InfluxDBproxy:
             return False
 
     def check_loop(self):
-        self.check_connection()
+        prev_status = self.isChecked
+        new_status = self.check_connection()
+
+        if not prev_status and new_status:
+            self.prepare_db()
+
         time.sleep(3)
+
+    def prepare_db(self):
+        dbs = self.database.get_list_database()
+        # create database if not exists
+        if not {'name': self.dbname} in dbs:
+            self.database.create_database(self.dbname)
+
+        # switch to database
+        self.database.switch_database(self.dbname)
+        self.isChecked = True
 
     def save_data(self, data: dict):
         name = data.pop('name')
@@ -56,6 +65,8 @@ class InfluxDBproxy:
                 self.database.write_points(db_json)
                 return True
             except requests.exceptions.ConnectTimeout:
+                self.isChecked = False
+                self.logger.warning('Connection lost to DB')
                 return False
         else:
             return False
