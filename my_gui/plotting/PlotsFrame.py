@@ -5,6 +5,7 @@ import matplotlib.animation
 import matplotlib.pyplot
 import LineDiagram
 import CompassDiagram
+import BarDiagram
 
 
 class PlotsFrame(tkinter.Frame):
@@ -26,6 +27,9 @@ class PlotsFrame(tkinter.Frame):
                 if plot_rec['type'] == 'compass':  # TODO: kiszervezni
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1, projection='polar')
                     new_plot = CompassDiagram.CompassDiagram(axes, dataholders, plot_rec)
+                elif plot_rec['type'] == 'bar':
+                    axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
+                    new_plot = BarDiagram.BarDiagram(axes, dataholders, plot_rec)
                 else:
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
                     new_plot = LineDiagram.LineDiagram(axes, dataholders, plot_rec)

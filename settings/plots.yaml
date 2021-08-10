@@ -27,12 +27,12 @@ plots:
         field: pos3
 
   - title: 'Front line detection'
-    type: fixed
-    ylim: [0, 1]
+    type: bar
+    ylim: [0, 20]
     bins: 32
     lines:
       - message: 'front_line'
-        field: detect
+        field: pos1
 
   - title: 'Back line position'
     type: series
@@ -48,7 +48,7 @@ plots:
         field: pos3
 
   - title: 'Back line detection'
-    type: fixed
+    type: bar
     ylim: [0, 1]
     bins: 32
     lines:
