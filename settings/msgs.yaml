@@ -1,28 +1,73 @@
+### MQTT topics and message types
+# <topic_name>:
+#   <message_name>:
+#     type: <type_byte>
+#     format: '<message_fields_format_string>' # https://docs.python.org/3/library/struct.html
+#     names: [<field_names>, ...]
+#   [...]
+# [...]
+
+- name: log
+  messages:
+    - name: log
+      type: 0x00
+      prefixes: [INFO, ERR, WARN]
+
 - name: tel
-  broker: 'localhost'
   messages:
     - name: batt
       type: 0x01
       format: '>HH'
-      names: [aux, mot]
+      fields: [aux, mot]
       factors: [209/45500, 209/45500]
 
     - name: front_line
       type: 0x02
       format: '>IBfff'
-      names: [detect, num, pos1, pos2, pos3]
+      fields: [detect, num, pos1, pos2, pos3]
 
     - name: back_line
       type: 0x02
       format: '>IBfff'
-      names: [ detect, num, pos1, pos2, pos3 ]
+      fields: [ detect, num, pos1, pos2, pos3 ]
 
     - name: speed
       type: 0x04
       format: '>HffffII'
-      names: [duty, current, current_setp, speed, speed_setp, distance, distance_setp]
+      fields: [duty, current, current_setp, speed, speed_setp, distance, distance_setp]
 
     - name: imu
       type: 0x0E
       format: 'ff'
-      names: [heading, heading_setp]
+      fields: [heading, heading_setp]
+
+- name: param
+  messages:
+    - name: servo_cal
+      type: 0x06
+      format: '>H>H>H>H'
+      fields: [center1, center2, delta1, delta2]
+    - name: current_setp
+      type: 0x07
+      format: 'f'
+      fields: [current_setp]
+    - name: speed_setp
+      type: 0x08
+      format: 'f'
+      fields: [speed_setp]
+    - name: line_param
+      type: 0x09
+      format: 'fff'
+      fields: [kszi, d0, dv]
+    - name: start
+      type: 0x0A
+      format: ''
+      fields: []
+    - name: stop
+      type: 0x0B
+      format: ''
+      fields: []
+    - name: gate
+      type: 0x0C
+      format: 'c'
+      fields: [gate]
