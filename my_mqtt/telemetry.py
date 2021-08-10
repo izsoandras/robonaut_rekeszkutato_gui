@@ -253,8 +253,8 @@ def encode_orientation(orientation_dict):
 
     orientation_dict = orientation_dict['data']
 
-    ori = struct.pack('f', orientation_dict['orientation'])
-    ori_setp = struct.pack('f', orientation_dict['orientation_setp'])
+    ori = struct.pack('>f', orientation_dict['orientation'])
+    ori_setp = struct.pack('>f', orientation_dict['orientation_setp'])
 
     data = my_mqtt.background_coders.concat_fields(ori, ori_setp)
 
