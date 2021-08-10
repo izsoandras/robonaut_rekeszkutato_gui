@@ -1,0 +1,28 @@
+- name: tel
+  broker: 'localhost'
+  messages:
+    - name: batt
+      type: 0x01
+      format: '>HH'
+      names: [aux, mot]
+      factors: [209/45500, 209/45500]
+
+    - name: front_line
+      type: 0x02
+      format: '>IBfff'
+      names: [detect, num, pos1, pos2, pos3]
+
+    - name: back_line
+      type: 0x02
+      format: '>IBfff'
+      names: [ detect, num, pos1, pos2, pos3 ]
+
+    - name: speed
+      type: 0x04
+      format: '>HffffII'
+      names: [duty, current, current_setp, speed, speed_setp, distance, distance_setp]
+
+    - name: imu
+      type: 0x0E
+      format: 'ff'
+      names: [heading, heading_setp]
