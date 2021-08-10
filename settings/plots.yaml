@@ -17,7 +17,7 @@ plots:
 
   - title: 'Front line position'
     type: series
-    ylim:
+    ylim: [0, 31]
     lines:
       - message: 'front_line'
         field: pos1
@@ -36,7 +36,7 @@ plots:
 
   - title: 'Back line position'
     type: series
-    ylim:
+    ylim: [0, 31]
     lines:
       - message: 'back_line'
         field: pos1
@@ -57,7 +57,7 @@ plots:
 
   - title: 'Motor current'
     type: series
-    ylim:
+    ylim: [-400, 400]
     lines:
       - message: speed
         field: current
@@ -68,7 +68,7 @@ plots:
 
   - title: 'Speed'
     type: series
-    ylim:
+    ylim: [-500, 2000]
     lines:
       - message: speed
         field: speed
@@ -79,7 +79,7 @@ plots:
 
   - title: 'Distance'
     type: series
-    ylim:
+    ylim: [0, 2000]
     lines:
       - message: speed
         field: distance

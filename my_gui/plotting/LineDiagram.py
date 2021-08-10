@@ -58,12 +58,9 @@ class LineDiagram:
         self.animated = list(self.axs.values()) + list(self.annots.values())
 
     def update_view(self):
-        if self.dataholder.hasNew:
-            for key in self.axs.keys():
-                data = self.dataholder.getData(key)
-                self.axs[key].set_ydata(data)
-                self.annots[key].set_text(f'{data[-1]:.2f}')
+        for key in self.axs.keys():
+            data = self.dataholder.getData(key)
+            self.axs[key].set_ydata(data)
+            self.annots[key].set_text(f'{data[-1]:.2f}')
 
-            return self.animated
-        else:
-            return []
+        return self.animated

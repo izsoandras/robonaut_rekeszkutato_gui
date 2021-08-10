@@ -19,7 +19,7 @@
       type: 0x01
       format: '>HH'
       fields: [aux, mot]
-      factors: [209/45500, 209/45500]
+      factors: [0.0045934065934066, 0.0045934065934066] # [209/45500, 209/45500]
 
     - name: front_line
       type: 0x02
@@ -27,7 +27,7 @@
       fields: [detect, num, pos1, pos2, pos3]
 
     - name: back_line
-      type: 0x02
+      type: 0x03
       format: '>IBfff'
       fields: [ detect, num, pos1, pos2, pos3 ]
 

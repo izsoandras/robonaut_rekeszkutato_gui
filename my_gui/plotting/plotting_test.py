@@ -2,16 +2,29 @@ import unittest
 import tkinter
 from utils.telemetry_factory import build_plot_env_from_file
 from utils.InfluxDBproxy import InfluxDBproxy
+import multiprocessing
+from my_mqtt.testing_tools import test_source
 
 
 class MyTestCase(unittest.TestCase):
-    def test_view(self):
-        root = tkinter.Tk()
-        proxy = InfluxDBproxy('localhost','test','plot_test_')
-        listener, frame = build_plot_env_from_file( '../../settings/mqtt.yaml', '../../settings/msgs.yaml', '../../settings/plots.yaml', proxy, root)
+    def setUp(self):
+        self.root = tkinter.Tk()
+        self.proxy = InfluxDBproxy('localhost', 'test', 'plot_test_')
+        self.listener, self.frame = build_plot_env_from_file('../../settings/mqtt.yaml', '../../settings/msgs.yaml',
+                                                   '../../settings/plots.yaml', self.proxy, self.root)
 
-        frame.pack()
-        root.mainloop()
+
+        self.frame.pack()
+
+    def test_view_static(self):
+        self.root.mainloop()
+
+    def test_view_dynamic(self):
+        self.listener.subscribe()
+        test_producer_process = multiprocessing.Process(target=test_source.run, args=(1,))
+        test_producer_process.start()
+
+        self.root.mainloop()
 
 
 if __name__ == '__main__':

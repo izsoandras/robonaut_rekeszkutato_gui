@@ -38,7 +38,7 @@ class RKIMessageCoder:
     def deconstruct_message(msg):
         RKIMessageCoder.validate_message(msg)
 
-        type = msg[0]
+        type = msg[1]
         payload = msg[2:]
         return type, payload
 
@@ -46,7 +46,7 @@ class RKIMessageCoder:
     def validate_message(msg):
         if len(msg) < 2:
             raise ValueError('Too few fields in message; ')
-        elif msg[1] >= 0xAA:
+        elif msg[0] >= 0xAA:
             raise ValueError('Length field is over 0xAA; ')
         elif len(msg) - 2 != msg[0]:
             raise ValueError('Length field does not match with data field length: ' + str(len(msg) - 2) + ' != ' + str(

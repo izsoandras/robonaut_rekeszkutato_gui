@@ -46,7 +46,7 @@ class DataHolder(metaclass=abc.ABCMeta):
                 return None
 
     def pushData(self, newData: dict):
-
+        del newData['name']  # TODO: remove literal
         if all(key in self.fields for key in newData.keys()):
             if all(field in list(newData.keys()) for field in self.fields):
                 self.queue.put(newData)
