@@ -2,6 +2,7 @@ import yaml
 from my_gui.plotting.PlotsFrame import PlotsFrame
 from my_mqtt.listeners.DatabaseSaveListener import DatabbaseSaveListener
 from dataholders.SeriesDataHolder import SeriesDataHolder
+from dataholders.FixedDataholder import FixedDataholder
 
 
 def build_plot_env_from_file(mqtt_data_path, msg_recipes_path, plot_recipes_path, db_proxy, parent, *args, **kwargs):
@@ -17,7 +18,7 @@ def build_plot_env_from_file(mqtt_data_path, msg_recipes_path, plot_recipes_path
     dh_by_type = {}
     dh_by_name = {}
     for msg in msg_rec['messages']:  # TODO: kiszervezni
-        new_dh = SeriesDataHolder(msg['name'], msg['fields'], plot_rec['sample_num'])
+        new_dh = FixedDataholder(msg['name'], msg['fields'], plot_rec['sample_num'])
         dh_by_name[msg['name']] = new_dh
         dh_by_type[msg['type']] = new_dh
 

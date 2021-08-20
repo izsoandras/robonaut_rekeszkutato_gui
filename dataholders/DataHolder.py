@@ -45,18 +45,19 @@ class DataHolder(metaclass=abc.ABCMeta):
                 self.logger.warning(f'Couldn\'t find key {key}. {self.fields}')
                 return None
 
-    def pushData(self, newData: dict):
-        del newData['name']  # TODO: remove literal
-        if all(key in self.fields for key in newData.keys()):
+    def pushData(self, newData):
+        if(type(newData) is not list):
+            newDatas = [newData]
+        else:
+            newDatas = newData
+
+        for newData in newDatas:
             if all(field in list(newData.keys()) for field in self.fields):
                 self.queue.put(newData)
                 self.hasNew = True
             else:
                 raise KeyError(
                     f'NewData does not have every key from fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
-        else:
-            raise KeyError(
-                f'NewData has keys that are not in fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
 
     def alertAllViews(self):
         for view in self.views:
