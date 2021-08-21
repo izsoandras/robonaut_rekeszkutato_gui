@@ -1,15 +1,17 @@
 from .MyMQTTllistener import MyMQTTlistener
 from utils.InfluxDBproxy import InfluxDBproxy
 import logging
+import datetime
 
 
 class DatabbaseSaveListener(MyMQTTlistener):
     def __init__(self, dbproxy: InfluxDBproxy, msg_recipes: list, name: str, broker, topic: str, username: str = None,
-                 pwd: str = None, dataholders: dict = None):
+                 pwd: str = None, dataholders: dict = None, meas_friendly_name=''):
         MyMQTTlistener.__init__(self, msg_recipes, name, broker, topic, username, pwd, dataholders)
 
         self.db = dbproxy
         self.isPaused = True
+        self.meas_friendly_name = meas_friendly_name
         self.logger = logging.getLogger('DBlistener')
         self.logger.setLevel(logging.DEBUG)
 
@@ -23,5 +25,9 @@ class DatabbaseSaveListener(MyMQTTlistener):
     def pause(self):
         self.isPaused = True
 
-    def resume(self):
+    def resume(self, measurement_friendly_name=None):
+        if measurement_friendly_name is not None:
+            self.meas_friendly_name=measurement_friendly_name
+
+        self.db.prefix = f'{str(datetime.now())}_{self.meas_friendly_name}'
         self.isPaused = False
