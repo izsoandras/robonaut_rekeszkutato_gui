@@ -9,7 +9,7 @@ import BarDiagram
 
 
 class PlotsFrame(tkinter.Frame):
-    def __init__(self, dataholders, recipe, parent, diagram=BarDiagram.BarDiagram(axes, dataholders, plot_rec), *args, **kwargs):
+    def __init__(self, dataholders, recipe, parent, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
         self.fig = Figure(figsize=(10, 8))
@@ -29,7 +29,7 @@ class PlotsFrame(tkinter.Frame):
                     new_plot = CompassDiagram.CompassDiagram(axes, dataholders, plot_rec)
                 elif plot_rec['type'] == 'bar':
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
-                    new_plot = diagram
+                    new_plot = BarDiagram.BarDiagram(axes, dataholders, plot_rec)
                 else:
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
                     new_plot = LineDiagram.LineDiagram(axes, dataholders, plot_rec)
