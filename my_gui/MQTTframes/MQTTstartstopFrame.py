@@ -8,8 +8,8 @@ class MQTTstartstopFrame(tkinter.Frame):
 
         self.listener = mqtt_listener
 
-        self.btn_start = tkinter.Button(master=self, text="Start", command=self.on_btn_open)
-        self.btn_stop = tkinter.Button(master=self, text="Stop", command=self.on_btn_close, state='disabled')
+        self.btn_start = tkinter.Button(master=self, text="Sub", command=self.on_btn_open)
+        self.btn_stop = tkinter.Button(master=self, text="Unsub", command=self.on_btn_close, state='disabled')
 
         self.btn_stop.pack(side=tkinter.RIGHT)
         self.btn_start.pack(side=tkinter.RIGHT)
