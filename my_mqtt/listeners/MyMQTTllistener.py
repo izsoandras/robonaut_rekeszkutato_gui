@@ -47,7 +47,9 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
 
     def subscribe(self):
         self.mqtt_client.subscribe(self.topic)
+        self.logger.info(f'Subscribed to: {self.topic}')
 
     def unsubscribe(self):
         self.mqtt_client.unsubscribe(self.topic)
+        self.logger.info(f'Subscribed to: {self.topic}')
 
