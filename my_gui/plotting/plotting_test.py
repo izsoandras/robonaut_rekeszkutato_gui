@@ -15,12 +15,14 @@ class MyTestCase(unittest.TestCase):
                                                    '../../settings/plots.yaml', self.proxy, self.root)
 
 
-        self.frame.pack()
+
 
     def test_view_static(self):
+        self.frame.pack()
         self.root.mainloop()
 
     def test_view_dynamic(self):
+        self.frame.pack()
         self.listener.subscribe()
         test_producer_process = multiprocessing.Process(target=test_source.run, args=(1,))
         test_producer_process.start()
@@ -28,7 +30,9 @@ class MyTestCase(unittest.TestCase):
         self.root.mainloop()
 
     def test_startstop(self):
-        self.startstop = MQTTstartstopFrame(self.root,self.listener)
+        self.startstop = MQTTstartstopFrame(self.root, self.listener)
+        self.startstop.pack()
+        self.frame.pack()
         test_producer_process = multiprocessing.Process(target=test_source.run, args=(1,))
         test_producer_process.start()
 
