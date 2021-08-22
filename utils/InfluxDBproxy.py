@@ -55,7 +55,7 @@ class InfluxDBproxy:
     def save_data(self, data: dict):
         name = data.pop('name')
         db_json = [{
-            "measurement": self.prefix + name,
+            "measurement": self.prefix + '_' + name,
             "fields": data,
             "tags": {}
         }]

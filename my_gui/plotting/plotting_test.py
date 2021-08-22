@@ -5,6 +5,7 @@ from utils.InfluxDBproxy import InfluxDBproxy
 import multiprocessing
 from my_mqtt.testing_tools import test_source
 from my_gui.MQTTframes.MQTTstartstopFrame import MQTTstartstopFrame
+from my_gui.MQTTframes.MQTTdbstartstopFrame import MQTTdbStartStopFrame
 
 
 class MyTestCase(unittest.TestCase):
@@ -31,6 +32,15 @@ class MyTestCase(unittest.TestCase):
 
     def test_startstop(self):
         self.startstop = MQTTstartstopFrame(self.root, self.listener)
+        self.startstop.pack()
+        self.frame.pack()
+        test_producer_process = multiprocessing.Process(target=test_source.run, args=(1,))
+        test_producer_process.start()
+
+        self.root.mainloop()
+
+    def test_save_startstop(self):
+        self.startstop = MQTTdbStartStopFrame(self.root, self.listener)
         self.startstop.pack()
         self.frame.pack()
         test_producer_process = multiprocessing.Process(target=test_source.run, args=(1,))

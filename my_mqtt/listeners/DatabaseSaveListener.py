@@ -1,7 +1,7 @@
 from .MyMQTTllistener import MyMQTTlistener
 from utils.InfluxDBproxy import InfluxDBproxy
 import logging
-import datetime
+from datetime import datetime
 
 
 class DatabbaseSaveListener(MyMQTTlistener):
