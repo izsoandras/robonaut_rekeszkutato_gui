@@ -11,6 +11,8 @@
   messages:
     - name: log
       type: 0x00
+      format: 's'
+      fields: [msg]
       prefixes: [INFO, ERR, WARN]
 
 - name: tel

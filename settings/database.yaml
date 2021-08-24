@@ -1,0 +1,3 @@
+dbhost: localhost
+dbname: test
+measurement_prefix: ''

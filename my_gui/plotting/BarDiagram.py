@@ -1,11 +1,11 @@
 import matplotlib.pyplot
-import AbstractDiagram
+import my_gui.plotting.AbstractDiagram
 import numpy as np
 
 
-class BarDiagram(AbstractDiagram.AbstractDiagram):
+class BarDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
     def __init__(self, subplot: matplotlib.pyplot.Axes, dholders: dict, recipe: dict):
-        AbstractDiagram.AbstractDiagram.__init__(self, subplot, dholders, recipe)
+        my_gui.plotting.AbstractDiagram.AbstractDiagram.__init__(self, subplot, dholders, recipe)
         self.animated = []
         for key in self.axs.keys():
             self.animated.extend(self.axs[key].patches)
