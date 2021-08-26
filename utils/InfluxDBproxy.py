@@ -19,19 +19,18 @@ class InfluxDBproxy:
         self.checkThread.start()
 
     def check_connection(self):
-        try:
-            self.database.ping()
-            if not self.isConnected:
-                self.logger.warning('Connected to database')
+        self._perform_on_db(self.database.ping)
+        return self.isConnected
 
+    def _set_connected(self):
+        if not self.isConnected:
+            self.logger.warning('Connected to database')
             self.isConnected = True
-            return True
-        except requests.exceptions.ConnectTimeout:
-            if self.isConnected:
-                self.logger.warning('Disconnected from database')
 
+    def _set_disconnected(self):
+        if self.isConnected:
+            self.logger.warning('Disconnected from database')
             self.isConnected = False
-            return False
 
     def check_loop(self):
         prev_status = self.isChecked
@@ -71,3 +70,30 @@ class InfluxDBproxy:
         else:
             return False
 
+    def get_list_measurements(self):
+        if self.isConnected:
+            measurements = self._perform_on_db(self.database.get_list_measurements)
+
+            names = []
+            for measurement in measurements:
+                names.append(measurement['name'])
+
+            return names
+
+        raise ConnectionError("Isn't connected to database!")
+
+    def get_measurement(self, measurement_name: str):
+        return self._perform_on_db(self.database.query,
+                                   query='SELECT * FROM $msname',
+                                   params={"msname": measurement_name})
+
+    def delete_measurement(self, measurement_name: str):
+        self._perform_on_db(self.database.drop_measurement, measurement_name)
+
+    def _perform_on_db(self, function, *args, **kwargs):
+        try:
+            ret = function(*args, **kwargs)
+            self._set_connected()
+            return ret
+        except requests.exceptions.ConnectTimeout:
+            self._set_disconnected()
