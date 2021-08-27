@@ -21,7 +21,7 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
         self.payload_coders = None
         self.build_coders(msg_recipes)
 
-        self.logger = logging.getLogger(name)
+        self.logger = logging.getLogger(f'RKID.{name}')
         self.logger.setLevel(logging.DEBUG)
 
     def build_coders(self, msg_recipes):

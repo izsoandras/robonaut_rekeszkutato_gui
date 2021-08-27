@@ -12,7 +12,7 @@ class DatabbaseSaveListener(MyMQTTlistener):
         self.db = dbproxy
         self.isPaused = True
         self.meas_friendly_name = meas_friendly_name
-        self.logger = logging.getLogger('DBlistener')
+        self.logger = logging.getLogger('RKID.DBlistener')
         self.logger.setLevel(logging.DEBUG)
 
     def on_msg_hook(self, client, userdata, msg_type, data):

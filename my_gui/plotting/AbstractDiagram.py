@@ -10,7 +10,7 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
         self.axes = subplot
         self.axs = {}
         self.annots = {}
-        self.logger = logging.getLogger(f'plot.{recipe["title"]}')  # TODO: remove literal
+        self.logger = logging.getLogger(f'RKID.plot.{recipe["title"]}')  # TODO: remove literal
 
         msg_name = recipe['lines'][0]['message']
         try:

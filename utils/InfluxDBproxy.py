@@ -13,7 +13,7 @@ class InfluxDBproxy:
         self.isConnected = False
         self.isChecked = False
 
-        self.logger = logging.getLogger('DBproxy')
+        self.logger = logging.getLogger('RKID.DBproxy')
         self.logger.setLevel(logging.DEBUG)
 
         self.check_connection()

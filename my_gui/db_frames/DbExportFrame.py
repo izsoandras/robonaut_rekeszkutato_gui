@@ -11,7 +11,7 @@ class DBExportFrame(tkinter.Frame):
 
         self.dbproxy = dbproxy
 
-        self.logger = logging.getLogger('DB Export')
+        self.logger = logging.getLogger('RKID.DBExport')
 
         self.lb_dropdown = tkinter.Label(self, text='Select measurement:')
         self.lb_dropdown.pack(side=tkinter.LEFT)

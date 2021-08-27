@@ -17,7 +17,7 @@ class DataHolder(metaclass=abc.ABCMeta):
         self.size = size
         self.views = views
         self.queue = Queue()
-        self.logger = logging.getLogger(f'DHs.{self.name}') # TODO: forget literal
+        self.logger = logging.getLogger(f'RKID.DHs.{self.name}') # TODO: forget literal
 
         for field in fields:
             self.data[field] = [0] * size

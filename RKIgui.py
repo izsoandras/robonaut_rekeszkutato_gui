@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import my_gui.plotting.TelemeteryFrame
 import logging
+import logging.handlers
 import utils.SettingsReader
 import utils.InfluxDBproxy
 import my_mqtt.listeners.DatabaseSaveListener
@@ -15,7 +16,24 @@ import my_gui.db_frames.DbExportFrame
 class RKIguiApp():
     # noinspection PyUnresolvedReferences
     def __init__(self, test_source_en=False):
-        self.logger = logging.getLogger('App')
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(logging.Formatter('%(name)s:%(levelname)s:%(message)s'))
+
+        file_handler = logging.FileHandler('robot.log', mode='w')
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+        # TODO: add QueueHandler to ScreenLoggerFrame
+        queue_handler = logging.handlers.QueueHandler(multiprocessing.Queue())
+
+        root_logger = logging.getLogger('RKID')
+        root_logger.setLevel(logging.DEBUG)
+        root_logger.addHandler(console_handler)
+        root_logger.addHandler(file_handler)
+        root_logger.addHandler(queue_handler)
+
+        self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
 
         reader = utils.SettingsReader.SettingsReader()

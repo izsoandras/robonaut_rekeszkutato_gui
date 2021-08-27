@@ -64,7 +64,7 @@ class SettingsReader:
 
         self.errors = []
         self.severe = []
-        self.logger = logging.getLogger('SettingsReader')
+        self.logger = logging.getLogger('RKID.SettingsReader')
 
         self.topic_recs = None
         self.mqtt_data = None
