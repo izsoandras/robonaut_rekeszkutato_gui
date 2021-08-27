@@ -12,6 +12,7 @@ class InfluxDBproxy:
         self.prefix = measurement_prefix
         self.isConnected = False
         self.isChecked = False
+        self._stop = False
 
         self.logger = logging.getLogger('RKID.DBproxy')
         self.logger.setLevel(logging.DEBUG)
@@ -22,6 +23,9 @@ class InfluxDBproxy:
 
         self.checkThread = threading.Thread(target=self.check_loop)
         self.checkThread.start()
+
+    def stop_checking(self):
+        self._stop = True
 
     def check_connection(self):
         self._perform_on_db(self.database.ping)
@@ -38,7 +42,7 @@ class InfluxDBproxy:
             self.isConnected = False
 
     def check_loop(self):
-        while True:
+        while not self._stop:
             prev_status = self.isChecked
             new_status = self.check_connection()
 
