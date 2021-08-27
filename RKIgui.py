@@ -58,9 +58,11 @@ class RKIguiApp():
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         if test_source_en:
-            test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
-            test_producer_process.start()
+            self.test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
+            self.test_producer_process.start()
             self.logger.info('Test source started')
+        else:
+            self.test_producer_process = None
 
         self.logger.info('-------SETUP COMPLETE----------')
         self.root.mainloop()
@@ -90,6 +92,10 @@ class RKIguiApp():
 
     def on_closing(self):
         self.logger.warning('Application closed')
+
+        if self.test_producer_process is not None:
+            self.test_producer_process.kill()
+
         self.root.destroy()
 
 
