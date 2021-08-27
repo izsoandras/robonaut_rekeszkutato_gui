@@ -8,6 +8,8 @@ class ScreenLogger(tkinter.Frame):
     def __init__(self, parent, level=logging.INFO, fmt=None, visible_line_num=10, max_line_num=100, update_ms=200, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
+        self.logger = logging.getLogger(__name__)
+
         self.max_line_num = max_line_num
         self.line_num = 0
         self.update_ms = update_ms
@@ -56,3 +58,4 @@ class ScreenLogger(tkinter.Frame):
 
     def set_visible_line_number(self, visible_line_num: int):
         self.tb_logfield.configure(height=visible_line_num)
+        self.logger.debug(f'Changed visible line number to: {visible_line_num}')
