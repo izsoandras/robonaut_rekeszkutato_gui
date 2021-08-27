@@ -26,7 +26,7 @@ class MQTTdbStartStopFrame(my_gui.MQTTframes.MQTTstartstopFrame.MQTTstartstopFra
     def on_btn_stop(self):
         self.listener.pause()
         self.btn_rec.config(text="Rec", command=self.on_btn_start)
-        self.en_name.config(state='enabled')
+        self.en_name.config(state='normal')
 
     def on_btn_open(self):
         super().on_btn_open()
