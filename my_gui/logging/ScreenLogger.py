@@ -19,7 +19,7 @@ class ScreenLogger(tkinter.Frame):
         self.logHandler = logging.handlers.QueueHandler(self.msg_queue)
         self.logHandler.setLevel(level)
         if fmt is None:
-            fmt = '%(name)s: %(message)s'
+            fmt = '%(levelname)s-%(name)s: %(message)s'
 
         self.logHandler.setFormatter(logging.Formatter(fmt))
 
@@ -31,8 +31,8 @@ class ScreenLogger(tkinter.Frame):
         self.fr_level_select = tkinter.Frame(self)
         self.lb_level = tkinter.Label(self.fr_level_select, text='Log view level:')
         self.ddvar_level = tkinter.StringVar(self)
-        choices = ["Debug", "Info", "Waring", "Error", "Severe", "Critical"]
-        self.dd_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_level, *choices)
+        choices = ["Debug", "Info", "Warning", "Error", "Severe", "Critical"]
+        self.dd_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_level, *choices, command=self.on_level_selection_changed)
         self.dd_level.config(width=10)
         self.ddvar_level.set(choices[1])
 
@@ -71,3 +71,22 @@ class ScreenLogger(tkinter.Frame):
     def set_visible_line_number(self, visible_line_num: int):
         self.tb_logfield.configure(height=visible_line_num)
         self.logger.debug(f'Changed visible line number to: {visible_line_num}')
+
+    def on_level_selection_changed(self, new_val):
+        if new_val == "Debug":
+            new_lvl = logging.DEBUG
+        elif new_val == "Info":
+            new_lvl = logging.INFO
+        elif new_val == "Warning":
+            new_lvl = logging.WARNING
+        elif new_val == "Error":
+            new_lvl = logging.ERROR
+        elif new_val == "Critical":
+            new_lvl = logging.CRITICAL
+        else:
+            self.logger.error(f'Wrong level {new_val}')
+            return
+
+        self.logHandler.setLevel(new_lvl)
+
+
