@@ -15,6 +15,11 @@ class InfluxDBproxy:
 
         self.logger = logging.getLogger('DBproxy')
         self.logger.setLevel(logging.DEBUG)
+
+        self.check_connection()
+        if not self.isConnected:
+            self.logger.warning(f'Could not connect to database at {dbhost}')
+
         self.checkThread = threading.Thread(target=self.check_loop)
         self.checkThread.start()
 
@@ -33,13 +38,14 @@ class InfluxDBproxy:
             self.isConnected = False
 
     def check_loop(self):
-        prev_status = self.isChecked
-        new_status = self.check_connection()
+        while True:
+            prev_status = self.isChecked
+            new_status = self.check_connection()
 
-        if not prev_status and new_status:
-            self.prepare_db()
+            if not prev_status and new_status:
+                self.prepare_db()
 
-        time.sleep(3)
+            time.sleep(3)
 
     def prepare_db(self):
         dbs = self.database.get_list_database()
@@ -83,9 +89,10 @@ class InfluxDBproxy:
         raise ConnectionError("Isn't connected to database!")
 
     def get_measurement(self, measurement_name: str):
+        # influxdb  only supports bind params in WHERE clause
+        # https://docs.influxdata.com/influxdb/v1.7/tools/api/#bind-parameters
         return self._perform_on_db(self.database.query,
-                                   query='SELECT * FROM $msname',
-                                   params={"msname": measurement_name})
+                                   query=f'SELECT * FROM "{measurement_name}"')
 
     def delete_measurement(self, measurement_name: str):
         self._perform_on_db(self.database.drop_measurement, measurement_name)

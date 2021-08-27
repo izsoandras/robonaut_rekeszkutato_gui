@@ -9,6 +9,7 @@ import my_mqtt.listeners.DatabaseSaveListener
 import utils.telemetry_factory
 from my_mqtt.testing_tools import test_source
 import multiprocessing
+import my_gui.db_frames.DbExportFrame
 
 
 class RKIguiApp():
@@ -60,7 +61,9 @@ class RKIguiApp():
         self.tabs = ttk.Notebook(self.root)
 
         telemetry_tab = my_gui.plotting.TelemeteryFrame.TelemetryFrame(self.tabs, self.tel_listener, dh_by_name, plot_rec)
+        db_tab = my_gui.db_frames.DbExportFrame.DBExportFrame(self.tabs, self.dbproxy)
         self.tabs.add(telemetry_tab, text='Graphs')
+        self.tabs.add(db_tab, text='Database')
 
         self.tabs.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH)
 
