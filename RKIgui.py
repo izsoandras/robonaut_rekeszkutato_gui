@@ -11,6 +11,7 @@ import utils.telemetry_factory
 from my_mqtt.testing_tools import test_source
 import multiprocessing
 import my_gui.db_frames.DbExportFrame
+import my_gui.logging.ScreenLogger
 
 
 class RKIguiApp():
@@ -24,14 +25,10 @@ class RKIguiApp():
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
-        # TODO: add QueueHandler to ScreenLoggerFrame
-        queue_handler = logging.handlers.QueueHandler(multiprocessing.Queue())
-
-        root_logger = logging.getLogger('RKID')
+        root_logger = logging.getLogger('RKID')  # TODO: outsource literal
         root_logger.setLevel(logging.DEBUG)
         root_logger.addHandler(console_handler)
         root_logger.addHandler(file_handler)
-        root_logger.addHandler(queue_handler)
 
         self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
@@ -74,6 +71,10 @@ class RKIguiApp():
         # Window attributes
         self.root.title('RKI RobonAUT Diagnostics')
         self.root.iconbitmap('assets/icon.ico')
+
+        self.logView = my_gui.logging.ScreenLogger.ScreenLogger(self.root)
+        logging.getLogger('RKID').addHandler(self.logView.logHandler)  # TODO: outsource literal
+        self.logView.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
 
         # Tabs
         self.tabs = ttk.Notebook(self.root)
