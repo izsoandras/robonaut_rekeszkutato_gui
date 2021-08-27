@@ -28,6 +28,18 @@ class ScreenLogger(tkinter.Frame):
 
         self.tb_logfield.configure(yscrollcommand=self.sb_logscroll.set)
 
+        self.fr_level_select = tkinter.Frame(self)
+        self.lb_level = tkinter.Label(self.fr_level_select, text='Log view level:')
+        self.ddvar_level = tkinter.StringVar(self)
+        choices = ["Debug", "Info", "Waring", "Error", "Severe", "Critical"]
+        self.dd_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_level, *choices)
+        self.dd_level.config(width=10)
+        self.ddvar_level.set(choices[1])
+
+        self.lb_level.pack(side=tkinter.LEFT)
+        self.dd_level.pack(side=tkinter.LEFT)
+        self.fr_level_select.pack(side=tkinter.TOP)
+
         self.sb_logscroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
         self.tb_logfield.pack(side=tkinter.LEFT, expand=True, fill=tkinter.X)
 
