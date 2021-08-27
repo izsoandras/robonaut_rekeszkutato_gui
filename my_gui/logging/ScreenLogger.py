@@ -5,7 +5,7 @@ import queue
 
 
 class ScreenLogger(tkinter.Frame):
-    def __init__(self, parent, visible_line_num=10, max_line_num=100, update_ms=200, *args, **kwargs):
+    def __init__(self, parent, level=logging.INFO, fmt=None, visible_line_num=10, max_line_num=100, update_ms=200, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
         self.max_line_num = max_line_num
@@ -15,6 +15,11 @@ class ScreenLogger(tkinter.Frame):
         self.msg_queue = queue.Queue()
 
         self.logHandler = logging.handlers.QueueHandler(self.msg_queue)
+        self.logHandler.setLevel(level)
+        if fmt is None:
+            fmt = '%(name)s: %(message)s'
+
+        self.logHandler.setFormatter(logging.Formatter(fmt))
 
         self.tb_logfield = tkinter.Text(self, height=visible_line_num, state=tkinter.DISABLED)
         self.sb_logscroll = tkinter.Scrollbar(self, orient=tkinter.VERTICAL, command=self.tb_logfield.yview)
@@ -29,9 +34,9 @@ class ScreenLogger(tkinter.Frame):
     def update_screen(self):
         self.tb_logfield.config(state=tkinter.NORMAL)
         while not self.msg_queue.empty():
-            new_msg = self.msg_queue.get()
+            new_log = self.msg_queue.get()
 
-            self.tb_logfield.insert(tkinter.END, '\n' + new_msg)
+            self.tb_logfield.insert(tkinter.END, '\n' + new_log.msg)
 
         self.line_num = int(self.tb_logfield.index(tkinter.END).split('.')[0]) - 1
         if self.line_num >= self.max_line_num:
