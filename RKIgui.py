@@ -96,6 +96,7 @@ class RKIguiApp():
         if self.test_producer_process is not None:
             self.test_producer_process.kill()
 
+        self.dbproxy.stop_checking()
         self.root.destroy()
 
 
