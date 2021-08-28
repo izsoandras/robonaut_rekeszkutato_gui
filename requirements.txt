@@ -1,6 +1,11 @@
-pillow
+pillow~=8.2.0
 tk
-paho-mqtt
-influxdb
-matplotlib
+paho-mqtt~=1.5.1
+influxdb~=5.3.1
+matplotlib~=3.4.2
 tornado
+
+requests~=2.25.1
+future~=0.18.2
+numpy~=1.20.3
+PyYAML~=5.4.1
