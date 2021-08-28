@@ -197,6 +197,7 @@ def run(period_sec):
         }
 
         enc_data = my_mqtt.log.encode_log(log_data)
+        enc_data[2] = 3
         client.publish(my_mqtt.LOGGER_TOPIC, enc_data)
 
         time.sleep(period_sec)

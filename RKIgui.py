@@ -12,6 +12,7 @@ from my_mqtt.testing_tools import test_source
 import multiprocessing
 import my_gui.db_frames.DbExportFrame
 import my_gui.logging.ScreenLogger
+import my_mqtt.listeners.LogListener
 
 
 class RKIguiApp():
@@ -21,9 +22,10 @@ class RKIguiApp():
         console_handler.setLevel(logging.DEBUG)
         console_handler.setFormatter(logging.Formatter('%(name)s:%(levelname)s:%(message)s'))
 
-        file_handler = logging.FileHandler('robot.log', mode='w')
+        file_handler = logging.FileHandler('app.log', mode='w')
         file_handler.setLevel(logging.INFO)
-        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
 
         root_logger = logging.getLogger('RKID')  # TODO: outsource literal
         root_logger.setLevel(logging.DEBUG)
@@ -47,9 +49,22 @@ class RKIguiApp():
         self.tel_listener = my_mqtt.listeners.DatabaseSaveListener.DatabbaseSaveListener(self.dbproxy,
                                                                                          topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
                                                                                          'RKI telemetry',
-                                                                                         mqtt_data['broker'], 'tel',
+                                                                                         mqtt_data['broker'], 'tel',  # TODO: configurable topic
                                                                                          mqtt_data['user'],
                                                                                          mqtt_data['pwd'], dh_by_type)
+
+        self.log_listener = my_mqtt.listeners.LogListener.LogListener('RKI log',
+                                                                      'RoboCar',
+                                                                      topics_rec[0]['messages'],
+                                                                      mqtt_data['broker'], 'log',  # TODO: configurable topic
+                                                                      mqtt_data['user'],
+                                                                      mqtt_data['pwd'])
+
+        self.log_listener.subscribe()
+
+        robot_file_handler = logging.FileHandler('robot.log', mode='w')
+        robot_file_handler.setFormatter(file_formatter)
+        self.log_listener.robot_logger.addHandler(robot_file_handler)
 
         # Create GUI
         self.root = None
@@ -76,6 +91,7 @@ class RKIguiApp():
 
         self.logView = my_gui.logging.ScreenLogger.ScreenLogger(self.root)
         logging.getLogger('RKID').addHandler(self.logView.logHandler)  # TODO: outsource literal
+        self.log_listener.robot_logger.addHandler(self.logView.logHandler)
         self.logView.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
 
         # Tabs
