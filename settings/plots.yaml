@@ -1,0 +1,99 @@
+### Plots
+
+sample_num: 50
+update_period: 200 # [ms]
+layout: [3,3] # [<rows_num>,<col_num>]
+plots:
+  - title: 'Battery voltage'
+    type: series
+    ylim: [0, 14]
+    lines:
+      - message: batt
+        field: aux
+        legend: 'aux [V]'
+      - message: batt
+        field: mot
+        legend: 'mot [V]'
+
+  - title: 'Front line position'
+    type: series
+    ylim: [0, 31]
+    lines:
+      - message: 'front_line'
+        field: pos1
+      - message: 'front_line'
+        field: pos2
+      - message: 'front_line'
+        field: pos3
+
+  - title: 'Front line detection'
+    type: bar
+    ylim: [0, 20]
+    bins: 32
+    lines:
+      - message: 'front_line'
+        field: pos1
+
+  - title: 'Back line position'
+    type: series
+    ylim: [0, 31]
+    lines:
+      - message: 'back_line'
+        field: pos1
+
+      - message: 'back_line'
+        field: pos2
+
+      - message: 'back_line'
+        field: pos3
+
+  - title: 'Back line detection'
+    type: bar
+    ylim: [0, 1]
+    bins: 32
+    lines:
+      - message: 'back_line'
+        field: detect
+
+  - title: 'Motor current'
+    type: series
+    ylim: [-400, 400]
+    lines:
+      - message: speed
+        field: current
+        legend: 'actual'
+      - message: speed
+        field:  current_setp
+        legend: 'setpoint'
+
+  - title: 'Speed'
+    type: series
+    ylim: [-500, 2000]
+    lines:
+      - message: speed
+        field: speed
+        legend: 'actual'
+      - message: speed
+        field:  speed_setp
+        legend: 'setpoint'
+
+  - title: 'Distance'
+    type: series
+    ylim: [0, 2000]
+    lines:
+      - message: speed
+        field: distance
+        legend: 'actual'
+      - message: speed
+        field:  distance_setp
+        legend: 'setpoint'
+
+  - title: 'Orientation'
+    type: compass
+    lines:
+      - message: imu
+        field: heading
+        legend: 'actual'
+      - message: imu
+        field: heading_setp
+        legend: 'setpoint'

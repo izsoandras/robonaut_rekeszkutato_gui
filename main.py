@@ -9,7 +9,7 @@ import multiprocessing
 import my_gui
 import my_mqtt
 import my_mqtt.commands
-from my_mqtt.testing import test_source
+from my_mqtt.testing_tools import test_source
 
 import logging
 import os

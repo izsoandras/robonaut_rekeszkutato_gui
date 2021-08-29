@@ -4,10 +4,10 @@
 block_cipher = None
 
 
-a = Analysis(['main.py'],
-             pathex=['/home/runner/work/robonaut_rekeszkutato_gui/robonaut_rekeszkutato_gui'],
+a = Analysis(['RKIgui.py'],
+             pathex=['C:\\Users\\Tarsoly\\Programming\\Python\\robonaut_rekeszkutato_gui'],
              binaries=[],
-             datas=[('.\\assets', 'assets/'), ('.\\conf.json', '.')],
+             datas=[('./assets', 'assets/'), ('./settings', 'settings/')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -27,7 +27,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=True , icon='assets\\icon.ico')
+          console=False , icon='assets\\icon.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

@@ -112,7 +112,7 @@ class PlotFrame(tkinter.Frame):
         self.btn_start.pack(side=tkinter.LEFT)
         self.btn_stop.pack(side=tkinter.LEFT)
 
-        self.fig = Figure(figsize=(10, 8))#
+        self.fig = Figure(figsize=(10, 8))  #
 
         self.plots = {
             'batt': {
@@ -460,7 +460,6 @@ class PlotFrame(tkinter.Frame):
                 plot_dict['voltage']['lines'][line]['ax'].set_ydata(self.datas[data_type][line])
                 plot_dict['voltage']['lines'][line]['annotation'].set_text(f'{self.datas[data_type][line][-1]:.2f}')
 
-
         # plot_dict['voltage']['axes'].relim()
         # plot_dict['voltage']['axes'].autoscale_view()
 
@@ -481,13 +480,13 @@ class PlotFrame(tkinter.Frame):
         for i in range(1, 4):
             line = f'pos{i}'
             self.plots[key]['position']['lines'][line]['ax'], = pos_plot.plot(self.datas[key]['t'],
-                                                                                   self.datas[key][f'pos{i}'],
-                                                                                   animated=True)
+                                                                              self.datas[key][f'pos{i}'],
+                                                                              animated=True)
 
             self.plots[key]['position']['lines'][line]['annotation'] = self.plots[key]['position'][
                 'axes'].annotate(
-                f'{self.datas[key][line][-1]:.2f}', xy=(-49, 0), xytext=(1, 2 + (i-1) * 10),
-                textcoords='offset points', animated=True, color=PlotFrame.TAB_PALETTE[i-1], weight='heavy')
+                f'{self.datas[key][line][-1]:.2f}', xy=(-49, 0), xytext=(1, 2 + (i - 1) * 10),
+                textcoords='offset points', animated=True, color=PlotFrame.TAB_PALETTE[i - 1], weight='heavy')
 
             animated.append(self.plots[key]['position']['lines'][line]['ax'])
             animated.append(self.plots[key]['position']['lines'][line]['annotation'])
@@ -562,10 +561,12 @@ class PlotFrame(tkinter.Frame):
                                                                                    self.datas['speed']['current'][
                                                                                        'setpoint'])
         self.plots[key]['current']['lines']["current"]['annotation'] = self.plots[key]['current']['axes'].annotate(
-            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -400), xytext=(1, 2), textcoords='offset points',
+            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -400), xytext=(1, 2),
+            textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
         self.plots[key]['current']['lines']["setpoint"]['annotation'] = self.plots[key]['current']['axes'].annotate(
-            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -400), xytext=(1, 12), textcoords='offset points',
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -400), xytext=(1, 12),
+            textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
         self.plots[key]['speed']['lines']['current']['ax'], = speed_plot.plot(self.datas['speed']['speed']['t'],
@@ -573,10 +574,12 @@ class PlotFrame(tkinter.Frame):
         self.plots[key]['speed']['lines']['setpoint']['ax'], = speed_plot.plot(self.datas['speed']['speed']['t'],
                                                                                self.datas['speed']['speed']['setpoint'])
         self.plots[key]['speed']['lines']["current"]['annotation'] = self.plots[key]['speed']['axes'].annotate(
-            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -500), xytext=(1, 2), textcoords='offset points',
+            f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, -500), xytext=(1, 2),
+            textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
         self.plots[key]['speed']['lines']["setpoint"]['annotation'] = self.plots[key]['speed']['axes'].annotate(
-            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -500), xytext=(1, 12), textcoords='offset points',
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, -500), xytext=(1, 12),
+            textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
         self.plots[key]['distance']['lines']['current']['ax'], = distance_plot.plot(
@@ -587,7 +590,8 @@ class PlotFrame(tkinter.Frame):
             f'{self.datas[key]["current"]["current"][-1]:.2f}', xy=(-49, 0), xytext=(1, 2), textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[0], weight='heavy')
         self.plots[key]['distance']['lines']["setpoint"]['annotation'] = self.plots[key]['distance']['axes'].annotate(
-            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, 0), xytext=(1, 12), textcoords='offset points',
+            f'{self.datas[key]["current"]["setpoint"][-1]:.2f}', xy=(-49, 0), xytext=(1, 12),
+            textcoords='offset points',
             animated=True, color=PlotFrame.TAB_PALETTE[1], weight='heavy')
 
         animated = [self.plots[key]['current']['lines']['current']['ax'],
@@ -734,7 +738,7 @@ class PlotFrame(tkinter.Frame):
         #            self.plots[key]['orientation']['lines']['orientation_setp']['ax'], circle_artist]
 
         plot.set_theta_zero_location("N")
-        plot.set_xticks(np.pi/180. * np.linspace(-180, 180, 8, endpoint=False))
+        plot.set_xticks(np.pi / 180. * np.linspace(-180, 180, 8, endpoint=False))
         plot.set_thetalim(np.pi, -np.pi)
         plot.set_theta_direction(-1)
         plot.set_yticklabels([])
@@ -742,11 +746,11 @@ class PlotFrame(tkinter.Frame):
         rad = np.deg2rad(self.datas[key]['orientation'])
         rad_setp = np.deg2rad(self.datas[key]['orientation_setp'])
 
-        self.plots[key]['orientation']['lines']['orientation']['ax'], = plot.plot([rad, rad],[0, 1])
+        self.plots[key]['orientation']['lines']['orientation']['ax'], = plot.plot([rad, rad], [0, 1])
         self.plots[key]['orientation']['lines']['orientation_setp']['ax'], = plot.plot([rad_setp, rad_setp], [0, 1])
 
-        return 1, [self.plots[key]['orientation']['lines']['orientation']['ax'], self.plots[key]['orientation']['lines']['orientation_setp']['ax']]
-
+        return 1, [self.plots[key]['orientation']['lines']['orientation']['ax'],
+                   self.plots[key]['orientation']['lines']['orientation_setp']['ax']]
 
     def update_orientation(self, new_data):
         data_type = new_data['type']
@@ -773,4 +777,3 @@ class PlotFrame(tkinter.Frame):
 
         self.plots['orientation']['orientation']['lines']['orientation']['ax'].set_xdata([rad, rad])
         self.plots['orientation']['orientation']['lines']['orientation_setp']['ax'].set_xdata([rad_setp, rad_setp])
-

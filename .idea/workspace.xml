@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="18fbb476-96a5-456a-a1dd-eb7280696398" name="Default Changelist" comment="">
+    <list default="true" id="18fbb476-96a5-456a-a1dd-eb7280696398" name="Default Changelist" comment="Abstract listener first implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/design/desktop_app.mdj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_gui/coursedisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_gui/coursedisplay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_mqtt/testing/test_source.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_mqtt/testing/test_source.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RKIgui.py" beforeDir="false" afterPath="$PROJECT_DIR$/RKIgui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +13,24 @@
   <component name="FavoritesManager">
     <favorites_list name="desktop_gui" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Unit Test" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -79,7 +92,34 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/main.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Tarsoly\Programming\Python\robonaut_rekeszkutato_gui\my_gui\" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="RKIgui" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="desktop_gui" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RKIgui.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="desktop_gui" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -103,6 +143,75 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for plotting_test.MyTestCase.test_startstop" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="desktop_gui" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_gui/plotting" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;plotting_test.MyTestCase.test_startstop&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_logcoder.MyTestCase" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="desktop_gui" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_mqtt/general" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_logcoder.MyTestCase&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_logcoder.MyTestCase.test_decode" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="desktop_gui" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_mqtt/general" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_logcoder.MyTestCase.test_decode&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_logcoder.MyTestCase.test_encode" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="desktop_gui" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_mqtt/general" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_logcoder.MyTestCase.test_encode&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.RKIgui" />
+        <item itemvalue="Python tests.Unittests for test_logcoder.MyTestCase.test_encode" />
+        <item itemvalue="Python tests.Unittests for test_logcoder.MyTestCase.test_decode" />
+        <item itemvalue="Python tests.Unittests for test_logcoder.MyTestCase" />
+        <item itemvalue="Python tests.Unittests for plotting_test.MyTestCase.test_startstop" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -117,7 +226,27 @@
       <updated>1612791161672</updated>
       <workItem from="1612791172752" duration="7485000" />
       <workItem from="1622202408399" duration="28063000" />
+      <workItem from="1622888412730" duration="651000" />
+      <workItem from="1624811180688" duration="1830000" />
+      <workItem from="1626288035577" duration="1012000" />
+      <workItem from="1626807272621" duration="54907000" />
+      <workItem from="1627936514678" duration="6084000" />
+      <workItem from="1628095400156" duration="7778000" />
+      <workItem from="1628507907966" duration="1799000" />
+      <workItem from="1628544851483" duration="25925000" />
+      <workItem from="1629461380898" duration="12792000" />
+      <workItem from="1629662688485" duration="26379000" />
+      <workItem from="1629973099214" duration="20714000" />
+      <workItem from="1630100288719" duration="8772000" />
     </task>
+    <task id="LOCAL-00001" summary="Abstract listener first implementation">
+      <created>1627821993671</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1627821993673</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -179,26 +308,44 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$PROJECT_DIR$/../.." />
     </ignored-roots>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/my_gui/coursedisplay.py</url>
-          <line>185</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Abstract listener first implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Abstract listener first implementation" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1622293143028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/desktop_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1612826469039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$test_source.coverage" NAME="test_source Coverage Results" MODIFIED="1628591255336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/testing_tools" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_logcoder_MyTestCase_test_decode.coverage" NAME="Unittests for test_logcoder.MyTestCase.test_decode Coverage Results" MODIFIED="1630149915380" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_generalcoder_GeneralCoderTestCase_test_encode.coverage" NAME="Unittests for test_generalcoder.GeneralCoderTestCase.test_encode Coverage Results" MODIFIED="1627622213757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_plotting_test_MyTestCase_test_view_dynamic.coverage" NAME="Unittests for plotting_test.MyTestCase.test_view_dynamic Coverage Results" MODIFIED="1629587267006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_gui/plotting" />
     <SUITE FILE_PATH="coverage/desktop_gui$matplotlib_in_tk_example.coverage" NAME="matplotlib_in_tk_example Coverage Results" MODIFIED="1603108689631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_in_test_generalcoder_py.coverage" NAME="Unittests in test_generalcoder.py Coverage Results" MODIFIED="1627579945172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_plotting_test_MyTestCase_test_save_startstop.coverage" NAME="Unittests for plotting_test.MyTestCase.test_save_startstop Coverage Results" MODIFIED="1629591120316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_gui/plotting" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_plotting_test_MyTestCase_test_startstop.coverage" NAME="Unittests for plotting_test.MyTestCase.test_startstop Coverage Results" MODIFIED="1629846885345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_gui/plotting" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_seriesdataholder_test_SeriesDataHolderTest_test_dataflow.coverage" NAME="Unittests for seriesdataholder_test.SeriesDataHolderTest.test_dataflow Coverage Results" MODIFIED="1627901189484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dataholders" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_plotting_test_MyTestCase_test_view.coverage" NAME="Unittests for plotting_test.MyTestCase.test_view Coverage Results" MODIFIED="1628616280861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_gui/plotting" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_generalcoder_GeneralCoderTestCase_test_decode.coverage" NAME="Unittests for test_generalcoder.GeneralCoderTestCase.test_decode Coverage Results" MODIFIED="1627622507412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_logcoder_MyTestCase_test_encode.coverage" NAME="Unittests for test_logcoder.MyTestCase.test_encode Coverage Results" MODIFIED="1630149933697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_generalcoder_GeneralCoderTestCase_test_names_fields_mismatch.coverage" NAME="Unittests for test_generalcoder.GeneralCoderTestCase.test_names_fields_mismatch Coverage Results" MODIFIED="1627580482984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$RKIgui.coverage" NAME="RKIgui Coverage Results" MODIFIED="1630152874401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1630153991938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/desktop_gui$main.coverage" NAME="main Coverage Results" MODIFIED="1612826469039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_generalcoder_GeneralCoderTestCase.coverage" NAME="Unittests for test_generalcoder.GeneralCoderTestCase Coverage Results" MODIFIED="1627622611249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
+    <SUITE FILE_PATH="coverage/robonaut_rekeszkutato_gui$Unittests_for_test_logcoder_MyTestCase.coverage" NAME="Unittests for test_logcoder.MyTestCase Coverage Results" MODIFIED="1630149809845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_mqtt/general" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/my_gui/coursedisplay.py">

@@ -1,20 +1,23 @@
 from queue import Queue
 import abc
+import logging
 
 
 class DataHolder(metaclass=abc.ABCMeta):
     IDX = 'idx'
 
-    def __init__(self, fields, size, views=None):
+    def __init__(self, name, fields, size, views=None):
         if views is None:
             views = []
 
+        self.name = name
         self.hasNew = False
         self.data = {}
         self.fields = fields
         self.size = size
         self.views = views
         self.queue = Queue()
+        self.logger = logging.getLogger(f'RKID.DHs.{self.name}') # TODO: forget literal
 
         for field in fields:
             self.data[field] = [0] * size
@@ -36,20 +39,25 @@ class DataHolder(metaclass=abc.ABCMeta):
         if key is None:
             return self.data
         else:
-            return self.data[key]
+            try:
+                return self.data[key]
+            except KeyError:
+                self.logger.warning(f'Couldn\'t find key {key}. {self.fields}')
+                return None
 
-    def pushData(self, newData: dict):
+    def pushData(self, newData):
+        if(type(newData) is not list):
+            newDatas = [newData]
+        else:
+            newDatas = newData
 
-        if all(key in self.fields for key in newData.keys()):
+        for newData in newDatas:
             if all(field in list(newData.keys()) for field in self.fields):
                 self.queue.put(newData)
                 self.hasNew = True
             else:
                 raise KeyError(
                     f'NewData does not have every key from fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
-        else:
-            raise KeyError(
-                f'NewData has keys that are not in fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
 
     def alertAllViews(self):
         for view in self.views:

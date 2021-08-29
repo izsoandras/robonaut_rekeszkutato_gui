@@ -107,9 +107,9 @@ def encode_line_data(line_dict):
 
     detect = struct.pack('>I', int(line_dict['detection'], 2))
     num = struct.pack('B', line_dict['num'])
-    pos1 = struct.pack('f', line_dict['pos1'])
-    pos2 = struct.pack('f', line_dict['pos2'])
-    pos3 = struct.pack('f', line_dict['pos3'])
+    pos1 = struct.pack('>f', line_dict['pos1'])
+    pos2 = struct.pack('>f', line_dict['pos2'])
+    pos3 = struct.pack('>f', line_dict['pos3'])
 
     data = my_mqtt.background_coders.concat_fields(detect, num, pos1, pos2, pos3)
 
@@ -163,10 +163,10 @@ def encode_speed_data(speed_dict):
     dutycycle32 = struct.pack('>I', speed_dict['duty'])
     dutycycle = dutycycle32[2:]
 
-    current = struct.pack('f', speed_dict['current'])
-    current_setp = struct.pack('f', speed_dict['current_setp'])
-    speed = struct.pack('f', speed_dict['speed'])
-    speed_setp = struct.pack('f', speed_dict['speed_setp'])
+    current = struct.pack('>f', speed_dict['current'])
+    current_setp = struct.pack('>f', speed_dict['current_setp'])
+    speed = struct.pack('>f', speed_dict['speed'])
+    speed_setp = struct.pack('>f', speed_dict['speed_setp'])
     distance = struct.pack('>I', speed_dict['distance'])
     distance_setp = struct.pack('>I', speed_dict['distance_setp'])
 
@@ -253,8 +253,8 @@ def encode_orientation(orientation_dict):
 
     orientation_dict = orientation_dict['data']
 
-    ori = struct.pack('f', orientation_dict['orientation'])
-    ori_setp = struct.pack('f', orientation_dict['orientation_setp'])
+    ori = struct.pack('>f', orientation_dict['orientation'])
+    ori_setp = struct.pack('>f', orientation_dict['orientation_setp'])
 
     data = my_mqtt.background_coders.concat_fields(ori, ori_setp)
 

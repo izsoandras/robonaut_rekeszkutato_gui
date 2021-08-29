@@ -22,13 +22,13 @@ def run(period_sec):
     client.connect('localhost')
 
 
-    with open('assets/skill_course_routes.json') as course_file:
-        course_dict = json.load(course_file)
+    # with open('../../../assets/skill_course_routes.json') as course_file:
+    #     course_dict = json.load(course_file)
 
     det_idx = 1
     det_dir = 1
 
-    next_mtx = np.array(course_dict['Next'])
+    # next_mtx = np.array(course_dict['Next'])
     x = bytearray(1)
     curr_node = 0
     goal_node = 0
@@ -197,6 +197,7 @@ def run(period_sec):
         }
 
         enc_data = my_mqtt.log.encode_log(log_data)
+        enc_data[2] = 3
         client.publish(my_mqtt.LOGGER_TOPIC, enc_data)
 
         time.sleep(period_sec)

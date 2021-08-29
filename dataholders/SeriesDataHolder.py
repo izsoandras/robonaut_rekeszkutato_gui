@@ -1,9 +1,9 @@
-from DataHolder import DataHolder
+from .DataHolder import DataHolder
 
 
 class SeriesDataHolder(DataHolder):
-    def __init__(self, fields, size, views=None):
-        DataHolder.__init__(self,fields, size, views)
+    def __init__(self, name, fields, size, views=None):
+        DataHolder.__init__(self, name, fields, size, views)
 
     def refreshData(self):
         new_data = []
