@@ -117,4 +117,4 @@ class RKIguiApp():
 
 
 if __name__ == "__main__":
-    app = RKIguiApp(True)
+    app = RKIguiApp(False)
