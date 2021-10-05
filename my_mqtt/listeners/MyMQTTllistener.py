@@ -67,5 +67,11 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
         self.mqtt_client.publish(self.topic, msg)
         self.logger.debug(f"Data {data} sent on topic {self.topic} as {msg}")
 
+    def ask_update(self, type: int):
+        msg = self.msg_coder.construct_message(type, bytes(0))
+        self.mqtt_client.publish(self.topic, msg)
+        self.logger.debug(f"Asked for updates through {self.topic} for msg {type}")
+
+
 
 

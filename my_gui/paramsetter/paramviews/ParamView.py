@@ -16,10 +16,13 @@ class ParamView(metaclass=abc.ABCMeta, tkinter.Frame):
         vcmd = self.register(self.validate_input)
         self.tb_set_value = tkinter.Entry(self, width=8, justify='right')
         self.tb_set_value.config(validate='key', validatecommand=(vcmd, '%P'))
+        self.tb_set_value.pack(side=tkinter.LEFT)
+
         self.stvar_current = tkinter.StringVar()
         self.tb_current_value = tkinter.Entry(self, state='readonly',
                                               textvariable=self.stvar_current,
                                               width=8, justify='left')
+        self.tb_current_value.pack(side=tkinter.LEFT)
 
     @abc.abstractmethod
     def validate_input(self, input_value: str):
