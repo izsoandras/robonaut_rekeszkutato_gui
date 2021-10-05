@@ -40,7 +40,7 @@ class ParamFrame(tkinter.Frame):
         wrkr.start()
 
     def on_btn_update(self):
-        wrkr = threading.Thread(target=self.client.ask_update, args=(self.msg_id))
+        wrkr = threading.Thread(target=self.client.ask_update, args=(self.msg_id,))
         wrkr.start()
 
     def update_view(self):
