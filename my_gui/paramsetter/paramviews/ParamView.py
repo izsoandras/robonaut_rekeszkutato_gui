@@ -28,6 +28,7 @@ class ParamView(metaclass=abc.ABCMeta, tkinter.Frame):
     def validate_input(self, input_value: str):
         pass
 
+    # TODO: make thread safe (it is accessed through multiple threads)
     def get_new_value(self):
         return self.tb_set_value.get()
 

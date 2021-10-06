@@ -30,18 +30,37 @@ class ParamFrame(tkinter.Frame):
         self.fr_buttons.pack(side=tkinter.TOP)
 
     def on_btn_send(self):
+        wrkr = threading.Thread(target=self.send_data())
+        wrkr.start()
+
+    def get_new_data(self):
         data = {
-            'name':self.name
+            'name': self.name
         }
         for key in self.param_views.keys():
             data[key] = self.param_views[key].get_new_value()
 
-        wrkr = threading.Thread(target=self.client.send_message, args=(self.msg_id,data))
-        wrkr.start()
+        return data
+
+    def get_current_data(self):
+        data = {
+            'name': self.name
+        }
+        for key in self.param_views.keys():
+            data[key] = self.param_views[key].get_current_value()
+
+        return data
+
+    def send_data(self):
+        data = self.get_new_data()
+        self.client.send_message(self.msg_id, data)
 
     def on_btn_update(self):
-        wrkr = threading.Thread(target=self.client.ask_update, args=(self.msg_id,))
+        wrkr = threading.Thread(target=self.ask_update)
         wrkr.start()
+
+    def ask_update(self):
+        self.client.ask_update(self.msg_id)
 
     def update_view(self):
         data = self.dataholder.getData()
