@@ -4,10 +4,10 @@ import tkinter
 # Source: https://blog.tecladocode.com/tkinter-scrollable-frames/
 class ScrollableFrame(tkinter.Frame):
     def __init__(self, parent, *args, **kwargs):
-        fr_canvas = tkinter.Frame(parent)
-        canvas = tkinter.Canvas(fr_canvas)
+        self.parent = tkinter.Frame(parent)
+        canvas = tkinter.Canvas(self.parent)
         super().__init__(canvas, *args, **kwargs)
-        scrollbar = tkinter.Scrollbar(fr_canvas, orient="vertical", command=canvas.yview)
+        scrollbar = tkinter.Scrollbar(self.parent, orient="vertical", command=canvas.yview)
 
         self.bind(
             "<Configure>",
@@ -20,6 +20,9 @@ class ScrollableFrame(tkinter.Frame):
 
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        fr_canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+        canvas.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
+        # self.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
+
+    def pack_parent(self, *args, **kwargs):
+        self.parent.pack(*args, **kwargs)

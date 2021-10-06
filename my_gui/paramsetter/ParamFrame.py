@@ -9,7 +9,7 @@ class ParamFrame(tkinter.Frame):
     def __init__(self, parent, data_holder, msgs_recipe, client: mml.MyMQTTlistener, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
-        self.name = msgs_recipe.name
+        self.name = msgs_recipe['name']   # TODO: remove literal
         self.msg_id = msgs_recipe['type']   # TODO: remove literal
         self.logger = logging.getLogger('paramframe_' + self.name)
         self.client = client
@@ -18,16 +18,21 @@ class ParamFrame(tkinter.Frame):
         self.lb_name = tkinter.Label(self, text=self.name)
         self.lb_name.pack(side=tkinter.TOP)
 
-        self.param_views = pv_factory.structString2paramView(self, msgs_recipe['format'], msgs_recipe['fields']) # TODO: remove literals
-        for view in self.param_views.values():
-            view.pack(side=tkinter.TOP)
+        try:
+            self.param_views = pv_factory.structString2paramView(self, msgs_recipe['format'], msgs_recipe['fields']) # TODO: remove literals
 
-        self.fr_buttons = tkinter.Frame(self, bd=5)
-        self.btn_send = tkinter.Button(self.fr_buttons, text='Send', command=self.on_btn_send)
-        self.btn_update = tkinter.Button(self.fr_buttons, text='Update', command=self.on_btn_update)
-        self.btn_send.pack(side=tkinter.LEFT)
-        self.btn_update.pack(side=tkinter.LEFT)
-        self.fr_buttons.pack(side=tkinter.TOP)
+            for view in self.param_views.values():
+                view.pack(side=tkinter.TOP, fill=tkinter.X)
+
+            self.fr_buttons = tkinter.Frame(self, bd=5)
+            self.btn_send = tkinter.Button(self.fr_buttons, text='Send', command=self.on_btn_send)
+            self.btn_update = tkinter.Button(self.fr_buttons, text='Update', command=self.on_btn_update)
+            self.btn_send.pack(side=tkinter.LEFT)
+            self.btn_update.pack(side=tkinter.LEFT)
+            self.fr_buttons.pack(side=tkinter.TOP)
+        except NotImplementedError as nie:
+            self.logger.error(nie)
+            self.param_views = {}
 
     def on_btn_send(self):
         wrkr = threading.Thread(target=self.send_data())
