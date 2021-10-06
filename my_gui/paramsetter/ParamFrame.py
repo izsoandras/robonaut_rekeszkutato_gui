@@ -11,7 +11,7 @@ class ParamFrame(tkinter.Frame):
 
         self.name = msgs_recipe['name']   # TODO: remove literal
         self.msg_id = msgs_recipe['type']   # TODO: remove literal
-        self.logger = logging.getLogger('paramframe_' + self.name)
+        self.logger = logging.getLogger('RKID.paramframe.' + self.name)
         self.client = client
         self.dataholder =data_holder
 
@@ -57,8 +57,11 @@ class ParamFrame(tkinter.Frame):
         return data
 
     def send_data(self):
-        data = self.get_new_data()
-        self.client.send_message(self.msg_id, data)
+        try:
+            data = self.get_new_data()
+            self.client.send_message(self.msg_id, data)
+        except ValueError as ve:
+            self.logger.error(ve)
 
     def on_btn_update(self):
         wrkr = threading.Thread(target=self.ask_update)
