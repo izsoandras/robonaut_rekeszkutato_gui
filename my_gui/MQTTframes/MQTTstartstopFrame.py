@@ -1,9 +1,9 @@
 import tkinter
-import my_mqtt.listeners.MyMQTTllistener
+import clients.mqtt
 
 
 class MQTTstartstopFrame(tkinter.Frame):
-    def __init__(self, parent, mqtt_listener: my_mqtt.listeners.MyMQTTllistener.MyMQTTlistener, *args, **kwargs):
+    def __init__(self, parent, mqtt_listener: clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
         self.listener = mqtt_listener

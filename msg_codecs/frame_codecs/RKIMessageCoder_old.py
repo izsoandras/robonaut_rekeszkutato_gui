@@ -1,16 +1,11 @@
+from .AbstractCoder import AbstractCoder
 import struct
 
 
-# TODO: move to other file/package
-def concat_fields(*bytes_fields):
-    ret = bytearray(0)
-    for byts in bytes_fields:
-        ret.extend(byts)
-
-    return ret
 
 
-class RKIMessageCoder:
+
+class RKIMessageCoder(AbstractCoder):
     @staticmethod
     def construct_message(type, data):
         type32 = struct.pack('>I', type)

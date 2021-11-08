@@ -6,15 +6,15 @@ import logging
 import logging.handlers
 import utils.SettingsReader
 import utils.InfluxDBproxy
-import my_mqtt.listeners.DatabaseSaveListener
+import clients.mqtt.listeners.DatabaseSaveListener
 import utils.telemetry_factory
-from my_mqtt.testing_tools import test_source
+from clients.mqtt.testing_tools import test_source
 import multiprocessing
 import my_gui.db_frames.DbExportFrame
 import my_gui.logging.ScreenLogger
-import my_mqtt.listeners.LogListener
+import clients.mqtt.listeners.LogListener
 import my_gui.paramsetter.SetParamsFrame
-import my_mqtt.listeners.MyMQTTllistener
+import clients.mqtt.listeners.MyMQTTllistener
 import utils.dataholder_factory
 
 
@@ -49,29 +49,29 @@ class RKIguiApp():
         # TODO: prepare data holders
         param_dh_by_name, param_dh_by_type = utils.telemetry_factory.build_dataholders(topics_rec[1:2], plots_rec)
 
-        self.tel_listener = my_mqtt.listeners.DatabaseSaveListener.DatabbaseSaveListener(self.dbproxy,
-                                                                                         topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
+        self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
+                                                                                              topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
                                                                                          'RKI telemetry',
-                                                                                         mqtt_data['broker'], 'tel',  # TODO: configurable topic
-                                                                                         mqtt_data['user'],
-                                                                                         mqtt_data['pwd'], param_dh_by_type)
+                                                                                              mqtt_data['broker'], 'tel',  # TODO: configurable topic
+                                                                                              mqtt_data['user'],
+                                                                                              mqtt_data['pwd'], param_dh_by_type)
 
-        self.log_listener = my_mqtt.listeners.LogListener.LogListener('RKI log',
+        self.log_listener = clients.mqtt.LogListener('RKI log',
                                                                       'RoboCar',
-                                                                      topics_rec[0]['messages'],
-                                                                      mqtt_data['broker'], 'log',  # TODO: configurable topic
-                                                                      mqtt_data['user'],
-                                                                      mqtt_data['pwd'])
+                                                                           topics_rec[0]['messages'],
+                                                                           mqtt_data['broker'], 'log',  # TODO: configurable topic
+                                                                           mqtt_data['user'],
+                                                                           mqtt_data['pwd'])
 
         self.log_listener.subscribe()
 
         _,param_dh_by_type = utils.dataholder_factory.build_param_dataholders(topics_rec[2:3])
-        self.param_listener = my_mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
+        self.param_listener = clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
                                                                                'RKI parameters',
-                                                                               mqtt_data['broker'], 'param',
-                                                                               # TODO: configurable topic
-                                                                               mqtt_data['user'],
-                                                                               mqtt_data['pwd'], param_dh_by_type)
+                                                                                    mqtt_data['broker'], 'param',
+                                                                                    # TODO: configurable topic
+                                                                                    mqtt_data['user'],
+                                                                                    mqtt_data['pwd'], param_dh_by_type)
 
         robot_file_handler = logging.FileHandler('robot.log', mode='w')
         robot_file_handler.setFormatter(file_formatter)

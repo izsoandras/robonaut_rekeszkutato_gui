@@ -1,10 +1,10 @@
 import tkinter
 import my_gui.MQTTframes.MQTTstartstopFrame
-import my_mqtt.listeners.DatabaseSaveListener
+import clients.mqtt.listeners.DatabaseSaveListener
 
 
 class MQTTdbStartStopFrame(my_gui.MQTTframes.MQTTstartstopFrame.MQTTstartstopFrame):
-    def __init__(self, parent, mqtt_listener: my_mqtt.listeners.DatabaseSaveListener.DatabbaseSaveListener, *args,
+    def __init__(self, parent, mqtt_listener: clients.mqtt.listeners.DatabaseSaveListener.DatabbaseSaveListener, *args,
                  **kwargs):
         super().__init__(parent, mqtt_listener, *args, **kwargs)
 

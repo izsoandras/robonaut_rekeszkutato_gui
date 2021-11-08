@@ -1,11 +1,11 @@
-import my_mqtt.listeners.MyMQTTllistener
 import logging
 import msg_codecs.payload_codecs.LogCoder
+from .MyMQTTllistener import MyMQTTlistener
 
 
-class LogListener(my_mqtt.listeners.MyMQTTllistener.MyMQTTlistener):
+class LogListener(MyMQTTlistener):
     def __init__(self, name: str, src_name: str, msg_recipes: list, broker, topic: str, username: str = None, pwd: str = None):
-        my_mqtt.listeners.MyMQTTllistener.MyMQTTlistener.__init__(self, msg_recipes, name, broker, topic, username, pwd)
+        MyMQTTlistener.__init__(self, msg_recipes, name, broker, topic, username, pwd)
 
         self.src_name = src_name
         self.robot_logger = logging.getLogger(src_name)

@@ -3,7 +3,7 @@ import tkinter
 from utils.telemetry_factory import build_plot_env_from_file
 from utils.InfluxDBproxy import InfluxDBproxy
 import multiprocessing
-from my_mqtt.testing_tools import test_source
+from clients.mqtt.testing_tools import test_source
 from my_gui.MQTTframes.MQTTstartstopFrame import MQTTstartstopFrame
 from my_gui.MQTTframes.MQTTdbstartstopFrame import MQTTdbStartStopFrame
 

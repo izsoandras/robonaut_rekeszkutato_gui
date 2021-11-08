@@ -1,6 +1,6 @@
 import yaml
 from my_gui.plotting.PlotsFrame import PlotsFrame
-from my_mqtt.listeners.DatabaseSaveListener import DatabbaseSaveListener
+from clients.mqtt.listeners.DatabaseSaveListener import DatabbaseSaveListener
 from dataholders.SeriesDataHolder import SeriesDataHolder
 from dataholders.FixedDataholder import FixedDataholder
 
