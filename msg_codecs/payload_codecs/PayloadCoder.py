@@ -1,8 +1,10 @@
 import struct
+from .AbstractCoder import AbstractCoder
 
 
-class PayloadCoder:
+class PayloadCoder(AbstractCoder):
     def __init__(self, name: str, type: int, format: str, fields: list, factors: list = None):
+        AbstractCoder.__init__(self)
 
         try:
             self.checkPattern(name, type, format, fields)
