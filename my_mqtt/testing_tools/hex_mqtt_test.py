@@ -7,6 +7,7 @@ if __name__ == "__main__":
 
     mqtt_publisher = mqtt.Client('test_publisher')
     mqtt_publisher.connect(host_name)
+    mqtt_publisher.username_pw_set('rekesz','12345678')
     mqtt_publisher.loop_start()
 
     input_str = ''

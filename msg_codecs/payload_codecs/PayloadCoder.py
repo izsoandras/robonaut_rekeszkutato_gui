@@ -22,7 +22,7 @@ class PayloadCoder:
     @staticmethod
     def checkPattern(name, typebyte, format, names):
         if typebyte > 0xAA:
-            raise ValueError(f'Type byte for {name} pattern is over 0xFF')
+            raise ValueError(f'Type byte for {name} pattern is over 0xAA')
         if typebyte < 0:
             raise ValueError(f'Type byte for {name} pattern should be non negative')
 

@@ -1,5 +1,5 @@
 import unittest
-import PayloadCoder
+from msg_codecs.payload_codecs import PayloadCoder
 
 
 class GeneralCoderTestCase(unittest.TestCase):

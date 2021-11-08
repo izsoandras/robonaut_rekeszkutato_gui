@@ -1,5 +1,5 @@
 import unittest
-import LogCoder
+from msg_codecs.payload_codecs import LogCoder
 
 
 class MyTestCase(unittest.TestCase):

@@ -2,98 +2,172 @@
 
 sample_num: 50
 update_period: 200 # [ms]
-layout: [3,3] # [<rows_num>,<col_num>]
+layout: [2,3] # [<rows_num>,<col_num>]
 plots:
   - title: 'Battery voltage'
     type: series
     ylim: [0, 14]
     lines:
-      - message: batt
-        field: aux
-        legend: 'aux [V]'
-      - message: batt
-        field: mot
-        legend: 'mot [V]'
+      - message: battery
+        field: batt
+        legend: '[V]'
 
-  - title: 'Front line position'
-    type: series
-    ylim: [0, 31]
-    lines:
-      - message: 'front_line'
-        field: pos1
-      - message: 'front_line'
-        field: pos2
-      - message: 'front_line'
-        field: pos3
-
-  - title: 'Front line detection'
-    type: bar
-    ylim: [0, 20]
-    bins: 32
-    lines:
-      - message: 'front_line'
-        field: pos1
-
-  - title: 'Back line position'
-    type: series
-    ylim: [0, 31]
-    lines:
-      - message: 'back_line'
-        field: pos1
-
-      - message: 'back_line'
-        field: pos2
-
-      - message: 'back_line'
-        field: pos3
-
-  - title: 'Back line detection'
-    type: bar
-    ylim: [0, 1]
-    bins: 32
-    lines:
-      - message: 'back_line'
-        field: detect
-
-  - title: 'Motor current'
-    type: series
-    ylim: [-400, 400]
-    lines:
-      - message: speed
-        field: current
-        legend: 'actual'
-      - message: speed
-        field:  current_setp
-        legend: 'setpoint'
-
-  - title: 'Speed'
-    type: series
-    ylim: [-500, 2000]
-    lines:
-      - message: speed
-        field: speed
-        legend: 'actual'
-      - message: speed
-        field:  speed_setp
-        legend: 'setpoint'
+#  - title: 'Single speed'
+#    type: series
+#    ylim: [-15,15]
+#    lines:
+#      - message: speed
+#        field: w
+#        legend: 'w[rad/s]'
+#  - title: 'Duty cycle'
+#    type: series
+#    ylim: [0,100]
+#    lines:
+#      - message: speed
+#        field: duty
+#        legend: 'duty[%]'
 
   - title: 'Distance'
     type: series
-    ylim: [0, 2000]
+    ylim: [0,2000]
     lines:
-      - message: speed
-        field: distance
-        legend: 'actual'
-      - message: speed
-        field:  distance_setp
-        legend: 'setpoint'
+        - message: distance
+          field: dist
+          legend: 'distance[mm]'
 
-  - title: 'Orientation'
+#  - title: 'Mot1'
+#    type: series
+#    ylim: [0,10]
+#    lines:
+#      - message: mot1_speed
+#        field: speed
+#        legend: 'speed[rad/s]'
+#      - message: mot1_speed
+#        field: setpoint
+#        legend: 'setp[rad/s]'
+#  - title: 'Mot2'
+#    type: series
+#    ylim: [ 0,10 ]
+#    lines:
+#      - message: mot2_speed
+#        field: speed
+#        legend: 'speed[rad/s]'
+#      - message: mot2_speed
+#        field: setpoint
+#        legend: 'setp[rad/s]'
+#  - title: 'Mot3'
+#    type: series
+#    ylim: [ 0,10 ]
+#    lines:
+#      - message: mot3_speed
+#        field: speed
+#        legend: 'speed[rad/s]'
+#      - message: mot3_speed
+#        field: setpoint
+#        legend: 'setp[rad/s]'
+
+#  - title: 'Magnetometer'
+#    type: series
+#    ylim: [-500, 500]
+#    lines:
+#      - message: imu_mag
+#        field: X
+#        legend: 'x'
+#
+#      - message: imu_mag
+#        field: Y
+#        legend: 'y'
+#
+#      - message: imu_mag
+#        field: Z
+#        legend: 'z'
+#
+#  - title: 'Accelerometer'
+#    type: series
+#    ylim: [ -2, 2 ]
+#    lines:
+#      - message: imu_acc
+#        field: X
+#        legend: 'x'
+#
+#      - message: imu_acc
+#        field: Y
+#        legend: 'y'
+#
+#      - message: imu_acc
+#        field: Z
+#        legend: 'z'
+#
+#  - title: 'Gyroscope'
+#    type: series
+#    ylim: [ -250, 250 ]
+#    lines:
+#      - message: imu_gyro
+#        field: X
+#        legend: 'x'
+#
+#      - message: imu_gyro
+#        field: Y
+#        legend: 'y'
+#
+#      - message: imu_gyro
+#        field: Z
+#        legend: 'z'
+
+  - title: 'X Pos'
+    type: series
+    ylim: [-3, 3]
+    lines:
+      - message: state_vec
+        field: x_pos
+        legend: 'curr'
+
+      - message: state_vec
+        field: x_pos_setp
+        legend: 'setp'
+
+
+  - title: 'Y Pos'
+    type: series
+    ylim: [-3, 3]
+    lines:
+      - message: state_vec
+        field: y_pos
+        legend: 'curr'
+
+      - message: state_vec
+        field: y_pos_setp
+        legend: 'setp'
+
+
+  - title: 'Heading'
+    type: compass
+    isRad: True
+    theta_dir: 1
+    lines:
+      - message: state_vec
+        field: head
+        legend: 'curr'
+
+      - message: state_vec
+        field: head_setp
+        legend: 'setp'
+
+  - title: 'Ctrl vec dir'
     type: compass
     lines:
-      - message: imu
-        field: heading
-        legend: 'actual'
-      - message: imu
-        field: heading_setp
-        legend: 'setpoint'
+      - message: control_vec
+        field: ang
+        legend: 'ang'
+
+      - message: control_vec
+        field: gang
+        legend: 'gang'
+#
+#  - title: 'Ctrl vec magnitude'
+#    type: series
+#    lines:
+#      - message: control_vec
+#        field: magn
+#        legend: 'magnitude [m/s]'
+

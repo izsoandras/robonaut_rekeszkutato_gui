@@ -1,10 +1,9 @@
-import my_mqtt.general.PayloadCoder
 import struct
+from .PayloadCoder import PayloadCoder
 
-
-class LogCoder(my_mqtt.general.PayloadCoder):
+class LogCoder(PayloadCoder):
     def __init__(self, msg_type: int):
-        my_mqtt.general.PayloadCoder.__init__(self, 'log', msg_type, 'Bs', ['level', 'message'])
+        PayloadCoder.__init__(self, 'log', msg_type, 'Bs', ['level', 'message'])
 
     def encode(self, data: dict):
         excludes = [key for key in self.field_names if key not in data.keys()]

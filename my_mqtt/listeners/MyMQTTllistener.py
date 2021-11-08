@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import abc
-import my_mqtt.general
+import msg_codecs.frame_codecs
+import msg_codecs.payload_codecs
 import logging
 
 
@@ -17,7 +18,7 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
 
         self.dataholders = dataholders
 
-        self.msg_coder = my_mqtt.general.RKIMessageCoder()
+        self.msg_coder = msg_codecs.frame_codecs.RKIMessageCoder()
         self.payload_coders = None
         self.build_coders(msg_recipes)
 
@@ -27,7 +28,7 @@ class MyMQTTlistener(metaclass=abc.ABCMeta):
     def build_coders(self, msg_recipes):
         coders = {}
         for recipe in msg_recipes:
-            coders[recipe['type']] = my_mqtt.general.PayloadCoder(**recipe) # TODO: ne literal legyen
+            coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe) # TODO: ne literal legyen
 
         self.payload_coders = coders
 
