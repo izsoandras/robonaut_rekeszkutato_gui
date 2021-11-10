@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
     def setUp(self):
         self.root = tkinter.Tk()
         self.proxy = InfluxDBproxy('localhost', 'test', 'plot_test_')
-        self.listener, self.frame = build_plot_env_from_file('../../settings/mqtt.yaml', '../../settings/msgs.yaml',
+        self.listener, self.frame = build_plot_env_from_file('../../settings/proto.yaml', '../../settings/msgs.yaml',
                                                    '../../settings/plots.yaml', self.proxy, self.root)
 
 

@@ -2,9 +2,6 @@ from .AbstractCoder import AbstractCoder
 import struct
 
 
-
-
-
 class RKIMessageCoder(AbstractCoder):
     @staticmethod
     def construct_message(type, data):

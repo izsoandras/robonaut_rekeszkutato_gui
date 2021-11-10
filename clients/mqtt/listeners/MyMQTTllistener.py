@@ -2,10 +2,12 @@ import paho.mqtt.client as mqtt
 import msg_codecs.frame_codecs
 import msg_codecs.payload_codecs
 import logging
+from ...AbstractClient import AbstractClient
 
 
-class MyMQTTlistener():
+class MyMQTTlistener(AbstractClient):
     def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None,  dataholders: dict = None):
+        AbstractClient.__init__(self, None, None, dataholders)
         self.mqtt_client = mqtt.Client(name)
         self.mqtt_client.on_message = self.on_message
         if username is not None and pwd is not None:

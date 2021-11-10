@@ -3,7 +3,8 @@ import logging
 
 # TODO: outsource
 defaults = {
-    'mqtt': {
+    'proto': {
+        'proto': 'mqtt',
         'broker': 'localhost',
         'user': None,
         'pwd': None
@@ -40,7 +41,7 @@ opt_fields = {
 
 
 class SettingsReader:
-    def __init__(self, msgs_path=None, plots_path=None, mqtt_path=None, db_path=None):
+    def __init__(self, msgs_path=None, plots_path=None, proto_path=None, db_path=None):
         if msgs_path is not None:
             self.msgs_path = msgs_path
         else:
@@ -51,10 +52,10 @@ class SettingsReader:
         else:
             self.plots_path = './settings/plots.yaml'  # TODO: remove literal
 
-        if mqtt_path is not None:
-            self.mqtt_path = mqtt_path
+        if proto_path is not None:
+            self.proto_path = proto_path
         else:
-            self.mqtt_path = './settings/mqtt.yaml'  # TODO: remove literal
+            self.proto_path = './settings/proto.yaml'  # TODO: remove literal
 
         if db_path is not None:
             self.db_path = db_path
@@ -67,20 +68,20 @@ class SettingsReader:
         self.logger = logging.getLogger('RKID.SettingsReader')
 
         self.topic_recs = None
-        self.mqtt_data = None
+        self.proto_data = None
         self.plots_rec = None
         self.db_data = None
 
     def read_data(self):
 
         try:
-            with open(self.mqtt_path) as file:
-                mqtt_data = yaml.safe_load(file)
+            with open(self.proto_path) as file:
+                proto_data = yaml.safe_load(file)
 
-            self.mqtt_data = self.check_full_default(mqtt_data, defaults['mqtt'], 'MQTT')
+            self.proto_data = self.check_full_default(proto_data, defaults['proto'], 'PROTO')
         except FileNotFoundError:
             self.logger.warning(f'MQTT data settings not found at: {self.mqtt_path},\nusing default values')
-            self.mqtt_data = defaults['mqtt']  # TODO: remove literal
+            self.proto_data = defaults['mqtt']  # TODO: remove literal
 
         try:
             with open(self.msgs_path) as file:
@@ -114,7 +115,7 @@ class SettingsReader:
             self.db_data = defaults['database']  # TODO: remove literal
             self.log_file_not_found('Database', self.db_path)
 
-        return self.topic_recs, self.plots_rec, self.mqtt_data, self.db_data
+        return self.topic_recs, self.plots_rec, self.proto_data, self.db_data
 
     def check_nested_lists(self, outmost_list: list, keys, fields_keys, whats):
         recs_passed = []
