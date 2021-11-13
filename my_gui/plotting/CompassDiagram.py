@@ -26,7 +26,7 @@ class CompassDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
             self.isRad = True
 
         for idx, line_rec in enumerate(recipe['lines']):  # TODO: remove literal
-            data = self.dataholder.getData(line_rec['field'])  # TODO: remove literal
+            data = self.dataholders[line_rec['message']].getData(line_rec['field'])  # TODO: remove literal
             if data is not None:
                 if self.isRad:
                     rad = data[-1]

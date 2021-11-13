@@ -42,7 +42,7 @@ class DataHolder(metaclass=abc.ABCMeta):
             try:
                 return self.data[key]
             except KeyError:
-                self.logger.warning(f'Couldn\'t find key {key}. {self.fields}')
+                self.logger.warning(f'Couldn\'t find key \'{key}\' in {self.fields}')
                 return None
 
     def pushData(self, newData):

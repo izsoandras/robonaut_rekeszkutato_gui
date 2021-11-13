@@ -19,11 +19,16 @@ class LineDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
         my_gui.plotting.AbstractDiagram.AbstractDiagram.__init__(self, subplot, dholders, recipe)
 
     def build_and_customize(self, recipe):
-        datanum = self.dataholder.size
+        keys = list(self.dataholders.keys())
+        if all(self.dataholders[keys[0]].size == self.dataholders[curr_key].size for curr_key in keys[1:]):
+            datanum = self.dataholders[keys[0]].size
+        else:
+            raise ValueError(f"Not all dataholders has the same length in plot {self.axes.get_title()}")
+
         self.axes.set_xlim([-datanum + 1, 0])
         self.axes.set_xticklabels([])
         for idx, line_rec in enumerate(recipe[LineDiagram.LINES]):
-            data = self.dataholder.getData(line_rec[LineDiagram.FIELD])
+            data = self.dataholders[line_rec["message"]].getData(line_rec[LineDiagram.FIELD])   # TODO: remove literal
             if data is not None:
                 self.axs[line_rec[LineDiagram.FIELD]], = self.axes.plot(list(range(-datanum + 1, 1)),
                                                                         data)
@@ -40,7 +45,14 @@ class LineDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
 
     def update_data(self):
         for key in self.axs.keys():
-            data = self.dataholder.getData(key)
+            msg_key = ''
+            for dh_key in self.dataholders.keys():
+                if self.dataholders[dh_key].name == key:
+                    msg_key = dh_key
+                    break
+
+            data = self.dataholders[key].getData(key)
+
             self.axs[key].set_ydata(data)
             self.annots[key].set_text(f'{data[-1]:.2f}')
 

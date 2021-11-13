@@ -125,7 +125,8 @@ class RKIguiApp():
             self.logger.info('-------SETUP COMPLETE----------')
             self.root.mainloop()
         except Exception as ex:
-            tkinter.messagebox.showerror("Application error", traceback.format_exc())
+            raise ex
+            # tkinter.messagebox.showerror("Application error", traceback.format_exc())
 
     def init_window(self):
         self.root = tkinter.Tk()

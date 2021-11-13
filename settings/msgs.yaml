@@ -25,7 +25,7 @@
     - name: motor telemetry
       type: 0x03
       format: '<fffff'
-      fields: ['speed_setpoint', 'avg speed', 'current setpoint','avg current', 'avg motor battery voltage']
+      fields: ['speed setpoint', 'avg speed', 'current setpoint','avg current', 'avg motor battery voltage']
 
     - name: ident telemetry
       type: 0x04
@@ -84,8 +84,8 @@
       format: '<'
       fields: []
       
-    - name: nav data
-      type: 0x22
-      format: '<BBBBB'
-      fields: ['dest','forb1','forb2','forb3','forb4']
-      new_line: True
+#    - name: nav data
+#      type: 0x22
+#      format: '<BBBBB'
+#      fields: ['dest','forb1','forb2','forb3','forb4']
+#      new_line: True

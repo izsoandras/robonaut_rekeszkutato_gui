@@ -10,14 +10,16 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
         self.axes = subplot
         self.axs = {}
         self.annots = {}
+        self.dataholders = {}
         self.logger = logging.getLogger(f'RKID.plot.{recipe["title"]}')  # TODO: remove literal
 
-        msg_name = recipe['lines'][0]['message']
-        try:
-            self.dataholder = dholders[msg_name]  # TODO: update for different source for different lines
-        except KeyError:
-            self.logger.warning(f'Dataholders do not have element: {msg_name}')
-            self.dataholder = dataholders.SeriesDataHolder.SeriesDataHolder('dummy', [], 10)
+        for line_rec in recipe['lines']:
+            msg_name = line_rec['message']
+            try:
+                self.dataholders[msg_name] = dholders[msg_name]  # TODO: update for different source for different lines
+            except KeyError:
+                self.logger.warning(f'Dataholders do not have element: {msg_name}')
+                self.dataholders[msg_name] = dataholders.SeriesDataHolder.SeriesDataHolder('dummy', [], 10)
 
         if 'ylim' in recipe.keys():
             self.axes.set_ylim(recipe['ylim'])
