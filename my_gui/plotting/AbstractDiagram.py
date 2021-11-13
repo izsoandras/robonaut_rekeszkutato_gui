@@ -47,3 +47,9 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
     def build_and_customize(self, recipe):
         pass
 
+    def get_msg_for_field(self, field_name):
+        for dh_key in self.dataholders.keys():
+            if field_name in self.dataholders[dh_key].fields:
+                return dh_key
+
+        raise KeyError(f"Couldn't find field {field_name} in any dataholder of plot {self.axes.get_title()}")

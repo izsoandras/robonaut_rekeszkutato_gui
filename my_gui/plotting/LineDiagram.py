@@ -45,13 +45,9 @@ class LineDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
 
     def update_data(self):
         for key in self.axs.keys():
-            msg_key = ''
-            for dh_key in self.dataholders.keys():
-                if self.dataholders[dh_key].name == key:
-                    msg_key = dh_key
-                    break
+            dh_key = self.get_msg_for_field(key)
 
-            data = self.dataholders[key].getData(key)
+            data = self.dataholders[dh_key].getData(key)
 
             self.axs[key].set_ydata(data)
             self.annots[key].set_text(f'{data[-1]:.2f}')

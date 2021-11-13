@@ -61,14 +61,14 @@ class RKIguiApp():
                 self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
                                                                                                       topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
                                                                                                  'RKI telemetry',
-                                                                                                      mqtt_data['broker'], 'tel',  # TODO: configurable topic
+                                                                                                      mqtt_data['broker'], topics_rec[0]['name'],  # TODO: configurable topic
                                                                                                       mqtt_data['user'],
                                                                                                       mqtt_data['pwd'], tel_dh_by_type)
 
                 self.log_listener = clients.mqtt.LogListener('RKI log',
                                                                               'RoboCar',
                                                                                    topics_rec[0]['messages'],
-                                                                                   mqtt_data['broker'], 'log',  # TODO: configurable topic
+                                                                                   mqtt_data['broker'], topics_rec[0]['name'],  # TODO: configurable topic
                                                                                    mqtt_data['user'],
                                                                                    mqtt_data['pwd'])
 
@@ -76,8 +76,8 @@ class RKIguiApp():
 
                 self.param_listener = clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
                                                                                        'RKI parameters',
-                                                                                            mqtt_data['broker'], 'param',
-                                                                                            # TODO: configurable topic
+                                                                                            mqtt_data['broker'],
+                                                                                            topics_rec[2]['name'], # TODO: configurable topic
                                                                                             mqtt_data['user'],
                                                                                             mqtt_data['pwd'], param_dh_by_type)
 

@@ -48,7 +48,9 @@ class CompassDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
 
     def update_data(self):
         for key in self.axs.keys():
-            data = self.dataholder.getData(key)[-1]
+            dh_key = self.get_msg_for_field(key)
+
+            data = self.dataholders[dh_key].getData(key)[-1]
             if self.isRad:
                 rad = data
             else:
