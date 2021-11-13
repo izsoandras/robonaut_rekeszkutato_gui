@@ -18,6 +18,7 @@ import clients.mqtt.listeners.MyMQTTllistener
 import utils.dataholder_factory
 import clients.serial.RKIUartListener
 import msg_codecs.frame_codecs.RKIUartCoder
+import traceback
 
 
 class RKIguiApp():
@@ -40,88 +41,91 @@ class RKIguiApp():
         self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
 
-        reader = utils.SettingsReader.SettingsReader()
-        topics_rec, plots_rec, proto_data, db_data = reader.read_data()
+        try:
+            reader = utils.SettingsReader.SettingsReader()
+            topics_rec, plots_rec, proto_data, db_data = reader.read_data()
 
-        if reader.severe:
-            messagebox.showerror('File not found', '\n'.join(reader.severe))
+            if reader.severe:
+                messagebox.showerror('File not found', '\n'.join(reader.severe))
 
-        self.dbproxy = utils.InfluxDBproxy.InfluxDBproxy(**db_data)
+            self.dbproxy = utils.InfluxDBproxy.InfluxDBproxy(**db_data)
 
-        # TODO: prepare data holders
-        tel_dh_by_name, tel_dh_by_type = utils.telemetry_factory.build_dataholders(topics_rec[1:2], plots_rec)
+            # TODO: prepare data holders
+            tel_dh_by_name, tel_dh_by_type = utils.telemetry_factory.build_dataholders(topics_rec[1:2], plots_rec)
 
-        _, param_dh_by_type = utils.dataholder_factory.build_param_dataholders(topics_rec[2:3])
+            _, param_dh_by_type = utils.dataholder_factory.build_param_dataholders(topics_rec[2:3])
 
-        self.log_listener = None
-        if proto_data["proto"] == 'mqtt':
-            mqtt_data = proto_data
-            self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
-                                                                                                  topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
-                                                                                             'RKI telemetry',
-                                                                                                  mqtt_data['broker'], 'tel',  # TODO: configurable topic
-                                                                                                  mqtt_data['user'],
-                                                                                                  mqtt_data['pwd'], tel_dh_by_type)
+            self.log_listener = None
+            if proto_data["proto"] == 'mqtt':
+                mqtt_data = proto_data
+                self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
+                                                                                                      topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
+                                                                                                 'RKI telemetry',
+                                                                                                      mqtt_data['broker'], 'tel',  # TODO: configurable topic
+                                                                                                      mqtt_data['user'],
+                                                                                                      mqtt_data['pwd'], tel_dh_by_type)
 
-            self.log_listener = clients.mqtt.LogListener('RKI log',
-                                                                          'RoboCar',
-                                                                               topics_rec[0]['messages'],
-                                                                               mqtt_data['broker'], 'log',  # TODO: configurable topic
-                                                                               mqtt_data['user'],
-                                                                               mqtt_data['pwd'])
+                self.log_listener = clients.mqtt.LogListener('RKI log',
+                                                                              'RoboCar',
+                                                                                   topics_rec[0]['messages'],
+                                                                                   mqtt_data['broker'], 'log',  # TODO: configurable topic
+                                                                                   mqtt_data['user'],
+                                                                                   mqtt_data['pwd'])
 
-            self.log_listener.subscribe()
+                self.log_listener.subscribe()
 
-            self.param_listener = clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
-                                                                                   'RKI parameters',
-                                                                                        mqtt_data['broker'], 'param',
-                                                                                        # TODO: configurable topic
-                                                                                        mqtt_data['user'],
-                                                                                        mqtt_data['pwd'], param_dh_by_type)
+                self.param_listener = clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
+                                                                                       'RKI parameters',
+                                                                                            mqtt_data['broker'], 'param',
+                                                                                            # TODO: configurable topic
+                                                                                            mqtt_data['user'],
+                                                                                            mqtt_data['pwd'], param_dh_by_type)
 
-            robot_file_handler = logging.FileHandler('robot.log', mode='w')
-            robot_file_handler.setFormatter(file_formatter)
-            self.log_listener.robot_logger.addHandler(robot_file_handler)
-            self.logger.info('Network setup done')
-        elif proto_data["proto"] == 'serial':
-            frame_coder = msg_codecs.frame_codecs.RKIUartCoder.RKIUartCoder(proto_data['max_len'])
-            payload_coders = {}
-            dhs = {**tel_dh_by_type, **param_dh_by_type}
-            all_rec = topics_rec[1]['messages']
-            all_rec.extend(topics_rec[2]['messages'])
-            for recipe in all_rec:
-                payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe)  # TODO: ne literal legyen
-            serial_listener = clients.serial.RKIUartListener.RKIUartListener('Serial',
-                                                                             proto_data['port'],
-                                                                             frame_coder,
-                                                                             payload_coders,
-                                                                             dhs,
-                                                                             proto_data['baudrate'])
-            self.param_listener = serial_listener
-            self.tel_listener = serial_listener
+                robot_file_handler = logging.FileHandler('robot.log', mode='w')
+                robot_file_handler.setFormatter(file_formatter)
+                self.log_listener.robot_logger.addHandler(robot_file_handler)
+                self.logger.info('Network setup done')
+            elif proto_data["proto"] == 'serial':
+                frame_coder = msg_codecs.frame_codecs.RKIUartCoder.RKIUartCoder(proto_data['max_len'])
+                payload_coders = {}
+                dhs = {**tel_dh_by_type, **param_dh_by_type}
+                all_rec = topics_rec[1]['messages']
+                all_rec.extend(topics_rec[2]['messages'])
+                for recipe in all_rec:
+                    payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe)  # TODO: ne literal legyen
+                serial_listener = clients.serial.RKIUartListener.RKIUartListener('Serial',
+                                                                                 proto_data['port'],
+                                                                                 frame_coder,
+                                                                                 payload_coders,
+                                                                                 dhs,
+                                                                                 proto_data['baudrate'])
+                self.param_listener = serial_listener
+                self.tel_listener = serial_listener
 
-        # Create GUI
-        self.root = None
-        self.init_window()
-        self.param_frame = None
-        self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type, self.param_listener)  # TODO: remove literal
-        self.log_frame = None
-        self.init_logview()
-        self.tabs = None
-        self.init_tabs(tel_dh_by_name, plots_rec)
-        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+            # Create GUI
+            self.root = None
+            self.init_window()
+            self.param_frame = None
+            self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type, self.param_listener)  # TODO: remove literal
+            self.log_frame = None
+            self.init_logview()
+            self.tabs = None
+            self.init_tabs(tel_dh_by_name, plots_rec)
+            self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        self.logger.info('GUI set up')
+            self.logger.info('GUI set up')
 
-        if test_source_en:
-            self.test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
-            self.test_producer_process.start()
-            self.logger.info('Test source started')
-        else:
-            self.test_producer_process = None
+            if test_source_en:
+                self.test_producer_process = multiprocessing.Process(target=test_source.run, args=(0.2,))
+                self.test_producer_process.start()
+                self.logger.info('Test source started')
+            else:
+                self.test_producer_process = None
 
-        self.logger.info('-------SETUP COMPLETE----------')
-        self.root.mainloop()
+            self.logger.info('-------SETUP COMPLETE----------')
+            self.root.mainloop()
+        except Exception as ex:
+            tkinter.messagebox.showerror("Application error", traceback.format_exc())
 
     def init_window(self):
         self.root = tkinter.Tk()
