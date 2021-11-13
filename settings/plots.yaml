@@ -1,6 +1,22 @@
 ### Plots
+# sample_num: <num_of_samples>
+# update_period: <update_time_of_plots_in_ms>
+# plots:
+#   - title: <title>
+#     type: <plot_type>       # chooes from: series, bar, compass
+#                             # special fields:
+#                             #     compass:
+#                             #         isRad: True/False   -   define whether the orientation is in radians or degrees
+#                             #         theta_dir: +/-1   -   theta increases CCW or CW
+#     (ylim: [<min>,<max>])
+#     lines:
+#       - message: <message_name>
+#       - field: <field_name>
+#       (- legend: <legend>)
+#       [...]
+#   [...]
 
-sample_num: 50
+sample_num: 50     # display sample number
 update_period: 200 # [ms]
 layout: [2,3] # [<rows_num>,<col_num>]
 plots:
@@ -8,166 +24,52 @@ plots:
     type: series
     ylim: [0, 14]
     lines:
-      - message: battery
-        field: batt
+      - message: main battery
+        field: 'avg voltage'
+        legend: '[V]'
+        
+      - message: motor telemetry
+        field: 'avg motor battery voltage'
         legend: '[V]'
 
-#  - title: 'Single speed'
-#    type: series
-#    ylim: [-15,15]
-#    lines:
-#      - message: speed
-#        field: w
-#        legend: 'w[rad/s]'
-#  - title: 'Duty cycle'
-#    type: series
-#    ylim: [0,100]
-#    lines:
-#      - message: speed
-#        field: duty
-#        legend: 'duty[%]'
+  - title: 'Speed'
+    type: series
+    ylim: [-100,100]
+    lines:
+      - message: motor telemetry
+        field: 'speed setpoint'
+        legend: 'setp'
+
+      - message: motor telemetry
+        field: 'avg speed'
+        legend: 'actual'
+        
+  - title: 'Current'
+    type: series
+    ylim: [-100,100]
+    lines:
+      - message: motor telemetry
+        field: 'current setpoint'
+        legend: 'setp'
+
+      - message: motor telemetry
+        field: 'avg current'
+        legend: 'actual'
+  
+  - title: 'Heading'
+    type: compass
+    isRad: False
+    theta_dir: 1
+    lines:
+      - message: orientation
+        field: 'yaw angle'
+        legend: ''
+
 
   - title: 'Distance'
     type: series
     ylim: [0,2000]
     lines:
         - message: distance
-          field: dist
-          legend: 'distance[mm]'
-
-#  - title: 'Mot1'
-#    type: series
-#    ylim: [0,10]
-#    lines:
-#      - message: mot1_speed
-#        field: speed
-#        legend: 'speed[rad/s]'
-#      - message: mot1_speed
-#        field: setpoint
-#        legend: 'setp[rad/s]'
-#  - title: 'Mot2'
-#    type: series
-#    ylim: [ 0,10 ]
-#    lines:
-#      - message: mot2_speed
-#        field: speed
-#        legend: 'speed[rad/s]'
-#      - message: mot2_speed
-#        field: setpoint
-#        legend: 'setp[rad/s]'
-#  - title: 'Mot3'
-#    type: series
-#    ylim: [ 0,10 ]
-#    lines:
-#      - message: mot3_speed
-#        field: speed
-#        legend: 'speed[rad/s]'
-#      - message: mot3_speed
-#        field: setpoint
-#        legend: 'setp[rad/s]'
-
-#  - title: 'Magnetometer'
-#    type: series
-#    ylim: [-500, 500]
-#    lines:
-#      - message: imu_mag
-#        field: X
-#        legend: 'x'
-#
-#      - message: imu_mag
-#        field: Y
-#        legend: 'y'
-#
-#      - message: imu_mag
-#        field: Z
-#        legend: 'z'
-#
-#  - title: 'Accelerometer'
-#    type: series
-#    ylim: [ -2, 2 ]
-#    lines:
-#      - message: imu_acc
-#        field: X
-#        legend: 'x'
-#
-#      - message: imu_acc
-#        field: Y
-#        legend: 'y'
-#
-#      - message: imu_acc
-#        field: Z
-#        legend: 'z'
-#
-#  - title: 'Gyroscope'
-#    type: series
-#    ylim: [ -250, 250 ]
-#    lines:
-#      - message: imu_gyro
-#        field: X
-#        legend: 'x'
-#
-#      - message: imu_gyro
-#        field: Y
-#        legend: 'y'
-#
-#      - message: imu_gyro
-#        field: Z
-#        legend: 'z'
-
-  - title: 'X Pos'
-    type: series
-    ylim: [-3, 3]
-    lines:
-      - message: state_vec
-        field: x_pos
-        legend: 'curr'
-
-      - message: state_vec
-        field: x_pos_setp
-        legend: 'setp'
-
-
-  - title: 'Y Pos'
-    type: series
-    ylim: [-3, 3]
-    lines:
-      - message: state_vec
-        field: y_pos
-        legend: 'curr'
-
-      - message: state_vec
-        field: y_pos_setp
-        legend: 'setp'
-
-
-  - title: 'Heading'
-    type: compass
-    isRad: True
-    theta_dir: 1
-    lines:
-      - message: state_vec
-        field: head
-        legend: 'curr'
-
-      - message: state_vec
-        field: head_setp
-        legend: 'setp'
-
-  - title: 'Ctrl vec dir'
-    type: compass
-    lines:
-      - message: control_vec
-        field: ang
-        legend: 'ang'
-
-      - message: control_vec
-        field: gang
-        legend: 'gang'
-#
-#  - title: 'Ctrl vec magnitude'
-#    type: series
-#    lines:
-#      - message: control_vec
-#        field: magn
-#        legend: 'magnitude [m/s]'
-
+          field: distance
+          legend: '[mm]'

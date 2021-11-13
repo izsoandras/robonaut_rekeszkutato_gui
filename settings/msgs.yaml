@@ -7,172 +7,85 @@
 #   [...]
 # [...]
 
-
-#- name: log
-#  messages:
-#    - name: log
-#      type: 0x00
-#      format: 'Bs'
-#      fields: [level, msg]
-#      prefixes: [INFO, ERR, WARN]
-#
-#- name: tel
-#  messages:
-#    - name: batt
-#      type: 0x01
-#      format: '>HH'
-#      fields: [aux, mot]
-#      factors: [0.0045934065934066, 0.0045934065934066] # [209/45500, 209/45500]
-#
-#    - name: front_line
-#      type: 0x02
-#      format: '>IBfff'
-#      fields: [detect, num, pos1, pos2, pos3]
-#
-#    - name: back_line
-#      type: 0x03
-#      format: '>IBfff'
-#      fields: [ detect, num, pos1, pos2, pos3 ]
-#
-#    - name: speed
-#      type: 0x04
-#      format: '>HffffII'
-#      fields: [duty, current, current_setp, speed, speed_setp, distance, distance_setp]
-#
-#    - name: imu
-#      type: 0x0E
-#      format: '>ff'
-#      fields: [heading, heading_setp]
-#
-#- name: param
-#  messages:
-#    - name: servo_cal
-#      type: 0x06
-#      format: '>HHHH'
-#      fields: [center1, center2, delta1, delta2]
-#    - name: current_setp
-#      type: 0x07
-#      format: 'f'
-#      fields: [current_setp]
-#    - name: speed_setp
-#      type: 0x08
-#      format: 'f'
-#      fields: [speed_setp]
-#    - name: line_param
-#      type: 0x09
-#      format: 'fff'
-#      fields: [kszi, d0, dv]
-#    - name: start
-#      type: 0x0A
-#      format: ''
-#      fields: []
-#    - name: stop
-#      type: 0x0B
-#      format: ''
-#      fields: []
-#    - name: gate
-#      type: 0x0C
-#      format: 'c'
-#      fields: [gate]
-#
 - name: log
   messages:
     - name: log
       type: 0x00
       format: 'Bs'
       fields: [level, msg]
-      prefixes: [INFO, ERR, WARN]
+      prefixes: [DEBUG, INFO, WARN, ERR, CRIT]
 
 - name: tel
   messages:
-    - name: battery
+    - name: LCD
       type: 0x01
-      format: 'f'
-      fields: [batt]
+      format: 's'
+      fields: [msg]
 
-    - name: speed
-      type: 0xA1
+    - name: motor telemetry
+      type: 0x03
+      format: '<fffff'
+      fields: ['speed_setpoint', 'avg speed', 'current setpoint','avg current', 'avg motor battery voltage']
+
+    - name: ident telemetry
+      type: 0x04
       format: '<ff'
-      fields: [duty, w]
+      fields: ['current setpoint', speed']
+
+    - name: line
+      type: 0x05
+      format: '<QQBB'
+      fileds: ['front detection', 'rear detection', 'front num', 'rear num']
+
+    - name: orientation
+      type: 0x06
+      format: '<f'
+      fields: ['yaw angle']
 
     - name: distance
-      type: 0xA3
+      type: 0x07
       format: '<H'
-      fields: [dist]
+      fields: ['distance']
 
-    - name: mot1_speed
-      type: 0xA5
-      format: '<ff'
-      fields: [speed, setpoint]
-
-    - name: mot2_speed
-      type: 0xA6
-      format: '<ff'
-      fields: [ speed, setpoint ]
-
-    - name: mot3_speed
-      type: 0xA7
-      format: '<ff'
-      fields: [ speed, setpoint ]
-
-    - name: imu_mag
-      type: 0x90
-      format: '<fff'
-      fields: [X, Y, Z]
-
-    - name: imu_acc
-      type: 0x91
-      format: '<fff'
-      fields: [ X, Y, Z ]
-
-    - name: imu_gyro
-      type: 0x92
-      format: '<fff'
-      fields: [ X, Y, Z ]
-
-
-    - name: x_pos
-      type: 0x80
-      format: '<ff'
-      fields: [x_curr, x_setp]
-
-    - name: y_pos
-      type: 0x81
-      format: '<ff'
-      fields: [ y_curr, y_setp ]
-
-    - name: head
-      type: 0x82
-      format: '<ff'
-      fields: [ h_curr, h_setp ]
-
-    - name: control_vec
-      type: 0x83
-      format: '<fff'
-      fields: [gang, ang, magn]
-
-    - name: state_vec
-      type: 0x84
-      format: '<ffffff'
-      fields: [ x_pos, y_pos, head, x_pos_setp, y_pos_setp, head_setp ]
+    - name: main battery
+      type: 0x08
+      format: '<f'
+      fields: ['avg voltage']
 
 - name: param
   messages:
-    - name: wheel_setp
-      type: 0xA4
-      format: '<fff'
-      fields: [mot1, mot2, mot3]
-    - name: ident_duty
-      type: 0xA8
-      format: '<f'
-      fields: ['duty']
-
-    - name: Robot control vec
-      type: 0xA9
-      format: '<fff'
-      fields: [V_x, V_y, w]
-
-    - name: Ref state
-      type: 0x94
-      format: '<fff'
-      fields: [x_pos, y_pos, head]
+    - name: motor setpoints
+      type: 0x10
+      format: '<ff'
+      fields: ['speed setpoint', 'current setpoint']
+      
+    - name: servo center
+      type: 0x11
+      format: '<HHH'
+      fields: ['front', 'rear','ToF']
+      
+    - name: line control
+      type: 0x12
+      format: '<'
+      fields: []
+      
+    - name: distance control
+      type: 0x13
+      format: '<ff'
+      fields: ['P','I']
+      
+    - name: start
+      type: 0x20
+      format: '<'
+      fields: []
+      
+    - name: stop
+      type: 0x21
+      format: '<'
+      fields: []
+      
+    - name: nav data
+      type: 0x22
+      format: '<BBBBB'
+      fields: ['dest','forb1','forb2','forb3','forb4']
+      new_line: True
