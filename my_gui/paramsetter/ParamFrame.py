@@ -3,6 +3,7 @@ import logging
 import my_gui.paramsetter.paramviews.paramview_factory as pv_factory
 import clients.mqtt.listeners.MyMQTTllistener as mml
 import threading
+import copy
 
 
 class ParamFrame(tkinter.Frame):
@@ -71,7 +72,11 @@ class ParamFrame(tkinter.Frame):
         self.client.ask_update(self.msg_id)
 
     def update_view(self):
-        data = self.dataholder.getData()
+        data = copy.deepcopy( self.dataholder.getData())
+
+        # TODO: miert van benne idx?
+        if 'idx' in data.keys():
+            data.pop('idx')
         if data is not None:
             for key in data.keys():
                 self.param_views[key].set_view(data[key][-1])

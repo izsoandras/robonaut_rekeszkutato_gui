@@ -8,9 +8,9 @@ from tkinter import filedialog
 
 
 class SetParamsFrame(my_gui.InheritableScrollableFrame.ScrollableFrame):
-    def __init__(self, parent, msgs_recipes: list, client, dataholders_by_id: dict, *args, **kwargs):
+    def __init__(self, parent, msgs_recipes: list, client, dataholders_by_id: dict, update_time: int = 20, *args, **kwargs):
         my_gui.InheritableScrollableFrame.ScrollableFrame.__init__(self,parent, *args,**kwargs)
-
+        self.update_time = update_time
         self.logger = logging.getLogger('Paramsframe')
 
         self.paramframes = []
@@ -27,6 +27,8 @@ class SetParamsFrame(my_gui.InheritableScrollableFrame.ScrollableFrame):
         self.btn_updateall.pack(side=tkinter.LEFT)
         self.btn_saveall.pack(side=tkinter.LEFT)
         self.fr_buttons.pack(side=tkinter.TOP)
+
+        self.poll_update()
 
     def send_all(self):
         for frame in self.paramframes:
@@ -56,4 +58,11 @@ class SetParamsFrame(my_gui.InheritableScrollableFrame.ScrollableFrame):
         with open(f, 'w') as param_file:
             yaml.dump(datas, param_file)
 
+    def update_view(self):
+        for paramframe in self.paramframes:
+            paramframe.update_view()
 
+    def poll_update(self):
+        self.update_view()
+        print("update paramview")
+        self.master.after(self.update_time, self.poll_update)

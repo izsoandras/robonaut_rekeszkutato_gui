@@ -9,6 +9,7 @@ class MyMQTTlistener(AbstractClient):
     def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None,  dataholders: dict = None):
         AbstractClient.__init__(self, None, None, dataholders)
         self.mqtt_client = mqtt.Client(name)
+        self.name = name
         self.mqtt_client.on_message = self.on_message
         if username is not None and pwd is not None:
             self.mqtt_client.username_pw_set(username, pwd)
@@ -55,24 +56,6 @@ class MyMQTTlistener(AbstractClient):
         self.mqtt_client.unsubscribe(self.topic)
         self.logger.info(f'Unsubscribed from: {self.topic}')
 
-    def send_message(self, type: int, data: dict):
-        coder = self.payload_coders[type]
-
-        try:
-            payload = coder.encode(data)
-        except KeyError as ex:
-            self.logger.error(ex)
-            return
-
-        msg = self.msg_coder.construct_message(type, payload)
-
-        self.mqtt_client.publish(self.topic, msg)
-        self.logger.debug(f"Data {data} sent on topic {self.topic} as {msg}")
-
-    def ask_update(self, type: int):
-        msg = self.msg_coder.construct_message(type, bytes(0))
-        self.mqtt_client.publish(self.topic, msg)
-        self.logger.debug(f"Asked for updates through {self.topic} for msg {type}")
 
 
 

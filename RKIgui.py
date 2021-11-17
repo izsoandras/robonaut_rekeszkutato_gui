@@ -59,27 +59,33 @@ class RKIguiApp():
             if proto_data["proto"] == 'mqtt':
                 mqtt_data = proto_data
                 self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
-                                                                                                      topics_rec[1]['messages'],  # TODO: ne szammal legyen indexolve
-                                                                                                 'RKI telemetry',
-                                                                                                      mqtt_data['broker'], topics_rec[0]['name'],  # TODO: configurable topic
-                                                                                                      mqtt_data['user'],
-                                                                                                      mqtt_data['pwd'], tel_dh_by_type)
+                                                                       topics_rec[1]['messages'],
+                                                                       # TODO: ne szammal legyen indexolve
+                                                                       'RKI telemetry',
+                                                                       mqtt_data['broker'], topics_rec[0]['name'],
+                                                                       # TODO: configurable topic
+                                                                       mqtt_data['user'],
+                                                                       mqtt_data['pwd'], tel_dh_by_type)
 
                 self.log_listener = clients.mqtt.LogListener('RKI log',
-                                                                              'RoboCar',
-                                                                                   topics_rec[0]['messages'],
-                                                                                   mqtt_data['broker'], topics_rec[0]['name'],  # TODO: configurable topic
-                                                                                   mqtt_data['user'],
-                                                                                   mqtt_data['pwd'])
+                                                             'RoboCar',
+                                                             topics_rec[0]['messages'],
+                                                             mqtt_data['broker'], topics_rec[0]['name'],
+                                                             # TODO: configurable topic
+                                                             mqtt_data['user'],
+                                                             mqtt_data['pwd'])
 
                 self.log_listener.subscribe()
 
-                self.param_listener = clients.mqtt.listeners.MyMQTTllistener.MyMQTTlistener(topics_rec[2]['messages'],
-                                                                                       'RKI parameters',
-                                                                                            mqtt_data['broker'],
-                                                                                            topics_rec[2]['name'], # TODO: configurable topic
-                                                                                            mqtt_data['user'],
-                                                                                            mqtt_data['pwd'], param_dh_by_type)
+                self.param_listener = clients.mqtt.listeners.ParamListener(topics_rec[2]['messages'],
+                                                                           'RKI parameters',
+                                                                           mqtt_data['broker'],
+                                                                           'param',
+                                                                           # TODO: configurable topic
+                                                                           topics_rec[2]['name'],  # TODO: configurable topic
+                                                                           mqtt_data['user'],
+                                                                           mqtt_data['pwd'], param_dh_by_type)
+                self.param_listener.subscribe()
 
                 robot_file_handler = logging.FileHandler('robot.log', mode='w')
                 robot_file_handler.setFormatter(file_formatter)
@@ -92,7 +98,8 @@ class RKIguiApp():
                 all_rec = topics_rec[1]['messages']
                 all_rec.extend(topics_rec[2]['messages'])
                 for recipe in all_rec:
-                    payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe)  # TODO: ne literal legyen
+                    payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(
+                        **recipe)  # TODO: ne literal legyen
                 serial_listener = clients.serial.RKIUartListener.RKIUartListener('Serial',
                                                                                  proto_data['port'],
                                                                                  frame_coder,
@@ -106,7 +113,8 @@ class RKIguiApp():
             self.root = None
             self.init_window()
             self.param_frame = None
-            self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type, self.param_listener)  # TODO: remove literal
+            self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type,
+                                 self.param_listener)  # TODO: remove literal
             self.log_frame = None
             self.init_logview()
             self.tabs = None
@@ -151,7 +159,8 @@ class RKIguiApp():
         # Tabs
         self.tabs = ttk.Notebook(self.root)
 
-        telemetry_tab = my_gui.plotting.TelemeteryFrame.TelemetryFrame(self.tabs, self.tel_listener, dh_by_name, plot_rec)
+        telemetry_tab = my_gui.plotting.TelemeteryFrame.TelemetryFrame(self.tabs, self.tel_listener, dh_by_name,
+                                                                       plot_rec)
         db_tab = my_gui.db_frames.DbExportFrame.DBExportFrame(self.tabs, self.dbproxy)
         self.tabs.add(telemetry_tab, text='Graphs')
         self.tabs.add(db_tab, text='Database')

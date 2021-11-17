@@ -5,7 +5,7 @@ import struct
 class RKIMessageCoder(AbstractCoder):
     @staticmethod
     def construct_message(type_id, data):
-        type32 = struct.pack('>I', type)
+        type32 = struct.pack('>I', type_id)
 
         if type_id > 0xFF:
             raise ValueError('Type is over 0xFF: ' + type_id)
@@ -15,6 +15,8 @@ class RKIMessageCoder(AbstractCoder):
         enc_msg = bytearray(0)
         enc_msg.extend(type_byte)
         enc_msg.extend(data)
+
+        return enc_msg
 
     @staticmethod
     def deconstruct_message(msg):

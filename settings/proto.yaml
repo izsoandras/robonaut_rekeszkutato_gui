@@ -1,9 +1,9 @@
-#proto: 'mqtt'
-#broker: 'localhost'
-#user: 'rekesz'
-#pwd: '12345678'
+proto: 'mqtt'
+broker: '152.66.181.27'
+user: 'rekesz'
+pwd: '12345678'
 
-proto: 'serial'
-port: 'COM3'
-baudrate: 115200
-max_len: 169
+#proto: 'serial'
+#port: 'COM3'
+#baudrate: 115200
+#max_len: 169

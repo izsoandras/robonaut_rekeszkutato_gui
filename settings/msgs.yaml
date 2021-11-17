@@ -56,7 +56,7 @@
       format: '<f'
       fields: ['avg voltage']
 
-- name: param
+- name: comm
   messages:
     - name: motor setpoints
       type: 0x10
