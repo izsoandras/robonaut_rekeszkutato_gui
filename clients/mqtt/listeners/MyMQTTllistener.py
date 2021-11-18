@@ -20,7 +20,7 @@ class MyMQTTlistener(AbstractClient):
 
         self.dataholders = dataholders
 
-        self.msg_coder = msg_codecs.frame_codecs.RKIMessageCoder()
+        self.msg_coder = msg_codecs.frame_codecs.RKIMessageCoder()  # TODO: configurable msg coder
         self.payload_coders = None
         self.build_coders(msg_recipes)
 
