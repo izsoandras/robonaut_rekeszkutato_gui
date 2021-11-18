@@ -1,6 +1,7 @@
 import struct
 from .PayloadCoder import PayloadCoder
 
+
 class LogCoder(PayloadCoder):
     def __init__(self, msg_type: int):
         PayloadCoder.__init__(self, 'log', msg_type, 'Bs', ['level', 'message'])

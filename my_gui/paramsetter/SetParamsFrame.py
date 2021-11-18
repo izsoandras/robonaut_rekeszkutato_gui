@@ -64,5 +64,4 @@ class SetParamsFrame(my_gui.InheritableScrollableFrame.ScrollableFrame):
 
     def poll_update(self):
         self.update_view()
-        print("update paramview")
         self.master.after(self.update_time, self.poll_update)

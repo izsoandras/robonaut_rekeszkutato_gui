@@ -62,7 +62,7 @@ class RKIguiApp():
                                                                        topics_rec[1]['messages'],
                                                                        # TODO: ne szammal legyen indexolve
                                                                        'RKI telemetry',
-                                                                       mqtt_data['broker'], topics_rec[0]['name'],
+                                                                       mqtt_data['broker'], topics_rec[1]['name'],
                                                                        # TODO: configurable topic
                                                                        mqtt_data['user'],
                                                                        mqtt_data['pwd'], tel_dh_by_type)
