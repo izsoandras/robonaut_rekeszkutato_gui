@@ -6,6 +6,8 @@ import matplotlib.pyplot
 import my_gui.plotting.LineDiagram
 import my_gui.plotting.CompassDiagram
 import my_gui.plotting.BarDiagram
+from .Spectogram import Spectogram
+from .SpectogramBinary import SpectogramBinary
 
 
 class PlotsFrame(tkinter.Frame):
@@ -30,6 +32,12 @@ class PlotsFrame(tkinter.Frame):
                 elif plot_rec['type'] == 'bar':
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
                     new_plot = my_gui.plotting.BarDiagram.BarDiagram(axes, dataholders, plot_rec)
+                elif plot_rec['type'] == 'spec':
+                    axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
+                    new_plot = Spectogram(axes,dataholders,plot_rec)
+                elif plot_rec['type'] == 'spec_bin':
+                    axes = self.fig.add_subplot(layout[0], layout[1], idx + 1)
+                    new_plot = SpectogramBinary(axes, dataholders, plot_rec)
                 else:
                     axes = self.fig.add_subplot(layout[0], layout[1], idx+1)
                     new_plot = my_gui.plotting.LineDiagram.LineDiagram(axes, dataholders, plot_rec)

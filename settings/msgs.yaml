@@ -39,7 +39,7 @@
     - name: line
       type: 0x05
       format: '<QQBB'
-      fileds: ['front detection', 'rear detection', 'front num', 'rear num']
+      fields: ['front detection', 'rear detection', 'front num', 'rear num']
 
     - name: orientation
       type: 0x06

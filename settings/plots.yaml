@@ -73,3 +73,9 @@ plots:
         - message: distance
           field: distance
           legend: '[mm]'
+
+  - title: 'Front line'
+    type: spec_bin
+    lines:
+      - message: line
+        field: front detection

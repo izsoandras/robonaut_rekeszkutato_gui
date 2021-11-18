@@ -42,7 +42,7 @@ def build_dataholders(msgs_reicpes, plots_recipe=None):
         for msg_rec in topic_rec['messages']:  # TODO: kiszervezni
             dh_type = find_plot_type(msg_rec['name'], plots_recipe['plots'])  # TODO: kiszervezni
 
-            if dh_type == 'series':
+            if dh_type == 'series' or dh_type == 'spec':
                 new_dh = SeriesDataHolder(msg_rec['name'], msg_rec['fields'], plots_recipe['sample_num'])
             elif dh_type == 'bar' or dh_type == 'compass':
                 new_dh = FixedDataholder(msg_rec['name'], msg_rec['fields'], plots_recipe['sample_num'])
