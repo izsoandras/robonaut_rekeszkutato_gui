@@ -38,7 +38,7 @@
 
     - name: line
       type: 0x05
-      format: '<QQBB'
+      format: '>IIBB'
       fields: ['front detection', 'rear detection', 'front num', 'rear num']
 
     - name: orientation

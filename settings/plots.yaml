@@ -66,16 +66,29 @@ plots:
         legend: ''
 
 
-  - title: 'Distance'
-    type: series
-    ylim: [0,2000]
-    lines:
-        - message: distance
-          field: distance
-          legend: '[mm]'
+#  - title: 'Distance'
+#    type: series
+#    ylim: [0,2000]
+#    lines:
+#        - message: distance
+#          field: distance
+#          legend: '[mm]'
 
   - title: 'Front line'
     type: spec_bin
     lines:
       - message: line
         field: front detection
+
+  - title: 'Rear line'
+    type: spec_bin
+    lines:
+      - message: line
+        field: rear detection
+#  - title: 'Line num'
+#    type: series
+#    ylim: [0,5]
+#    lines:
+#        - message: line
+#          field: front num
+#          legend: '[db]'
