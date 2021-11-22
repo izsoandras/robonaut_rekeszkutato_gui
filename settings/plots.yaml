@@ -76,12 +76,16 @@ plots:
 
   - title: 'Front line'
     type: spec_bin
+    flipud: false
+    fliplr: false
     lines:
       - message: line
         field: front detection
 
   - title: 'Rear line'
     type: spec_bin
+    flipud: false
+    fliplr: true
     lines:
       - message: line
         field: rear detection
