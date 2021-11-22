@@ -43,7 +43,7 @@ class Spectogram(AbstractDiagram):
             mtx_data = np.flipud(mtx_data)
 
         if self.fliplr:
-            mtx_data = np.fliplr(self.fliplr)
+            mtx_data = np.fliplr(mtx_data)
 
         return mtx_data
 

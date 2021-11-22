@@ -1,4 +1,5 @@
 import yaml
+import yaml.scanner
 import logging
 
 # TODO: outsource
@@ -35,7 +36,7 @@ comp_fields = {
 opt_fields = {
     'topic': [],
     'msgs': ['factors'],
-    'plot': ['title', 'type', 'ylim', 'bins', 'sample_num'],
+    'plot': ['title', 'type', 'ylim', 'bins', 'sample_num', 'isRad', 'theta_dir', 'flipud', 'fliplr'],
     'line': ['legend']
 }
 
@@ -82,6 +83,9 @@ class SettingsReader:
         except FileNotFoundError:
             self.logger.warning(f'MQTT data settings not found at: {self.mqtt_path},\nusing default values')
             self.proto_data = defaults['mqtt']  # TODO: remove literal
+        except yaml.scanner.ScannerError as se:
+            self.proto_data = defaults['mqtt']
+            self.logger.error(str(se))
 
         try:
             with open(self.msgs_path) as file:
@@ -92,6 +96,9 @@ class SettingsReader:
         except FileNotFoundError:
             self.topic_recs = defaults['topics']  # TODO: remove literal
             self.log_file_not_found('Msgs', self.msgs_path)
+        except yaml.scanner.ScannerError as se:
+            self.topic_recs = defaults['topics']
+            self.logger.error(str(se))
 
         try:
             with open(self.plots_path) as file:
@@ -103,8 +110,11 @@ class SettingsReader:
 
             self.plots_rec = plots_rec
         except FileNotFoundError:
-            self.plots_rec = defaults['plot']  # TODO: remove literal
+            self.plots_rec = defaults['plotting']  # TODO: remove literal
             self.log_file_not_found('Plots', self.plots_path)
+        except yaml.scanner.ScannerError as se:
+            self.plots_rec = defaults['plotting']
+            self.logger.error(str(se))
 
         try:
             with open(self.db_path) as file:
@@ -114,6 +124,9 @@ class SettingsReader:
         except FileNotFoundError:
             self.db_data = defaults['database']  # TODO: remove literal
             self.log_file_not_found('Database', self.db_path)
+        except yaml.scanner.ScannerError as se:
+            self.db_data = defaults['database']
+            self.logger.error(str(se))
 
         return self.topic_recs, self.plots_rec, self.proto_data, self.db_data
 

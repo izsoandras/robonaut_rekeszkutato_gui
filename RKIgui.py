@@ -41,6 +41,12 @@ class RKIguiApp():
         self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
 
+        # Create GUI
+        self.root = None
+        self.init_window()
+        self.log_frame = None
+        self.init_logview()
+
         try:
             reader = utils.SettingsReader.SettingsReader()
             topics_rec, plots_rec, proto_data, db_data = reader.read_data()
@@ -109,17 +115,19 @@ class RKIguiApp():
                 self.param_listener = serial_listener
                 self.tel_listener = serial_listener
 
-            # Create GUI
-            self.root = None
-            self.init_window()
+            if self.log_listener is not None:
+                self.log_listener.robot_logger.addHandler(self.log_frame.logHandler)
+
             self.param_frame = None
             self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type,
                                  self.param_listener)  # TODO: remove literal
-            self.log_frame = None
-            self.init_logview()
             self.tabs = None
             self.init_tabs(tel_dh_by_name, plots_rec)
             self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+            self.param_frame.pack_parent(side=tkinter.RIGHT, fill=tkinter.Y)
+            self.log_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
+            self.tabs.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH)
 
             self.logger.info('GUI set up')
 
@@ -131,6 +139,7 @@ class RKIguiApp():
                 self.test_producer_process = None
 
             self.logger.info('-------SETUP COMPLETE----------')
+
             self.root.mainloop()
         except Exception as ex:
             raise ex
@@ -146,14 +155,10 @@ class RKIguiApp():
     def init_logview(self):
         self.log_frame = my_gui.logging.ScreenLogger.ScreenLogger(self.root)
         logging.getLogger('RKID').addHandler(self.log_frame.logHandler)  # TODO: outsource literal
-        if self.log_listener is not None:
-            self.log_listener.robot_logger.addHandler(self.log_frame.logHandler)
-        self.log_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
 
     def init_paramframe(self, msgs_recipes, dh_by_type, client):
         # Params frame
         self.param_frame = my_gui.paramsetter.SetParamsFrame.SetParamsFrame(self.root, msgs_recipes, client, dh_by_type)
-        self.param_frame.pack_parent(side=tkinter.RIGHT, fill=tkinter.Y)
 
     def init_tabs(self, dh_by_name, plot_rec):
         # Tabs
@@ -165,8 +170,6 @@ class RKIguiApp():
         self.tabs.add(telemetry_tab, text='Graphs')
         self.tabs.add(db_tab, text='Database')
 
-        self.tabs.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH)
-
     def on_closing(self):
         self.logger.warning('Application closed')
 
@@ -174,6 +177,9 @@ class RKIguiApp():
             self.test_producer_process.kill()
 
         self.dbproxy.stop_checking()
+        self.tel_listener.stop_checking()
+        self.log_listener.stop_checking()
+        self.param_listener.stop_checking()
         self.root.destroy()
 
 

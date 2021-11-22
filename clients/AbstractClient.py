@@ -9,3 +9,9 @@ class AbstractClient(metaclass=abc.ABCMeta):
         self.msg_coder = msg_coder
         self.payload_coders = payload_coders
         self.dataholders = dhs
+
+    def start_checking(self):
+        pass
+
+    def stop_checking(self):
+        pass

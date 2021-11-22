@@ -3,6 +3,8 @@ import msg_codecs.frame_codecs
 import msg_codecs.payload_codecs
 import logging
 from ...AbstractClient import AbstractClient
+import time
+import threading
 
 
 class MyMQTTlistener(AbstractClient):
@@ -14,7 +16,13 @@ class MyMQTTlistener(AbstractClient):
         if username is not None and pwd is not None:
             self.mqtt_client.username_pw_set(username, pwd)
 
-        self.mqtt_client.connect(broker)
+        self.broker = broker
+        self.isConnected = True
+        self.connectStatusLogged = False
+        self._stop = False
+        self.checkThread = None
+        self.start_checking()
+
         self.topic = topic
         self.mqtt_client.loop_start()
 
@@ -56,6 +64,39 @@ class MyMQTTlistener(AbstractClient):
         self.mqtt_client.unsubscribe(self.topic)
         self.logger.info(f'Unsubscribed from: {self.topic}')
 
+    def _keep_connection(self):
+        while not self._stop:
+            if not self.mqtt_client.is_connected():
+                try:
+                    self.mqtt_client.connect(self.broker)
+
+                    if not self.isConnected or not self.connectStatusLogged:
+                        self.logger.info(f"Client {self.name} to broker: {self.broker}")
+                        self.isConnected = True
+                        self.connectStatusLogged = True
+                except TimeoutError as te:
+                    if self.isConnected or not self.connectStatusLogged:
+                        self.logger.warning(f"Client {self.name} lost connection to broker {self.broker} (timeout). Check if network is available.")
+                        self.isConnected = False
+                        self.connectStatusLogged = True
+
+                except ConnectionRefusedError as cre:
+                    if self.isConnected or not self.connectStatusLogged:
+                        self.logger.warning(f"Client {self.name} lost connection to broker {self.broker} (refused). Check if broker is running.")
+                        self.isConnected = False
+                        self.connectStatusLogged = True
+
+            time.sleep(0.5)
+
+    def stop_checking(self):
+        self._stop = True
+        self.checkThread.join()
+        self.checkThread = None
+
+    def start_checking(self):
+        self._stop = False
+        self.checkThread = threading.Thread(target=self._keep_connection)
+        self.checkThread.start()
 
 
 
