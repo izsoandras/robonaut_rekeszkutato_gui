@@ -5,23 +5,25 @@ import logging
 from ...AbstractClient import AbstractClient
 import time
 import threading
+import random
 
 
 class MyMQTTlistener(AbstractClient):
     def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None,  dataholders: dict = None):
         AbstractClient.__init__(self, None, None, dataholders)
-        self.mqtt_client = mqtt.Client(name)
+        self.mqtt_client = mqtt.Client(name+f" {str(random.randint(0,100))}")
         self.name = name
         self.mqtt_client.on_message = self.on_message
         if username is not None and pwd is not None:
             self.mqtt_client.username_pw_set(username, pwd)
 
         self.broker = broker
-        self.isConnected = True
+        self.isConnected = False
         self.connectStatusLogged = False
         self._stop = False
         self.checkThread = None
-        self.start_checking()
+        self.mqtt_client.connect(self.broker)
+        # self.start_checking()
 
         self.topic = topic
         self.mqtt_client.loop_start()
@@ -74,6 +76,7 @@ class MyMQTTlistener(AbstractClient):
                         self.logger.info(f"Client {self.name} to broker: {self.broker}")
                         self.isConnected = True
                         self.connectStatusLogged = True
+                        self.mqtt_client.loop_start()
                 except TimeoutError as te:
                     if self.isConnected or not self.connectStatusLogged:
                         self.logger.warning(f"Client {self.name} lost connection to broker {self.broker} (timeout). Check if network is available.")

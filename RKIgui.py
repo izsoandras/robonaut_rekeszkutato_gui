@@ -41,11 +41,6 @@ class RKIguiApp():
         self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
 
-        # Create GUI
-        self.root = None
-        self.init_window()
-        self.log_frame = None
-        self.init_logview()
 
         try:
             reader = utils.SettingsReader.SettingsReader()
@@ -115,6 +110,12 @@ class RKIguiApp():
                 self.param_listener = serial_listener
                 self.tel_listener = serial_listener
 
+            # Create GUI
+            self.root = None
+            self.init_window()
+            self.log_frame = None
+            self.init_logview()
+
             if self.log_listener is not None:
                 self.log_listener.robot_logger.addHandler(self.log_frame.logHandler)
 
@@ -177,9 +178,9 @@ class RKIguiApp():
             self.test_producer_process.kill()
 
         self.dbproxy.stop_checking()
-        self.tel_listener.stop_checking()
-        self.log_listener.stop_checking()
-        self.param_listener.stop_checking()
+        # self.tel_listener.stop_checking()
+        # self.log_listener.stop_checking()
+        # self.param_listener.stop_checking()
         self.root.destroy()
 
 
