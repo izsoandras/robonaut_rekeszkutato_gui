@@ -3,6 +3,7 @@ broker: '152.66.181.27'
 #broker: localhost
 user: 'rekesz'
 pwd: '12345678'
+#client_unique: 'Tarsoly'
 
 #proto: 'serial'
 #port: 'COM3'

@@ -18,7 +18,7 @@ import clients.mqtt.listeners.MyMQTTllistener
 import utils.dataholder_factory
 import clients.serial.RKIUartListener
 import msg_codecs.frame_codecs.RKIUartCoder
-import traceback
+import random
 
 
 class RKIguiApp():
@@ -41,7 +41,6 @@ class RKIguiApp():
         self.logger = logging.getLogger('RKID.App')
         self.logger.warning('Application started')
 
-
         try:
             reader = utils.SettingsReader.SettingsReader()
             topics_rec, plots_rec, proto_data, db_data = reader.read_data()
@@ -56,19 +55,25 @@ class RKIguiApp():
 
             _, param_dh_by_type = utils.dataholder_factory.build_param_dataholders(topics_rec[2:3])
 
+            self.client_postfix = None
+            if 'client_unique' in proto_data.keys():
+                self.client_postfix = " " + proto_data['client_unique']
+            else:
+                self.client_postfix = " " + str(random.randint(0, 100))
+
             self.log_listener = None
             if proto_data["proto"] == 'mqtt':
                 mqtt_data = proto_data
                 self.tel_listener = clients.mqtt.DatabbaseSaveListener(self.dbproxy,
                                                                        topics_rec[1]['messages'],
                                                                        # TODO: ne szammal legyen indexolve
-                                                                       'RKI telemetry',
+                                                                       'RKI telemetry'+self.client_postfix,
                                                                        mqtt_data['broker'], topics_rec[1]['name'],
                                                                        # TODO: configurable topic
                                                                        mqtt_data['user'],
                                                                        mqtt_data['pwd'], tel_dh_by_type)
 
-                self.log_listener = clients.mqtt.LogListener('RKI log',
+                self.log_listener = clients.mqtt.LogListener('RKI log'+self.client_postfix,
                                                              'RoboCar',
                                                              topics_rec[0]['messages'],
                                                              mqtt_data['broker'], topics_rec[0]['name'],
@@ -79,7 +84,7 @@ class RKIguiApp():
                 self.log_listener.subscribe()
 
                 self.param_listener = clients.mqtt.listeners.ParamListener(topics_rec[2]['messages'],
-                                                                           'RKI parameters',
+                                                                           'RKI parameters'+self.client_postfix,
                                                                            mqtt_data['broker'],
                                                                            'param',
                                                                            # TODO: configurable topic
@@ -109,6 +114,7 @@ class RKIguiApp():
                                                                                  proto_data['baudrate'])
                 self.param_listener = serial_listener
                 self.tel_listener = serial_listener
+
 
             # Create GUI
             self.root = None
