@@ -25,7 +25,12 @@ class InfluxDBproxy:
         self.checkThread.start()
 
     def stop_checking(self):
+        self.logger.info("Stopping database proxy")
         self._stop = True
+        if self.checkThread is not None:
+            self.checkThread.join()
+            self.checkThread = None
+            self.logger.info("Database proxy stopped")
 
     def check_connection(self):
         self._perform_on_db(self.database.ping)

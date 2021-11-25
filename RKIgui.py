@@ -45,9 +45,6 @@ class RKIguiApp():
             reader = utils.SettingsReader.SettingsReader()
             topics_rec, plots_rec, proto_data, db_data = reader.read_data()
 
-            if reader.severe:
-                messagebox.showerror('File not found', '\n'.join(reader.severe))
-
             self.dbproxy = utils.InfluxDBproxy.InfluxDBproxy(**db_data)
 
             # TODO: prepare data holders
@@ -147,6 +144,10 @@ class RKIguiApp():
 
             self.logger.info('-------SETUP COMPLETE----------')
 
+            if reader.severe:
+                self.logger.error('\n'.join(reader.severe))
+                messagebox.showerror('File not found', '\n'.join(reader.severe))
+
             self.root.mainloop()
         except Exception as ex:
             raise ex
@@ -178,8 +179,7 @@ class RKIguiApp():
         self.tabs.add(db_tab, text='Database')
 
     def on_closing(self):
-        self.logger.warning('Application closed')
-
+        self.logger.info('Start closing sequence')
         if self.test_producer_process is not None:
             self.test_producer_process.kill()
 
@@ -187,6 +187,7 @@ class RKIguiApp():
         # self.tel_listener.stop_checking()
         # self.log_listener.stop_checking()
         # self.param_listener.stop_checking()
+        self.logger.warning('Application closed')
         self.root.destroy()
 
 
