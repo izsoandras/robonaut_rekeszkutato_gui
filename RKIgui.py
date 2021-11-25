@@ -19,11 +19,13 @@ import utils.dataholder_factory
 import clients.serial.RKIUartListener
 import msg_codecs.frame_codecs.RKIUartCoder
 import random
+import threading
 
 
 class RKIguiApp():
     # noinspection PyUnresolvedReferences
     def __init__(self, test_source_en=False):
+        self.is_closing = False
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.DEBUG)
         console_handler.setFormatter(logging.Formatter('%(name)s:%(levelname)s:%(message)s'))
@@ -149,6 +151,7 @@ class RKIguiApp():
             if reader.severe:
                 messagebox.showerror('File not found', '\n'.join(reader.severe))
 
+            self.root.after(100, self.check_closing)
             self.root.mainloop()
         except Exception as ex:
             raise ex
@@ -181,6 +184,10 @@ class RKIguiApp():
 
     def on_closing(self):
         self.logger.info('Start closing sequence')
+        close_thread = threading.Thread(target=self.closing_seq)
+        close_thread.start()
+
+    def closing_seq(self):
         if self.test_producer_process is not None:
             self.test_producer_process.kill()
 
@@ -188,8 +195,14 @@ class RKIguiApp():
         # self.tel_listener.stop_checking()
         # self.log_listener.stop_checking()
         # self.param_listener.stop_checking()
-        self.logger.warning('Application closed')
-        self.root.destroy()
+        self.is_closing = True
+
+    def check_closing(self):
+        if self.is_closing:
+            self.logger.warning('Application closed')
+            self.root.destroy()
+
+        self.root.after(100, self.check_closing)
 
 
 if __name__ == "__main__":
