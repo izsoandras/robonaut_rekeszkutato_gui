@@ -81,7 +81,8 @@ class SettingsReader:
 
             self.proto_data = self.check_full_default(proto_data, defaults['proto'], 'PROTO')
         except FileNotFoundError:
-            self.logger.warning(f'MQTT data settings not found at: {self.mqtt_path},\nusing default values')
+            # self.logger.warning(f'MQTT data settings not found at: {self.mqtt_path},\nusing default values')
+            self.log_file_not_found('MQTT data', self.mqtt_path)
             self.proto_data = defaults['mqtt']  # TODO: remove literal
         except yaml.scanner.ScannerError as se:
             self.proto_data = defaults['mqtt']

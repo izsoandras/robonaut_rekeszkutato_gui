@@ -17,7 +17,7 @@
       type: 0x00
       format: 'Bs'
       fields: [level, msg]
-      prefixes: [DEBUG, INFO, WARN, ERR, CRIT]
+#      prefixes: [DEBUG, INFO, WARN, ERR, CRIT]
 
 - name: tel
   messages:

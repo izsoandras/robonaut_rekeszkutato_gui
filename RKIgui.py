@@ -39,7 +39,14 @@ class RKIguiApp():
         root_logger.addHandler(file_handler)
 
         self.logger = logging.getLogger('RKID.App')
+
         self.logger.warning('Application started')
+
+        # Create log GUI element
+        self.root = None
+        self.init_window()
+        self.log_frame = None
+        self.init_logview()
 
         try:
             reader = utils.SettingsReader.SettingsReader()
@@ -113,11 +120,6 @@ class RKIguiApp():
                 self.tel_listener = serial_listener
 
 
-            # Create GUI
-            self.root = None
-            self.init_window()
-            self.log_frame = None
-            self.init_logview()
 
             if self.log_listener is not None:
                 self.log_listener.robot_logger.addHandler(self.log_frame.logHandler)
@@ -145,7 +147,6 @@ class RKIguiApp():
             self.logger.info('-------SETUP COMPLETE----------')
 
             if reader.severe:
-                self.logger.error('\n'.join(reader.severe))
                 messagebox.showerror('File not found', '\n'.join(reader.severe))
 
             self.root.mainloop()
