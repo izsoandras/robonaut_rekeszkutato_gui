@@ -197,6 +197,12 @@ class RKIguiApp():
         if self.test_producer_process is not None:
             self.test_producer_process.kill()
 
+        # TODO: to normally instead of simple and dirty
+        self.dbproxy._stop = True
+        self.tel_listener._stop = True
+        self.log_listener._stop = True
+        self.param_listener._stop = True
+
         self.dbproxy.stop_checking()
         self.tel_listener.stop_checking()
         self.log_listener.stop_checking()
