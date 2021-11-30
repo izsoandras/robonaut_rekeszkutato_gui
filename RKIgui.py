@@ -20,12 +20,14 @@ import clients.serial.RKIUartListener
 import msg_codecs.frame_codecs.RKIUartCoder
 import random
 import threading
+import my_gui.custom_elements
 
 
 class RKIguiApp():
     # noinspection PyUnresolvedReferences
     def __init__(self, test_source_en=False):
         self.is_closing = False
+        self.close_thread = None
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.DEBUG)
         console_handler.setFormatter(logging.Formatter('%(name)s:%(levelname)s:%(message)s'))
@@ -131,8 +133,11 @@ class RKIguiApp():
                                  self.param_listener)  # TODO: remove literal
             self.tabs = None
             self.init_tabs(tel_dh_by_name, plots_rec)
+            self.start_stop_frame =my_gui.custom_elements.RKIStartStopFrame(self.root, self.param_listener, 0x20, 0x21) # TODO: outsource
             self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+            # self.root.bind("<space>", self.on_spacebar)
 
+            self.start_stop_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, expand=True)
             self.param_frame.pack_parent(side=tkinter.RIGHT, fill=tkinter.Y)
             self.log_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
             self.tabs.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH)
@@ -184,8 +189,9 @@ class RKIguiApp():
 
     def on_closing(self):
         self.logger.info('Start closing sequence')
-        close_thread = threading.Thread(target=self.closing_seq)
-        close_thread.start()
+        if self.close_thread is None:
+            self.close_thread = threading.Thread(target=self.closing_seq)
+            self.close_thread.start()
 
     def closing_seq(self):
         if self.test_producer_process is not None:

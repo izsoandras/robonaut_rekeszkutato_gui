@@ -1,13 +1,13 @@
 import tkinter
 import logging
 import my_gui.paramsetter.paramviews.paramview_factory as pv_factory
-import clients.mqtt.listeners.MyMQTTllistener as mml
+from clients.mqtt.listeners import ParamListener
 import threading
 import copy
 
 
 class ParamFrame(tkinter.Frame):
-    def __init__(self, parent, data_holder, msgs_recipe, client: mml.MyMQTTlistener, **kwargs):
+    def __init__(self, parent, data_holder, msgs_recipe, client: ParamListener, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
         self.name = msgs_recipe['name']   # TODO: remove literal

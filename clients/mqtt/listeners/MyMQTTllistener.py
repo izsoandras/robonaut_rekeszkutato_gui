@@ -112,9 +112,11 @@ class MyMQTTlistener(AbstractClient):
             time.sleep(0.5)
 
     def stop_checking(self):
+        self.logger.warning("Stopping connection checking")
         self._stop = True
         self.checkThread.join()
         self.checkThread = None
+        self.logger.warning("Connection check stopped")
 
     def start_checking(self):
         self._stop = False
