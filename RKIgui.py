@@ -192,9 +192,9 @@ class RKIguiApp():
             self.test_producer_process.kill()
 
         self.dbproxy.stop_checking()
-        # self.tel_listener.stop_checking()
-        # self.log_listener.stop_checking()
-        # self.param_listener.stop_checking()
+        self.tel_listener.stop_checking()
+        self.log_listener.stop_checking()
+        self.param_listener.stop_checking()
         self.is_closing = True
 
     def check_closing(self):
