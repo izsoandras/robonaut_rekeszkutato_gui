@@ -23,9 +23,13 @@ class ScreenLogger(tkinter.Frame):
         self.robotLogHandler.setLevel(robot_level)
 
         if fmt is None:
-            fmt = '%(levelname)s-%(name)s: %(message)s'
+            fmt = '%(asctime)s-%(levelname)s-%(name)s>\t%(message)s'
 
-        self.appLogHandler.setFormatter(logging.Formatter(fmt))
+        date_fmt = '%H:%M:%S'
+
+        formatter = logging.Formatter(fmt, date_fmt)
+        self.appLogHandler.setFormatter(formatter)
+        self.robotLogHandler.setFormatter(formatter)
 
         self.tb_logfield = tkinter.Text(self, height=visible_line_num, state=tkinter.DISABLED)
         self.sb_logscroll = tkinter.Scrollbar(self, orient=tkinter.VERTICAL, command=self.tb_logfield.yview)
