@@ -5,7 +5,7 @@ import queue
 
 
 class ScreenLogger(tkinter.Frame):
-    def __init__(self, parent, level=logging.INFO, fmt=None, visible_line_num=10, max_line_num=100, update_ms=200, *args, **kwargs):
+    def __init__(self, parent, app_level=logging.INFO, robot_level=logging.INFO, fmt=None, visible_line_num=10, max_line_num=100, update_ms=200, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
 
         self.logger = logging.getLogger(__name__)
@@ -16,12 +16,16 @@ class ScreenLogger(tkinter.Frame):
 
         self.msg_queue = queue.Queue()
 
-        self.logHandler = logging.handlers.QueueHandler(self.msg_queue)
-        self.logHandler.setLevel(level)
+        self.appLogHandler = logging.handlers.QueueHandler(self.msg_queue)
+        self.appLogHandler.setLevel(app_level)
+
+        self.robotLogHandler = logging.handlers.QueueHandler(self.msg_queue)
+        self.robotLogHandler.setLevel(robot_level)
+
         if fmt is None:
             fmt = '%(levelname)s-%(name)s: %(message)s'
 
-        self.logHandler.setFormatter(logging.Formatter(fmt))
+        self.appLogHandler.setFormatter(logging.Formatter(fmt))
 
         self.tb_logfield = tkinter.Text(self, height=visible_line_num, state=tkinter.DISABLED)
         self.sb_logscroll = tkinter.Scrollbar(self, orient=tkinter.VERTICAL, command=self.tb_logfield.yview)
@@ -29,15 +33,21 @@ class ScreenLogger(tkinter.Frame):
         self.tb_logfield.configure(yscrollcommand=self.sb_logscroll.set)
 
         self.fr_level_select = tkinter.Frame(self)
-        self.lb_level = tkinter.Label(self.fr_level_select, text='Log view level:')
-        self.ddvar_level = tkinter.StringVar(self)
-        choices = ["Debug", "Info", "Warning", "Error", "Severe", "Critical"]
-        self.dd_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_level, *choices, command=self.on_level_selection_changed)
-        self.dd_level.config(width=10)
-        self.ddvar_level.set(choices[1])
+        self.lb_app_level = tkinter.Label(self.fr_level_select, text='Log view app level:')
+        self.ddvar_app_level = tkinter.StringVar(self)
+        choices = ["Debug", "Info", "Warning", "Error", "Critical"]
+        self.dd_app_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_app_level, *choices, command=self.on_app_level_selection_changed)
+        self.dd_app_level.config(width=10)
+        self.ddvar_app_level.set(choices[1])    # TODO: change to given parameter
+        self.lb_robot_level = tkinter.Label(self.fr_level_select, text='Log view robot level:')
+        self.ddvar_robot_level = tkinter.StringVar(self)
+        self.dd_robot_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_robot_level, *choices, command=self.on_robot_level_selection_changed)
+        self.ddvar_robot_level.set(choices[1])    # TODO: change to given parameter
 
-        self.lb_level.pack(side=tkinter.LEFT)
-        self.dd_level.pack(side=tkinter.LEFT)
+        self.lb_app_level.pack(side=tkinter.LEFT)
+        self.dd_app_level.pack(side=tkinter.LEFT)
+        self.lb_robot_level.pack(side=tkinter.LEFT)
+        self.dd_robot_level.pack(side=tkinter.LEFT)
         self.fr_level_select.pack(side=tkinter.TOP)
 
         self.sb_logscroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -72,7 +82,7 @@ class ScreenLogger(tkinter.Frame):
         self.tb_logfield.configure(height=visible_line_num)
         self.logger.debug(f'Changed visible line number to: {visible_line_num}')
 
-    def on_level_selection_changed(self, new_val):
+    def on_app_level_selection_changed(self, new_val):
         if new_val == "Debug":
             new_lvl = logging.DEBUG
         elif new_val == "Info":
@@ -87,6 +97,23 @@ class ScreenLogger(tkinter.Frame):
             self.logger.error(f'Wrong level {new_val}')
             return
 
-        self.logHandler.setLevel(new_lvl)
+        self.appLogHandler.setLevel(new_lvl)
+
+    def on_robot_level_selection_changed(self, new_val):
+        if new_val == "Debug":
+            new_lvl = logging.DEBUG
+        elif new_val == "Info":
+            new_lvl = logging.INFO
+        elif new_val == "Warning":
+            new_lvl = logging.WARNING
+        elif new_val == "Error":
+            new_lvl = logging.ERROR
+        elif new_val == "Critical":
+            new_lvl = logging.CRITICAL
+        else:
+            self.logger.error(f'Wrong level {new_val}')
+            return
+
+        self.robotLogHandler.setLevel(new_lvl)
 
 

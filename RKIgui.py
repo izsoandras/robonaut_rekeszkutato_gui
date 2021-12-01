@@ -123,10 +123,8 @@ class RKIguiApp():
                 self.param_listener = serial_listener
                 self.tel_listener = serial_listener
 
-
-
             if self.log_listener is not None:
-                self.log_listener.robot_logger.addHandler(self.log_frame.logHandler)
+                self.log_listener.robot_logger.addHandler(self.log_frame.robotLogHandler)
 
             self.param_frame = None
             self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type,
@@ -171,7 +169,7 @@ class RKIguiApp():
 
     def init_logview(self):
         self.log_frame = my_gui.logging.ScreenLogger.ScreenLogger(self.root)
-        logging.getLogger('RKID').addHandler(self.log_frame.logHandler)  # TODO: outsource literal
+        logging.getLogger('RKID').addHandler(self.log_frame.appLogHandler)  # TODO: outsource literal
 
     def init_paramframe(self, msgs_recipes, dh_by_type, client):
         # Params frame

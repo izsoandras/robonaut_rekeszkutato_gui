@@ -1,6 +1,6 @@
 proto: 'mqtt'
-#broker: '152.66.181.27'
-broker: localhost
+broker: '152.66.181.27'
+#broker: localhost
 user: 'rekesz'
 pwd: '12345678'
 #client_unique: 'Tarsoly'
