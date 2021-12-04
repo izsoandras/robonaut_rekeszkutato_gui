@@ -20,11 +20,11 @@ class RKIStartStopFrame(tkinter.Frame):
         self.master.bind("<space>", self.on_spacebar)
 
     def send_emergency_stop(self):
-        self.client.send_message(self.start_msg_id, {})
+        self.client.send_message(self.stop_msg_id, {})
         self.logger.info('Sent STOP message')
 
     def send_start(self):
-        self.client.send_message(self.stop_msg_id, {})
+        self.client.send_message(self.start_msg_id, {})
         self.logger.info('Sent START message')
 
     def on_spacebar(self, event):

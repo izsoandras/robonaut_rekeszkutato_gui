@@ -17,12 +17,13 @@ class DatabbaseSaveListener(MyMQTTlistener):
 
     def on_msg_hook(self, client, userdata, msg_type, data):
         if not self.isPaused:
-            if self.db.save_data(data):
-                self.logger.debug('Data saved!')
+            if self.db.isConnected:
+                self.db.push_data(data)
             else:
-                self.logger.warning('Data could not be saved!')
+                self.logger.warning('Database is not connected. Data could not be saved!')
 
     def pause(self):
+        self.db.stop_consumer()
         self.isPaused = True
 
     def resume(self, measurement_friendly_name=None):
@@ -30,4 +31,5 @@ class DatabbaseSaveListener(MyMQTTlistener):
             self.meas_friendly_name=measurement_friendly_name
 
         self.db.prefix = f'{str(datetime.now())}_{self.meas_friendly_name}'
+        self.db.start_consumer()
         self.isPaused = False
