@@ -83,6 +83,8 @@ class MyMQTTlistener(AbstractClient):
                 self.logger.error(str(cre))
             except TimeoutError as te:
                 self.logger.error(str(te))
+            except OSError as ose:
+                self.logger.error(str(ose))
 
             time.sleep(3)
 
