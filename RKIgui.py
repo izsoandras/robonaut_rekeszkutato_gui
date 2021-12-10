@@ -21,6 +21,7 @@ import msg_codecs.frame_codecs.RKIUartCoder
 import random
 import threading
 import my_gui.custom_elements
+import backend
 
 
 class RKIguiApp():
@@ -29,7 +30,7 @@ class RKIguiApp():
         self.is_closing = False
         self.close_thread = None
         console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
+        console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(logging.Formatter('%(name)s:%(levelname)s:%(message)s'))
 
         file_handler = logging.FileHandler('app.log', mode='w')
@@ -126,9 +127,14 @@ class RKIguiApp():
             if self.log_listener is not None:
                 self.log_listener.robot_logger.addHandler(self.log_frame.robotLogHandler)
 
+
             self.param_frame = None
             self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type,
                                  self.param_listener)  # TODO: remove literal
+
+            self.robotPinger = backend.Pinger(self.param_listener, param_dh_by_type, 0x23, [self.param_frame.on_btn_updateall])  # TODO: remove hardcode
+            self.robotPinger.start_reqing()
+
             self.tabs = None
             self.init_tabs(tel_dh_by_name, plots_rec)
             self.start_stop_frame =my_gui.custom_elements.RKIStartStopFrame(self.root, self.param_listener, 0x20, 0x21) # TODO: outsource
@@ -200,7 +206,9 @@ class RKIguiApp():
         self.tel_listener._stop = True
         self.log_listener._stop = True
         self.param_listener._stop = True
+        self.robotPinger.stop_reqing()
 
+        self.robotPinger.join_reqing()
         self.dbproxy.stop_checking()
         self.tel_listener.stop_checking()
         self.log_listener.stop_checking()
