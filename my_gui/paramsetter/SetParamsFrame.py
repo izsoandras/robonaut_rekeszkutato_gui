@@ -15,8 +15,9 @@ class SetParamsFrame(my_gui.InheritableScrollableFrame.ScrollableFrame):
 
         self.paramframes = []
         for rec in msgs_recipes:
-            self.paramframes.append(pf.ParamFrame(self, dataholders_by_id[rec['type']], rec, client)) # TODO: remove literal
-            self.paramframes[-1].pack(side=tkinter.TOP, fill=tkinter.X)
+            if rec['fields']:
+                self.paramframes.append(pf.ParamFrame(self, dataholders_by_id[rec['type']], rec, client)) # TODO: remove literal
+                self.paramframes[-1].pack(side=tkinter.TOP, fill=tkinter.X)
 
         self.fr_buttons = tkinter.Frame(self)
         self.btn_sendall = tkinter.Button(self.fr_buttons, text="Send all", command=self.on_btn_sendall)

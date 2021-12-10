@@ -13,7 +13,9 @@ class ParamView(tkinter.Frame, metaclass=abc.ABCMeta):
 
         # https://stackoverflow.com/questions/55184324/why-is-calling-register-required-for-tkinter-input-validation/55231273#55231273
         vcmd = self.register(self.validate_input)
-        self.tb_set_value = tkinter.Entry(self, width=8, justify='right')
+        self.stvar_new = tkinter.StringVar()
+        self.tb_set_value = tkinter.Entry(self, width=8, justify='right',
+                                          textvariable=self.stvar_new)
         self.tb_set_value.config(validate='key', validatecommand=(vcmd, '%P'))
 
         self.stvar_current = tkinter.StringVar()
@@ -33,8 +35,16 @@ class ParamView(tkinter.Frame, metaclass=abc.ABCMeta):
     def get_new_value(self):
         return self.tb_set_value.get()
 
+    def set_new_value(self, new):
+        self.stvar_new.set(str(new))
+
     def get_current_value(self):
         return self.stvar_current.get()
 
     def set_view(self, value):
         self.stvar_current.set(str(value))
+        self._signal_refreshed()
+
+    def _signal_refreshed(self):
+        self.tb_current_value.configure(readonlybackground='PaleGreen1')
+        self.master.after(500,self.tb_current_value.configure,{'readonlybackground':'SystemButtonFace'})

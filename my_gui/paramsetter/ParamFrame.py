@@ -27,9 +27,11 @@ class ParamFrame(tkinter.Frame):
 
             self.fr_buttons = tkinter.Frame(self, bd=5)
             self.btn_send = tkinter.Button(self.fr_buttons, text='Send', command=self.on_btn_send)
-            self.btn_update = tkinter.Button(self.fr_buttons, text='Update', command=self.on_btn_update)
+            self.btn_move = tkinter.Button(self.fr_buttons, text='\u2B9C', command=self.on_btn_move)
+            self.btn_refresh = tkinter.Button(self.fr_buttons, text='Refresh', command=self.on_btn_update)
             self.btn_send.pack(side=tkinter.LEFT)
-            self.btn_update.pack(side=tkinter.LEFT)
+            self.btn_move.pack(side=tkinter.LEFT)
+            self.btn_refresh.pack(side=tkinter.LEFT)
             self.fr_buttons.pack(side=tkinter.TOP)
         except NotImplementedError as nie:
             self.logger.error(nie)
@@ -68,15 +70,20 @@ class ParamFrame(tkinter.Frame):
         wrkr = threading.Thread(target=self.ask_update)
         wrkr.start()
 
+    def on_btn_move(self):
+        for pv in self.param_views.values():
+            pv.set_new_value(pv.get_current_value())
+
     def ask_update(self):
         self.client.ask_update(self.msg_id)
 
     def update_view(self):
-        data = copy.deepcopy( self.dataholder.getData())
+        if self.dataholder.hasNew:
+            data = copy.deepcopy( self.dataholder.getData())
 
-        # TODO: miert van benne idx?
-        if 'idx' in data.keys():
-            data.pop('idx')
-        if data is not None:
-            for key in data.keys():
-                self.param_views[key].set_view(data[key][-1])
+            # TODO: miert van benne idx?
+            if 'idx' in data.keys():
+                data.pop('idx')
+            if data is not None:
+                for key in data.keys():
+                    self.param_views[key].set_view(data[key][-1])
