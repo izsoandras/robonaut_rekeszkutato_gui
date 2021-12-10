@@ -37,7 +37,7 @@ class LineDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
                     self.axs[line_rec[LineDiagram.FIELD]].set_label(line_rec[LineDiagram.LEGEND])
                     self.has_legend = True
 
-                self.annots[line_rec[LineDiagram.FIELD]] = self.axes.annotate(f'{data[-1]:.2f}', xy=(-49, 0),
+                self.annots[line_rec[LineDiagram.FIELD]] = self.axes.annotate(f'{data[-1]:.2f}', xy=(-datanum+1, 0),
                                                                               xytext=(1, 2 + idx * 10),
                                                                               textcoords='offset points', animated=True,
                                                                               color=LineDiagram.TAB_PALETTE[idx],

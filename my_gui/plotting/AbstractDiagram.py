@@ -36,7 +36,13 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
         self.animated = list(self.axs.values()) + list(self.annots.values())
 
     def update_view(self):
+        # old_datas = [self.axs[key].get_ydata() for key in self.axs.keys()]
         self.update_data()
+
+        # for idx, key in enumerate(self.axs.keys()):
+        #     if not old_datas[idx] == self.axs[key].get_ydata():
+        #         print("new data")
+
         return self.animated
 
     @abc.abstractmethod

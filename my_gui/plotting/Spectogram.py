@@ -6,7 +6,7 @@ import dataholders.SeriesDataHolder
 
 class Spectogram(AbstractDiagram):
 
-    def __init__(self, subplot, dholders: dict, recipe: dict, sample_num: int = 50, num_in_sample: int = 32):
+    def __init__(self, subplot, dholders: dict, recipe: dict):
         self.quad = None
         self.idx = 0
 
@@ -20,9 +20,9 @@ class Spectogram(AbstractDiagram):
         else:
             self.fliplr = False
 
-        self.width = num_in_sample
-        self.height = sample_num
-        self.data = np.zeros((self.width,self.height))
+        self.width = None
+        self.height = None
+        # self.data = np.zeros((self.width,self.height))
         AbstractDiagram.__init__(self, subplot, dholders, recipe)
 
         self.animated = [self.quad]
@@ -32,6 +32,12 @@ class Spectogram(AbstractDiagram):
     def build_and_customize(self, recipe):
 
         dh = list(self.dataholders.values())[0]
+        data_key = recipe['lines'][0]['field']
+        self.height = dh.size
+        try:
+            self.width = len(dh.getData(data_key)[0])
+        except TypeError:
+            self.width = 1
         self.data = np.indices((self.height, self.width)).sum(axis=0) % 2   # create checkboard like matrix
         self.quad = self.axes.pcolormesh(self.data)
         self.axs[recipe['lines'][0]['field']] = self.quad
