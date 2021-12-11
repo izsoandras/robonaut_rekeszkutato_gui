@@ -11,6 +11,8 @@ import random
 class MyMQTTlistener(AbstractClient):
     def __init__(self, msg_recipes: list, name: str, broker, topic: str, username: str = None, pwd: str = None,  dataholders: dict = None):
         AbstractClient.__init__(self, None, None, dataholders)
+        self.logger = logging.getLogger(f'RKID.{name}')
+        self.logger.setLevel(logging.DEBUG)
         self.mqtt_client = mqtt.Client(name)
         self.name = name
         self.mqtt_client.on_message = self.on_message
@@ -39,9 +41,6 @@ class MyMQTTlistener(AbstractClient):
         self.msg_coder = msg_codecs.frame_codecs.RKIMessageCoder()  # TODO: configurable msg coder
         self.payload_coders = None
         self.build_coders(msg_recipes)
-
-        self.logger = logging.getLogger(f'RKID.{name}')
-        self.logger.setLevel(logging.DEBUG)
 
     def build_coders(self, msg_recipes):
         coders = {}
