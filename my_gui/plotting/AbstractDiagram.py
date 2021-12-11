@@ -2,6 +2,7 @@ import abc
 import matplotlib.pyplot
 import dataholders.SeriesDataHolder
 import logging
+from matplotlib.patches import Ellipse
 
 
 class AbstractDiagram(metaclass=abc.ABCMeta):
@@ -11,6 +12,7 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
         self.axs = {}
         self.annots = {}
         self.dataholders = {}
+        self.new_data = False
         self.logger = logging.getLogger(f'RKID.plot.{recipe["title"]}')  # TODO: remove literal
 
         for line_rec in recipe['lines']:
@@ -20,6 +22,8 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
             except KeyError:
                 self.logger.warning(f'Dataholders do not have element: {msg_name}')
                 self.dataholders[msg_name] = dataholders.SeriesDataHolder.SeriesDataHolder('dummy', [], 10)
+
+            self.dataholders[msg_name].add_view(self)
 
         if 'ylim' in recipe.keys():
             self.axes.set_ylim(recipe['ylim'])
@@ -33,11 +37,24 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
 
         if self.has_legend:
             self.axes.legend(loc='upper left', fontsize='x-small')
-        self.animated = list(self.axs.values()) + list(self.annots.values())
+
+        xlim = self.axes.get_xlim()
+        ylim = self.axes.get_ylim()
+        x_diff = xlim[1] - xlim[0]
+        y_diff = ylim[1] - ylim[0]
+        pos = ((xlim[0]+xlim[1])/2, ylim[0]+y_diff/40)
+        self.blinker = matplotlib.patches.Ellipse(pos,x_diff/40, y_diff/40, facecolor='limegreen', zorder=10)
+        self.axes.add_patch(self.blinker)
+        self.animated = list(self.axs.values()) + list(self.annots.values()) + [self.blinker]
 
     def update_view(self):
         # old_datas = [self.axs[key].get_ydata() for key in self.axs.keys()]
+
+        if self.new_data:
+            self.blinker.set_visible(not self.blinker.get_visible())
+
         self.update_data()
+        self.new_data = False
 
         # for idx, key in enumerate(self.axs.keys()):
         #     if not old_datas[idx] == self.axs[key].get_ydata():
@@ -59,3 +76,6 @@ class AbstractDiagram(metaclass=abc.ABCMeta):
                 return dh_key
 
         raise KeyError(f"Couldn't find field {field_name} in any dataholder of plot {self.axes.get_title()}")
+
+    def setOld(self):
+        self.new_data = True

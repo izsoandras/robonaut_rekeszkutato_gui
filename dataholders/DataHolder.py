@@ -55,6 +55,7 @@ class DataHolder(metaclass=abc.ABCMeta):
             if all(field in list(newData.keys()) for field in self.fields):
                 self.queue.put(newData)
                 self.hasNew = True
+                self.alertAllViews()
             else:
                 raise KeyError(
                     f'NewData does not have every key from fields. Fields: {self.fields}, Keys: {list(newData.keys())}')
@@ -62,4 +63,7 @@ class DataHolder(metaclass=abc.ABCMeta):
     def alertAllViews(self):
         for view in self.views:
             view.setOld()
+
+    def add_view(self, view):
+        self.views.append(view)
 

@@ -13,6 +13,7 @@ class SpectogramBinary(Spectogram):
         self.data = np.indices((self.height, self.width)).sum(axis=0) % 2   # create checkboard like matrix
         self.quad = self.axes.pcolormesh(self.data)
         self.axs[recipe['lines'][0]['field']] = self.quad
+        # self.animated.append(self.quad)
 
 
     def transform_data(self, data):
