@@ -16,8 +16,8 @@
 #       [...]
 #   [...]
 
-sample_num: 50     # display sample number
-update_period: 200 # [ms]
+sample_num: 500     # display sample number
+update_period: 500 # [ms]
 layout: [2,3] # [<rows_num>,<col_num>]
 plots:
   - title: 'Battery voltage'
@@ -34,7 +34,7 @@ plots:
 
   - title: 'Speed'
     type: series
-    ylim: [-100,100]
+    ylim: [-6,6]
     lines:
       - message: motor telemetry
         field: 'speed setpoint'
@@ -43,7 +43,7 @@ plots:
       - message: motor telemetry
         field: 'avg speed'
         legend: 'actual'
-        
+
   - title: 'Current'
     type: series
     ylim: [-100,100]
@@ -56,14 +56,13 @@ plots:
         field: 'avg current'
         legend: 'actual'
   
-  - title: 'Heading'
-    type: compass
-    isRad: False
-    theta_dir: 1
-    lines:
-      - message: orientation
-        field: 'yaw angle'
-        legend: ''
+#  - title: 'Heading'
+#    type: compass
+#    isRad: False
+#    theta_dir: 1
+#    lines:
+#      - message: orientation
+#        field: 'yaw angle'
 
 
   - title: 'Distance'
@@ -74,21 +73,21 @@ plots:
           field: distance
           legend: '[mm]'
 
-#  - title: 'Front line'
-#    type: spec_bin
-#    flipud: false
-#    fliplr: false
-#    lines:
-#      - message: line
-#        field: front detection
-#
-#  - title: 'Rear line'
-#    type: spec_bin
-#    flipud: false
-#    fliplr: true
-#    lines:
-#      - message: line
-#        field: rear detection
+  - title: 'Front line'
+    type: spec_bin
+    flipud: false
+    fliplr: true
+    lines:
+      - message: line
+        field: front detection
+
+  - title: 'Rear line'
+    type: spec_bin
+    flipud: false
+    fliplr: false
+    lines:
+      - message: line
+        field: rear detection
 #  - title: 'Line num'
 #    type: series
 #    ylim: [0,5]
@@ -96,3 +95,25 @@ plots:
 #        - message: line
 #          field: front num
 #          legend: '[db]'
+
+#  - title: 'Identification'
+#    type: series
+#    ylim: [0,60]
+#    lines:
+#      - message: ident telemetry
+#        field: current setpoint
+#        legend: '[A]'
+#      - message: ident telemetry
+#        field: speed
+#        legend: '[m/s]'
+#
+#  - title: 'Identification (speed)'
+#    type: series
+#    ylim: [ 0 ,8 ]
+#    lines:
+#      - message: ident telemetry
+#        field: current setpoint
+#        legend: '[A]'
+#      - message: ident telemetry
+#        field: speed
+#        legend: '[m/s]'

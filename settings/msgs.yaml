@@ -34,7 +34,7 @@
     - name: ident telemetry
       type: 0x04
       format: '<ff'
-      fields: ['current setpoint', speed']
+      fields: ['current setpoint', 'speed']
 
     - name: line
       type: 0x05
@@ -65,13 +65,13 @@
       
     - name: servo center
       type: 0x11
-      format: '<HHH'
+      format: '>HHH'
       fields: ['front', 'rear','ToF']
       
     - name: line control
       type: 0x12
-      format: '<'
-      fields: []
+      format: '<fff'
+      fields: ['d0','dv','zeta']
       
     - name: distance control
       type: 0x13
@@ -87,7 +87,12 @@
       type: 0x21
       format: '<'
       fields: []
-      
+
+    - name: ping
+      type: 0x23
+      format: '<'
+      fields: []
+
 #    - name: nav data
 #      type: 0x22
 #      format: '<BBBBB'
