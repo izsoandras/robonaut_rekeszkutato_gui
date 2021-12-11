@@ -137,10 +137,12 @@ class RKIguiApp():
 
             self.tabs = None
             self.init_tabs(tel_dh_by_name, plots_rec)
+            self.statusbar = my_gui.custom_elements.RKIstatusbar(self.root, self.param_listener, self.dbproxy, self.robotPinger)
             self.start_stop_frame =my_gui.custom_elements.RKIStartStopFrame(self.root, self.param_listener, 0x20, 0x21) # TODO: outsource
             self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
             # self.root.bind("<space>", self.on_spacebar)
 
+            self.statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X, expand=True)
             self.start_stop_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, expand=True)
             self.param_frame.pack_parent(side=tkinter.RIGHT, fill=tkinter.Y)
             self.log_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X, anchor=tkinter.S)
