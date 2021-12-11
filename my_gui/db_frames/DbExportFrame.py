@@ -3,6 +3,8 @@ from tkinter import filedialog
 import utils.db_exporters
 import logging
 import utils.InfluxDBproxy
+import threading
+import os
 
 
 class DBExportFrame(tkinter.Frame):
@@ -12,6 +14,7 @@ class DBExportFrame(tkinter.Frame):
         self.dbproxy = dbproxy
 
         self.logger = logging.getLogger('RKID.DBExport')
+        self.export_thread = None
 
         self.lb_dropdown = tkinter.Label(self, text='Select measurement:')
         self.lb_dropdown.pack(side=tkinter.LEFT)
@@ -34,15 +37,16 @@ class DBExportFrame(tkinter.Frame):
         self.btn_delete.pack()
 
         self.fr_buttons.pack(side=tkinter.LEFT)
+        self.bind('<Visibility>', self.on_change)
 
     def update_dropdown(self):
-
+        # TODO: get measurements on background thread
         # Insert list of new options (tk._setit hooks them up to var)
         try:
             measurements = self.dbproxy.get_list_measurements()
         except ConnectionError:
             self.logger.debug("DB not connected, couldn't update dropwodn!")
-            return
+            measurements = []
 
         # Reset var and delete all old options
         self.dropdown_var.set('')
@@ -65,17 +69,31 @@ class DBExportFrame(tkinter.Frame):
         self.logger.debug('Dropdown updated')
 
     def on_btn_export(self):
-        f = filedialog.asksaveasfilename(title="Export measurement", filetypes=(("CSV files", "*.csv"),))
 
-        if f is None:
+        if self.export_thread is not None and self.export_thread.is_alive():
+            self.logger.warning('Export is still in progress!')
             return
 
-        # TODO: background thread
-        self.logger.debug(f'Sending query for measurements {self.dropdown_var.get()}')
-        query_set = self.dbproxy.get_measurement(self.dropdown_var.get())
-        self.logger.info(f'Exporting {self.dropdown_var.get()}')
-        utils.db_exporters.influx2csv(query_set, f)
-        self.logger.info(f'Export {self.dropdown_var.get()} complete!')
+        name = self.dropdown_var.get()
+        f = filedialog.asksaveasfilename(title="Export measurement", filetypes=(("CSV files", "*.csv"),),initialfile=f'{name}.csv')
+
+        if not f:
+            self.logger.info('Export cancelled')
+            return
+
+        self.export_thread = threading.Thread(target=self._export_task, args=(name, f))
+        self.export_thread.start()
+
+    def _export_task(self, measurement, file):
+        name, ext = os.path.splitext(file)
+        if not ext:
+            file = file + '.csv'
+
+        self.logger.info(f'Sending query for measurements {measurement}')
+        query_set = self.dbproxy.get_measurement(measurement)
+        self.logger.info(f'Exporting {measurement} to {file}')
+        utils.db_exporters.influx2csv(query_set, file)
+        self.logger.info(f'Export {measurement} complete!')
 
     def on_btn_delete(self):
         self.dbproxy.delete_measurement(self.dropdown_var.get())
@@ -85,3 +103,5 @@ class DBExportFrame(tkinter.Frame):
     def on_btn_update(self):
         self.update_dropdown()
 
+    def on_change(self, b):
+        self.update_dropdown()
