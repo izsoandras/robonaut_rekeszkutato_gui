@@ -70,8 +70,8 @@
       
     - name: line control
       type: 0x12
-      format: '<fff'
-      fields: ['d0','dv','zeta']
+      format: '<fffff'
+      fields: ['dv','Kp','Kd', 'IMU Kp','IMU Kd']
       
     - name: distance control
       type: 0x13

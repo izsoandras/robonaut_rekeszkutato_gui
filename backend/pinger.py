@@ -6,7 +6,7 @@ import dataholders.FifoDataholder
 
 
 class Pinger(object):
-    def __init__(self, mqtt_client: ParamListener, dataholders: dict, type_id: int, on_connection:list, interval=0.5, timeout=0.1):
+    def __init__(self, mqtt_client: ParamListener, dataholders: dict, type_id: int, on_connection:list, interval=1, timeout=0.5):
         self.interval = interval
         self.timeout = timeout
         self.dataholder = dataholders[type_id]

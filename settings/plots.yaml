@@ -17,7 +17,7 @@
 #   [...]
 
 sample_num: 500     # display sample number
-update_period: 500 # [ms]
+update_period: 40 # [ms]
 layout: [2,3] # [<rows_num>,<col_num>]
 plots:
   - title: 'Battery voltage'
@@ -56,13 +56,13 @@ plots:
         field: 'avg current'
         legend: 'actual'
   
-#  - title: 'Heading'
-#    type: compass
-#    isRad: False
-#    theta_dir: 1
-#    lines:
-#      - message: orientation
-#        field: 'yaw angle'
+  - title: 'Heading'
+    type: compass
+    isRad: False
+    theta_dir: 1
+    lines:
+      - message: orientation
+        field: 'yaw angle'
 
 
   - title: 'Distance'
@@ -81,13 +81,13 @@ plots:
       - message: line
         field: front detection
 
-  - title: 'Rear line'
-    type: spec_bin
-    flipud: false
-    fliplr: false
-    lines:
-      - message: line
-        field: rear detection
+#  - title: 'Rear line'
+#    type: spec_bin
+#    flipud: false
+#    fliplr: false
+#    lines:
+#      - message: line
+#        field: rear detection
 #  - title: 'Line num'
 #    type: series
 #    ylim: [0,5]
