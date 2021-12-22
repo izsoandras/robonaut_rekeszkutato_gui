@@ -4,10 +4,10 @@
 block_cipher = None
 
 
-a = Analysis(['RKIgui.py'],
+a = Analysis(['C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/RKIgui.py'],
              pathex=[],
              binaries=[],
-             datas=[],
+             datas=[('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/settings', 'settings/'), ('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/assets', 'assets/'), ('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/uart_codec.so', '.')],
              hiddenimports=[],
              hookspath=[],
              hooksconfig={},
@@ -33,7 +33,7 @@ exe = EXE(pyz,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,
-          entitlements_file=None )
+          entitlements_file=None , icon='C:\\Users\\Tarsoly\\Programming\\Python\\robonaut_rekeszkutato_gui\\assets\\icon.ico', embed_manifest=False)
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
