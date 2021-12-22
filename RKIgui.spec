@@ -10,12 +10,12 @@ a = Analysis(['C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/RKI
              datas=[('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/settings', 'settings/'), ('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/assets', 'assets/'), ('C:/Users/Tarsoly/Programming/Python/robonaut_rekeszkutato_gui/uart_codec.so', '.')],
              hiddenimports=[],
              hookspath=[],
-             hooksconfig={},
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
-             cipher=block_cipher)
+             cipher=block_cipher,
+             noarchive=False)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 
