@@ -45,7 +45,7 @@ def build_dataholders(msgs_reicpes, plots_recipe=None):
             if dh_type == 'series' or dh_type == 'spec' or dh_type == 'spec_bin':
                 new_dh = SeriesDataHolder(msg_rec['name'], msg_rec['fields'], plots_recipe['sample_num'])
             elif dh_type == 'bar' or dh_type == 'compass':
-                new_dh = FixedDataholder(msg_rec['name'], msg_rec['fields'], plots_recipe['sample_num'])
+                new_dh = FixedDataholder(msg_rec['name'], msg_rec['fields'], 1)
             else:
                 raise ValueError(f'Wrong value as plot type for {msg_rec["name"]}')
 

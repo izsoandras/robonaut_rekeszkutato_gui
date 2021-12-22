@@ -58,8 +58,9 @@ plots:
   
   - title: 'Heading'
     type: compass
+#    ylim: [ -180,180 ]
     isRad: False
-    theta_dir: 1
+    theta_dir: -1
     lines:
       - message: orientation
         field: 'yaw angle'

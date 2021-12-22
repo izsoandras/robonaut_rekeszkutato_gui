@@ -39,22 +39,24 @@ class CompassDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
                 #     self.axs[line_rec['field']].set_label(line_rec['field'])
                 #     self.has_legend = True
                 #
-                # self.annots[line_rec['field']] = self.axes.annotate(f'{data[-1]:.2f}', xy=(-49, 0),
-                #                                                     # TODO: remove literal
-                #                                                     xytext=(-60, -60 + idx * 10),
-                #                                                     textcoords='offset points', animated=True,
-                #                                                     color=CompassDiagram.TAB_PALETTE[idx],
-                #                                                     weight='heavy')
+                self.annots[line_rec['field']] = self.axes.annotate(f'{data[-1]:.2f}', xy=(-49, 0),
+                                                                    # TODO: remove literal
+                                                                    xytext=(-60, -60 + idx * 10),
+                                                                    textcoords='offset points', animated=True,
+                                                                    color=CompassDiagram.TAB_PALETTE[idx],
+                                                                    weight='heavy')
 
     def update_data(self):
         for key in self.axs.keys():
             dh_key = self.get_msg_for_field(key)
-
             data = self.dataholders[dh_key].getData(key)[-1]
+
             if self.isRad:
                 rad = data
             else:
                 rad = np.deg2rad(data)
 
+            self.logger.warning(f"UPdate data: {rad}")
+
             self.axs[key].set_xdata([rad, rad])
-            # self.annots[key].set_text(f'{data:.2f}')
+            self.annots[key].set_text(f'{data:.2f}')
