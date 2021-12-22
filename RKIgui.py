@@ -17,7 +17,6 @@ import my_gui.paramsetter.SetParamsFrame
 import clients.mqtt.listeners.MyMQTTllistener
 import utils.dataholder_factory
 import clients.serial.RKIUartListener
-import msg_codecs.frame_codecs.RKIUartCoder
 import random
 import threading
 import my_gui.custom_elements
@@ -107,22 +106,23 @@ class RKIguiApp():
                 self.log_listener.robot_logger.addHandler(robot_file_handler)
                 self.logger.info('Network setup done')
             elif proto_data["proto"] == 'serial':
-                frame_coder = msg_codecs.frame_codecs.RKIUartCoder.RKIUartCoder(proto_data['max_len'])
-                payload_coders = {}
-                dhs = {**tel_dh_by_type, **param_dh_by_type}
-                all_rec = topics_rec[1]['messages']
-                all_rec.extend(topics_rec[2]['messages'])
-                for recipe in all_rec:
-                    payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(
-                        **recipe)  # TODO: ne literal legyen
-                serial_listener = clients.serial.RKIUartListener.RKIUartListener('Serial',
-                                                                                 proto_data['port'],
-                                                                                 frame_coder,
-                                                                                 payload_coders,
-                                                                                 dhs,
-                                                                                 proto_data['baudrate'])
-                self.param_listener = serial_listener
-                self.tel_listener = serial_listener
+                self.logger.error("Serial listener is currently not supported")
+                # frame_coder = msg_codecs.frame_codecs.RKIUartCoder.RKIUartCoder(proto_data['max_len'])
+                # payload_coders = {}
+                # dhs = {**tel_dh_by_type, **param_dh_by_type}
+                # all_rec = topics_rec[1]['messages']
+                # all_rec.extend(topics_rec[2]['messages'])
+                # for recipe in all_rec:
+                #     payload_coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(
+                #         **recipe)  # TODO: ne literal legyen
+                # serial_listener = clients.serial.RKIUartListener.RKIUartListener('Serial',
+                #                                                                  proto_data['port'],
+                #                                                                  frame_coder,
+                #                                                                  payload_coders,
+                #                                                                  dhs,
+                #                                                                  proto_data['baudrate'])
+                # self.param_listener = serial_listener
+                # self.tel_listener = serial_listener
 
             if self.log_listener is not None:
                 self.log_listener.robot_logger.addHandler(self.log_frame.robotLogHandler)
