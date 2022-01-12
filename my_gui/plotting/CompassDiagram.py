@@ -56,7 +56,7 @@ class CompassDiagram(my_gui.plotting.AbstractDiagram.AbstractDiagram):
             else:
                 rad = np.deg2rad(data)
 
-            self.logger.warning(f"UPdate data: {rad}")
+            # self.logger.warning(f"UPdate data: {rad}")
 
             self.axs[key].set_xdata([rad, rad])
             self.annots[key].set_text(f'{data:.2f}')
