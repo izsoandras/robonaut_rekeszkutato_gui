@@ -132,7 +132,7 @@ class RKIguiApp():
             self.init_paramframe(topics_rec[2]['messages'], param_dh_by_type,
                                  self.param_listener)  # TODO: remove literal
 
-            self.robotPinger = backend.Pinger(self.param_listener, param_dh_by_type, 0x23, [self.param_frame.on_btn_updateall])  # TODO: remove hardcode
+            self.robotPinger = backend.Pinger(self.param_listener, param_dh_by_type, 0x23, [])#[self.param_frame.on_btn_updateall])  # TODO: remove hardcode
             self.robotPinger.start_reqing()
 
             self.tabs = None
