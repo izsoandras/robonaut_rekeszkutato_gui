@@ -42,10 +42,14 @@ class MyMQTTlistener(AbstractClient):
         self.payload_coders = None
         self.build_coders(msg_recipes)
 
+    # TODO: make factory for coders
     def build_coders(self, msg_recipes):
         coders = {}
         for recipe in msg_recipes:
-            coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe) # TODO: ne literal legyen
+            if recipe['format'] == 'string':
+                coders[recipe['type']] = msg_codecs.payload_codecs.StringCoder(**recipe)
+            else:
+                coders[recipe['type']] = msg_codecs.payload_codecs.PayloadCoder(**recipe) # TODO: ne literal legyen
 
         self.payload_coders = coders
 

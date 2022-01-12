@@ -2,11 +2,13 @@ from .PayloadCoder import PayloadCoder
 
 
 class StringCoder(PayloadCoder):
-    def __init__(self, name: str, type_byte: int, field):
-        PayloadCoder.__init__(self, name, type_byte, 's', ['msg'])
+    def __init__(self, name: str, type: int, fields, format='string'):
+        if format != 'string':
+            raise ValueError("Required format is string!")
+        PayloadCoder.__init__(self, name, type, 's', fields)
 
     def encode(self, data: dict):
-        pass
+        return data[self.field_names[0]].encode('utf-8')
 
     def decode(self, payload):
-        pass
+        return payload.decode('utf-8', 'strict')

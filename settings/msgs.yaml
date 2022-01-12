@@ -56,6 +56,11 @@
       format: '<f'
       fields: ['avg voltage']
 
+    - name: 'navigation telemetry'
+      type: 0x09
+      format: '<BBBBBBB'
+      fields: ['current node', 'goal node', 'node_dir', 'orientation', 'direction', 'event', 'maneuver']
+
 - name: comm
   messages:
     - name: motor setpoints
@@ -93,8 +98,7 @@
       format: '<'
       fields: []
 
-#    - name: nav data
-#      type: 0x22
-#      format: '<BBBBB'
-#      fields: ['dest','forb1','forb2','forb3','forb4']
-#      new_line: True
+    - name: nav data
+      type: 0x22
+      format: 'string'
+      fields: ['msg']
