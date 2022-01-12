@@ -11,9 +11,5 @@ influxd
 
 ## Install python libs:
 ```
- pip install pillow
- pip install tk
- pip install paho-mqtt
- pip install influxdb
- pip install matplotlib
- ```
+pip install pillow tk paho-mqtt influxdb matplotlib pyyaml serial
+```

@@ -82,6 +82,16 @@
       type: 0x13
       format: '<ff'
       fields: ['P','I']
+
+    - name: impeller
+      type: 0x14
+      format: '>H'
+      fields: ['imp speed']
+      
+    - name: nav event
+      type: 0x24
+      format: '<B'
+      fields: ['event']
       
     - name: start
       type: 0x20
