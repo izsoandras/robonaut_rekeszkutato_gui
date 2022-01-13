@@ -248,24 +248,24 @@ class CourseMap(tkinter.Frame):
 
     def update_view(self):
         if self.dataholder.hasNew:
-            self.car_state = self.dataholder.getData()[-1]
+            # self.car_state = self.dataholder.getData()[-1]
             self.invalidate()
-            if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
-                msg = 'NAVI_EVENT_CROSSING_FRONT'
-            elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
-                msg = 'NAVI_EVENT_CROSSING_REAR'
-            elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
-                msg = 'NAVI_EVENT_CROSSING_LEFT'
-            elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
-                msg = 'NAVI_EVENT_START_ROUTE'
-            elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
-                msg = 'NAVI_EVENT_EXIT_LEFT'
-            elif self.car_state['event'] == NAVI_EVENT_INVALID:
-                msg = 'NAVI_EVENT_INVALID'
-            else:
-                msg = 'Unknown navigation event!'
-
-            self.logger.info(msg)
+            # if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
+            #     msg = 'NAVI_EVENT_CROSSING_FRONT'
+            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
+            #     msg = 'NAVI_EVENT_CROSSING_REAR'
+            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
+            #     msg = 'NAVI_EVENT_CROSSING_LEFT'
+            # elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
+            #     msg = 'NAVI_EVENT_START_ROUTE'
+            # elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
+            #     msg = 'NAVI_EVENT_EXIT_LEFT'
+            # elif self.car_state['event'] == NAVI_EVENT_INVALID:
+            #     msg = 'NAVI_EVENT_INVALID'
+            # else:
+            #     msg = 'Unknown navigation event!'
+            #
+            # self.logger.info(msg)
 
         if self._invalid:
             self.redraw()
@@ -335,7 +335,7 @@ class CourseMap(tkinter.Frame):
 
         for d in self.disabled:
             if self.node_info['name'][d['idx']] is not None:
-                msg = msg + self.node_info['name'][d['idx']]
+                msg = msg + str(self.node_info['name'][d['idx']]).lower()
 
         msg = msg + '\n'
 
