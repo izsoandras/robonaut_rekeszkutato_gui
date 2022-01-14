@@ -136,7 +136,7 @@ class RKIguiApp():
             self.robotPinger.start_reqing()
 
             self.tabs = None
-            self.init_tabs(tel_dh_by_name, param_dh_by_type, plots_rec)
+            self.init_tabs(tel_dh_by_name, tel_dh_by_type, plots_rec)
             self.statusbar = my_gui.custom_elements.RKIstatusbar(self.root, self.param_listener, self.dbproxy, self.robotPinger)
             # self.start_stop_frame =my_gui.custom_elements.RKIStartStopFrame(self.root, self.param_listener, 0x20, 0x21) # TODO: outsource
             self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -187,13 +187,14 @@ class RKIguiApp():
         # Tabs
         self.tabs = ttk.Notebook(self.root)
 
-        course_tab = CourseMap(self.tabs, self.param_listener, 0x22, dh_by_type[0x22])
+        course_tab = CourseMap(self.tabs, self.param_listener, 0x22, dh_by_type[0x09])
         telemetry_tab = my_gui.plotting.TelemeteryFrame.TelemetryFrame(self.tabs, self.tel_listener, dh_by_name,
                                                                        plot_rec)
         db_tab = my_gui.db_frames.DbExportFrame.DBExportFrame(self.tabs, self.dbproxy)
         self.tabs.add(course_tab, text='Course')
         self.tabs.add(telemetry_tab, text='Graphs')
         self.tabs.add(db_tab, text='Database')
+        telemetry_tab.fr_startstop.on_btn_open()
 
     def on_closing(self):
         self.logger.info('Start closing sequence')

@@ -86,4 +86,7 @@ class ParamFrame(tkinter.Frame):
                 data.pop('idx')
             if data is not None:
                 for key in data.keys():
-                    self.param_views[key].set_view(data[key][-1])
+                    try:
+                        self.param_views[key].set_view(data[key][-1])
+                    except KeyError as ke:
+                        print(ke)

@@ -6,6 +6,7 @@ from ...AbstractClient import AbstractClient
 import time
 import threading
 import random
+import struct
 
 
 class MyMQTTlistener(AbstractClient):
@@ -55,7 +56,11 @@ class MyMQTTlistener(AbstractClient):
 
     def on_message(self, client, userdata, message):
         msg_type, payload = self.msg_coder.deconstruct_message(message.payload)
-        data = self.payload_coders[msg_type].decode(payload)
+        try:
+            data = self.payload_coders[msg_type].decode(payload)
+        except struct.error as se:
+            self.logger.error(str(se) +f', received: {payload.hex()}')
+            return
 
         self.logger.debug(f'Message received in {client} on topic {message.topic}: {str(message.payload)}')
 

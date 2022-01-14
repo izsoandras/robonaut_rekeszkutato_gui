@@ -6,6 +6,13 @@ import my_gui.paramsetter.paramviews.UintParamView as uipv
 def structString2paramView(parent, string: str, names):
     ret_dict = {}
     names_idx = 0
+
+    if string == 'string':
+        ret_dict = {
+            names[0]: ipv.IntParamView(parent, 'NOT IMPLEMENTED', 8)
+        }
+        return ret_dict
+
     for c in string:
         bigC = c.upper()
         if c in 'x><=@!':
@@ -23,9 +30,9 @@ def structString2paramView(parent, string: str, names):
                 raise Exception(f'Character idx {names_idx} in {string} is in BHILQ but neither B,H,I,L or Q')
 
             if c.isupper():
-                new_view = ipv.IntParamView(parent, names[names_idx], bit_num)
-            else:
                 new_view = uipv.UintParamView(parent, names[names_idx], bit_num)
+            else:
+                new_view = ipv.IntParamView(parent, names[names_idx], bit_num)
 
         elif c in 'fd':
             new_view = fpv.FloatParamView(parent, names[names_idx])

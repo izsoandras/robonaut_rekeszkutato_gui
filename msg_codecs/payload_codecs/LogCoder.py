@@ -24,7 +24,10 @@ class LogCoder(PayloadCoder):
 
     def decode(self, payload):
         level = payload[0]
-        message = str(payload[1:], 'utf-8')
+        try:
+            message = str(payload[1:], 'utf-8')
+        except UnicodeDecodeError as ude:
+            message = str(ude) + f'message: {payload[1:].hex()}'
 
         return {
             'name': self.name,

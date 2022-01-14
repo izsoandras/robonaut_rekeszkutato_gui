@@ -20,20 +20,22 @@ LINE_IMG = 9
 MANEUVER_FOLLOW_LEFT = 0
 MANEUVER_FOLLOW_MIDDLE = 1
 MANEUVER_FOLLOW_RIGHT = 2
-MANEUVER_TURN_FOLLOW_LEFT = 3
-MANEUVER_TURN_FOLLOW_MIDDLE = 4
-MANEUVER_TURN_FOLLOW_RIGHT = 5
-MANEUVER_EXIT_THROUGH = 6
-MANEUVER_LANE_SW_LEFT = 7
-MANEUVER_LANE_SW_RIGHT = 8
-MANEUVER_STOP = 9
+MANEUVER_TURN = 3
+MANEUVER_TURN_FOLLOW_LEFT = 4
+MANEUVER_TURN_FOLLOW_MIDDLE = 5
+MANEUVER_TURN_FOLLOW_RIGHT = 6
+MANEUVER_EXIT_THROUGH = 7
+MANEUVER_LANE_SW_LEFT = 8
+MANEUVER_LANE_SW_RIGHT =9
+MANEUVER_STOP = 10
 
 NAVI_EVENT_CROSSING_FRONT = 0
 NAVI_EVENT_CROSSING_REAR = 1
 NAVI_EVENT_CROSSING_LEFT = 2
 NAVI_EVENT_EXIT_LEFT = 3
 NAVI_EVENT_START_ROUTE = 4
-NAVI_EVENT_INVALID = 5
+NAVI_EVENT_TURN_COMPLETE = 5
+NAVI_EVENT_INVALID = 6
 
 
 class CourseMap(tkinter.Frame):
@@ -197,10 +199,7 @@ class CourseMap(tkinter.Frame):
             new_img = ImageOps.mirror(self.fig_imgs_resiz[LANE_RIGHT_IMG])
         else:
             if maneuver == MANEUVER_EXIT_THROUGH:
-                if car_ori * car_dir > 0:
-                    new_img = ImageOps.mirror(self.fig_imgs_resiz[EXIT_IMG])
-                else:
-                    new_img = self.fig_imgs_resiz[EXIT_IMG]
+                new_img = ImageOps.mirror(self.fig_imgs_resiz[EXIT_IMG])
             elif maneuver == MANEUVER_FOLLOW_MIDDLE:
                 new_img = ImageOps.mirror(self.fig_imgs_resiz[MIDDLE_IMG])
             elif maneuver == MANEUVER_FOLLOW_LEFT:
@@ -219,7 +218,7 @@ class CourseMap(tkinter.Frame):
 
         img.paste(new_img, (0, 0), new_img)
 
-        if maneuver in [MANEUVER_TURN_FOLLOW_LEFT, MANEUVER_TURN_FOLLOW_MIDDLE, MANEUVER_TURN_FOLLOW_RIGHT]:
+        if maneuver in [ MANEUVER_TURN, MANEUVER_TURN_FOLLOW_LEFT, MANEUVER_TURN_FOLLOW_MIDDLE, MANEUVER_TURN_FOLLOW_RIGHT]:
             new_img = self.fig_imgs_resiz[DIR_SW_IMG]
 
         img.paste(new_img, (0, 0), new_img)
@@ -227,6 +226,9 @@ class CourseMap(tkinter.Frame):
         return img
 
     def put_car(self, car_img, node_idx, node_dir):
+        if node_idx > len(self.node_info["name"]):
+            node_idx = -1
+
         angle = math.atan2(self.node_info["dirs"][node_idx][1], self.node_info["dirs"][node_idx][0])
         self.car_img = ImageTk.PhotoImage(car_img.rotate(math.degrees(angle), expand=True))
         self.canvas.itemconfigure(self.car_img_id, image=self.car_img)
@@ -248,24 +250,27 @@ class CourseMap(tkinter.Frame):
 
     def update_view(self):
         if self.dataholder.hasNew:
-            # self.car_state = self.dataholder.getData()[-1]
+            data = self.dataholder.getData()
+            for key in data.keys():
+                self.car_state[key] = data[key][-1]
+
             self.invalidate()
-            # if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
-            #     msg = 'NAVI_EVENT_CROSSING_FRONT'
-            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
-            #     msg = 'NAVI_EVENT_CROSSING_REAR'
-            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
-            #     msg = 'NAVI_EVENT_CROSSING_LEFT'
-            # elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
-            #     msg = 'NAVI_EVENT_START_ROUTE'
-            # elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
-            #     msg = 'NAVI_EVENT_EXIT_LEFT'
-            # elif self.car_state['event'] == NAVI_EVENT_INVALID:
-            #     msg = 'NAVI_EVENT_INVALID'
-            # else:
-            #     msg = 'Unknown navigation event!'
-            #
-            # self.logger.info(msg)
+            if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
+                msg = 'NAVI_EVENT_CROSSING_FRONT'
+            elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
+                msg = 'NAVI_EVENT_CROSSING_REAR'
+            elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
+                msg = 'NAVI_EVENT_CROSSING_LEFT'
+            elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
+                msg = 'NAVI_EVENT_START_ROUTE'
+            elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
+                msg = 'NAVI_EVENT_EXIT_LEFT'
+            elif self.car_state['event'] == NAVI_EVENT_INVALID:
+                msg = 'NAVI_EVENT_INVALID'
+            else:
+                msg = 'Unknown navigation event!'
+
+            self.logger.info(msg)
 
         if self._invalid:
             self.redraw()

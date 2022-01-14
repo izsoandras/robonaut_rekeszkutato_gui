@@ -19,6 +19,7 @@
       fields: [level, msg]
 #      prefixes: [DEBUG, INFO, WARN, ERR, CRIT]
 
+
 - name: tel
   messages:
     - name: LCD
@@ -58,7 +59,7 @@
 
     - name: 'navigation telemetry'
       type: 0x09
-      format: '<BBBBBBB'
+      format: '<BBbbbBB'
       fields: ['current node', 'goal node', 'node_dir', 'orientation', 'direction', 'event', 'maneuver']
 
 - name: comm
@@ -92,23 +93,33 @@
       type: 0x24
       format: '<B'
       fields: ['event']
-      
-    - name: start
-      type: 0x20
-      format: '<'
-      fields: []
-      
-    - name: stop
-      type: 0x21
-      format: '<'
-      fields: []
-
-    - name: ping
-      type: 0x23
-      format: '<'
-      fields: []
 
     - name: nav data
       type: 0x22
       format: 'string'
       fields: ['msg']
+
+    - name: nav state
+      type: 0x25
+      format: '<Bbb'
+      fields: ['node id','node dir','car dir']
+
+    - name: lab event
+      type: 0x26
+      format: '<B'
+      fields: ['event']
+
+    - name: start
+      type: 0x20
+      format: '<'
+      fields: [ ]
+
+    - name: stop
+      type: 0x21
+      format: '<'
+      fields: [ ]
+
+    - name: ping
+      type: 0x23
+      format: '<'
+      fields: [ ]

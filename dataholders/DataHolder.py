@@ -32,6 +32,7 @@ class DataHolder(metaclass=abc.ABCMeta):
         pass
 
     def getData(self, key=None):
+
         if self.hasNew:
             self.hasNew = False # TODO: check thread safety
             self.refreshData()
