@@ -49,7 +49,7 @@ class CourseMap(tkinter.Frame):
         self.dataholder = dataholder
         self.car_state = {
             'current node': 0,
-            'goal node': 16,
+            'goal node': 0,
             'node_dir': 1,
             'orientation': 1,
             'direction': 1,
@@ -70,7 +70,7 @@ class CourseMap(tkinter.Frame):
         self.resized_img = self.canvas_img
 
         figs_paths = ['car_car.png', 'car_dir_sw.png', 'car_exit.png', 'car_lane_left.png', 'car_lane_right.png', 'car_left.png', 'car_right.png', 'car_middle.png', 'car_STOP.png', 'car_line_sensor.png']
-        self.car_ratio = 1.5/5
+        self.car_ratio = self.node_info['car_rat']
         self.fig_imgs = []
         self.fig_imgs_resiz = []
         for fig_path in figs_paths:
@@ -84,7 +84,7 @@ class CourseMap(tkinter.Frame):
 
         self.disabled = []
         self.goal = {'idx': None, 'tag': None}
-        self.marker_rad = 20
+        self.marker_rad = self.fig_imgs_resiz[0].height * self.car_ratio
 
         self.send_btn = tkinter.Button(self.canvas, text="Send", bg='RoyalBlue1', activebackground='navy', command=self.on_btn_send_click)
         # self.send_btn.pack(side=tkinter.RIGHT, anchor=tkinter.SE)
@@ -107,14 +107,6 @@ class CourseMap(tkinter.Frame):
 
     def redraw(self):
         self._invalid = False
-        self.update_car()
-
-        for d in self.disabled:
-            self._draw_marker(d, 'IndianRed1')
-
-        self.disabled = [d for d in self.disabled if d['idx'] is not None]
-
-        self._draw_marker(self.goal, 'gold')
 
         if self.car_goal_marker is not None:
             self.canvas.delete(self.car_goal_marker)
@@ -126,7 +118,16 @@ class CourseMap(tkinter.Frame):
                                                    self.ratio * (g_y - self.marker_rad),
                                                    self.ratio * (g_x + self.marker_rad),
                                                    self.ratio * (g_y + self.marker_rad),
-                                                   fill=None, outline='DarkGoldenrod3', width=self.ratio*10)
+                                                   fill=None, outline='DarkGoldenrod3', width=self.ratio*self.marker_rad/2)
+
+        for d in self.disabled:
+            self._draw_marker(d, 'IndianRed1')
+
+        self.disabled = [d for d in self.disabled if d['idx'] is not None]
+
+        self._draw_marker(self.goal, 'gold')
+
+        self.update_car()
 
         self.send_btn.place(x=self.canvas_img.width(),
                             y=self.canvas_img.height() - 10,
@@ -242,6 +243,7 @@ class CourseMap(tkinter.Frame):
         y0 = int(self.ratio * (self.node_info["coords"][node_idx][1] + car_center[1]))
 
         self.canvas.coords(self.car_img_id, x0, y0)
+        self.canvas.tag_raise(self.car_img)
         pass
 
     def update_car(self):
@@ -282,9 +284,13 @@ class CourseMap(tkinter.Frame):
         for idx, crd in enumerate(self.node_info["coords"]):
             crd = [c * self.ratio for c in crd]
             if math.dist(crd, [event.x, event.y]) < self.ratio * 40:
+                if not self.node_info['name'][idx].strip():
+                    self.logger.warning(f"Node {idx} has no name, so it can't be goal!")
+                    return
+
                 for d in self.disabled:
                     if d['idx'] == idx:
-                        self.logger.warning('This node is disabled! Cannot be goal!')
+                        self.logger.warning(f'Node {idx} is disabled! Cannot be goal!')
                         return
 
                 if self.goal['idx'] == idx:
@@ -302,8 +308,12 @@ class CourseMap(tkinter.Frame):
         for idx, crd in enumerate(self.node_info["coords"]):
             crd = [c*self.ratio for c in crd]
             if math.dist(crd, [event.x, event.y]) < self.ratio * 40:
+                if not self.node_info['name'][idx].strip():
+                    self.logger.warning(f"Node {idx} has no name, so it can't be disabled!")
+                    return
+
                 if idx == self.goal['idx']:
-                    self.logger.warning("This node is the goal node! Cannot be disabled!")
+                    self.logger.warning(f"Node {idx} is the goal node! Cannot be disabled!")
                     return
 
                 deleted = False
