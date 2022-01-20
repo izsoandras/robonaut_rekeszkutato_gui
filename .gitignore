@@ -138,3 +138,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+assets/map/course_2021.png
+
+assets/icon_old.ico
+
+assets/map/course_2021.json
