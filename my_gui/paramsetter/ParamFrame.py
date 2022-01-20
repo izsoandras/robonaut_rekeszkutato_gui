@@ -24,6 +24,7 @@ class ParamFrame(tkinter.Frame):
 
             for view in self.param_views.values():
                 view.pack(side=tkinter.TOP, fill=tkinter.X)
+                view.tb_set_value.bind('<Return>',self.on_enter_press)
 
             self.fr_buttons = tkinter.Frame(self, bd=5)
             self.btn_send = tkinter.Button(self.fr_buttons, text='Send', command=self.on_btn_send)
@@ -40,6 +41,10 @@ class ParamFrame(tkinter.Frame):
     def on_btn_send(self):
         wrkr = threading.Thread(target=self.send_data())
         wrkr.start()
+
+    def on_enter_press(self, event):
+        self.on_btn_send()
+        self.logger.debug(f"Enter pressed in {self.name}")
 
     def get_new_data(self):
         data = {
