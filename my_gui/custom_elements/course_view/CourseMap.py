@@ -192,6 +192,7 @@ class CourseMap(tkinter.Frame):
 
         img.paste(new_img, (0, 0), new_img)
 
+        new_img = None
         if maneuver == MANEUVER_STOP:
             new_img = self.fig_imgs_resiz[STOP_IMG]
         elif maneuver == MANEUVER_LANE_SW_LEFT:
@@ -214,10 +215,11 @@ class CourseMap(tkinter.Frame):
             elif maneuver == MANEUVER_TURN_FOLLOW_RIGHT:
                 new_img = self.fig_imgs_resiz[LEFT_IMG]
 
-            if car_ori * car_dir < 0:
+            if new_img is not None and car_ori * car_dir < 0:
                 new_img = new_img.rotate(180)
 
-        img.paste(new_img, (0, 0), new_img)
+        if new_img is not None:
+            img.paste(new_img, (0, 0), new_img)
 
         if maneuver in [ MANEUVER_TURN, MANEUVER_TURN_FOLLOW_LEFT, MANEUVER_TURN_FOLLOW_MIDDLE, MANEUVER_TURN_FOLLOW_RIGHT]:
             new_img = self.fig_imgs_resiz[DIR_SW_IMG]
