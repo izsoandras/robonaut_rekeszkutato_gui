@@ -223,8 +223,7 @@ class CourseMap(tkinter.Frame):
 
         if maneuver in [ MANEUVER_TURN, MANEUVER_TURN_FOLLOW_LEFT, MANEUVER_TURN_FOLLOW_MIDDLE, MANEUVER_TURN_FOLLOW_RIGHT]:
             new_img = self.fig_imgs_resiz[DIR_SW_IMG]
-
-        img.paste(new_img, (0, 0), new_img)
+            img.paste(new_img, (0, 0), new_img)
 
         return img
 
