@@ -22,7 +22,8 @@ defaults = {
         'layout': [3, 3],
         'plots': []
     },
-    'lines': []
+    'lines': [],
+    'extract': []
 }
 
 # TODO: outsource
@@ -37,12 +38,13 @@ opt_fields = {
     'topic': [],
     'msgs': ['factors'],
     'plot': ['title', 'type', 'ylim', 'bins', 'sample_num', 'isRad', 'theta_dir', 'flipud', 'fliplr'],
-    'line': ['legend']
+    'line': ['legend'],
+    'extract': ['name', 'fields']
 }
 
 
 class SettingsReader:
-    def __init__(self, msgs_path=None, plots_path=None, proto_path=None, db_path=None):
+    def __init__(self, msgs_path=None, plots_path=None, proto_path=None, db_path=None, extract_path=None):
         if msgs_path is not None:
             self.msgs_path = msgs_path
         else:
@@ -63,6 +65,11 @@ class SettingsReader:
         else:
             self.db_path = './settings/database.yaml'  # TODO: remove literal
 
+        if extract_path is not None:
+            self.extract_path = extract_path
+        else:
+            self.extract_path = './settings/extract.yaml'  # TODO: remove literal
+
 
         self.errors = []
         self.severe = []
@@ -72,6 +79,7 @@ class SettingsReader:
         self.proto_data = None
         self.plots_rec = None
         self.db_data = None
+        self.extract_data = None
 
     def read_data(self):
 
@@ -129,7 +137,19 @@ class SettingsReader:
             self.db_data = defaults['database']
             self.logger.error(str(se))
 
-        return self.topic_recs, self.plots_rec, self.proto_data, self.db_data
+        try:
+            with open(self.extract_path) as file:
+                extract_data = yaml.safe_load(file)
+
+            self.extract_data = extract_data    # TODO: checking
+        except FileNotFoundError:
+            self.extract_data = defaults['extract']  # TODO: remove literal
+            self.log_file_not_found('Extract', self.extract_path)
+        except yaml.scanner.ScannerError as se:
+            self.extract_data = defaults['extract']
+            self.logger.error(str(se))
+
+        return self.topic_recs, self.plots_rec, self.proto_data, self.db_data, self.extract_data
 
     def check_nested_lists(self, outmost_list: list, keys, fields_keys, whats):
         recs_passed = []

@@ -1,0 +1,21 @@
+
+- name: motor telemetry
+  fields: ['speed setpoint', 'avg speed', 'current setpoint','avg current', 'avg motor battery voltage']
+
+#- name: ident telemetry
+#  fields: ['current setpoint', 'speed']
+
+#- name: line
+#  fields: ['front detection', 'rear detection', 'front num', 'rear num']
+
+- name: orientation
+  fields: ['yaw angle']
+
+- name: distance
+  fields: ['distance']
+
+- name: main battery
+  fields: ['avg voltage']
+
+#- name: 'navigation telemetry'
+#  fields: ['current node', 'goal node', 'node_dir', 'orientation', 'direction', 'event', 'maneuver']

@@ -22,6 +22,7 @@ import threading
 import my_gui.custom_elements
 import backend
 from my_gui.custom_elements.course_view import CourseMap
+from my_gui.custom_elements.course_view import TelemetryExtractFrame
 
 class RKIguiApp():
     # noinspection PyUnresolvedReferences
@@ -54,7 +55,7 @@ class RKIguiApp():
 
         try:
             reader = utils.SettingsReader.SettingsReader()
-            topics_rec, plots_rec, proto_data, db_data = reader.read_data()
+            topics_rec, plots_rec, proto_data, db_data, extract_rec = reader.read_data()
 
             self.dbproxy = utils.InfluxDBproxy.InfluxDBproxy(**db_data)
 
@@ -136,7 +137,7 @@ class RKIguiApp():
             self.robotPinger.start_reqing()
 
             self.tabs = None
-            self.init_tabs(tel_dh_by_name, tel_dh_by_type, plots_rec)
+            self.init_tabs(tel_dh_by_name, tel_dh_by_type, plots_rec, extract_rec)
             self.statusbar = my_gui.custom_elements.RKIstatusbar(self.root, self.param_listener, self.dbproxy, self.robotPinger)
             # self.start_stop_frame =my_gui.custom_elements.RKIStartStopFrame(self.root, self.param_listener, 0x20, 0x21) # TODO: outsource
             self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -183,11 +184,15 @@ class RKIguiApp():
         # Params frame
         self.param_frame = my_gui.paramsetter.SetParamsFrame.SetParamsFrame(self.root, msgs_recipes, client, dh_by_type)
 
-    def init_tabs(self, dh_by_name, dh_by_type, plot_rec):
+    def init_tabs(self, dh_by_name, dh_by_type, plot_rec, extract_rec):
         # Tabs
         self.tabs = ttk.Notebook(self.root)
 
-        course_tab = CourseMap(self.tabs, self.param_listener, 0x22, dh_by_type[0x09])
+        course_tab = tkinter.Frame(self.tabs)
+        fr_map = CourseMap(course_tab, self.param_listener, 0x22, dh_by_type[0x09])
+        fr_extract = TelemetryExtractFrame(course_tab, extract_rec, dh_by_name)
+        fr_extract.pack(side=tkinter.RIGHT, anchor='n', expand=True)
+        fr_map.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
         telemetry_tab = my_gui.plotting.TelemeteryFrame.TelemetryFrame(self.tabs, self.tel_listener, dh_by_name,
                                                                        plot_rec)
         db_tab = my_gui.db_frames.DbExportFrame.DBExportFrame(self.tabs, self.dbproxy)
