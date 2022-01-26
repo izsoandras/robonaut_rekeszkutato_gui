@@ -2,6 +2,8 @@ import logging
 import logging.handlers
 import tkinter
 import queue
+import tkinter.font
+import numpy
 
 
 class ScreenLogger(tkinter.Frame):
@@ -47,11 +49,13 @@ class ScreenLogger(tkinter.Frame):
         self.ddvar_robot_level = tkinter.StringVar(self)
         self.dd_robot_level = tkinter.OptionMenu(self.fr_level_select, self.ddvar_robot_level, *choices, command=self.on_robot_level_selection_changed)
         self.ddvar_robot_level.set(choices[1])    # TODO: change to given parameter
+        self.btn_section_break = tkinter.Button(self.fr_level_select, text="Section break", command=self.on_btn_section_break)
 
         self.lb_app_level.pack(side=tkinter.LEFT)
         self.dd_app_level.pack(side=tkinter.LEFT)
         self.lb_robot_level.pack(side=tkinter.LEFT)
         self.dd_robot_level.pack(side=tkinter.LEFT)
+        self.btn_section_break.pack(side=tkinter.LEFT)
         self.fr_level_select.pack(side=tkinter.TOP)
 
         self.sb_logscroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -60,20 +64,33 @@ class ScreenLogger(tkinter.Frame):
         self.master.after(update_ms, self.update_screen)
 
     def update_screen(self):
-        self.tb_logfield.config(state=tkinter.NORMAL)
+        lines = []
         while not self.msg_queue.empty():
             new_log = self.msg_queue.get()
+            lines.append(new_log.msg)
 
-            self.tb_logfield.insert(tkinter.END, '\n' + new_log.msg)
+        self.push_to_screen(lines)
 
-        self.line_num = int(self.tb_logfield.index(tkinter.END).split('.')[0]) - 1
-        if self.line_num >= self.max_line_num:
-            self.tb_logfield.delete('1.0', f'{1 + (self.line_num - self.max_line_num)}.0')
-
-        self.keep_end_visible_if_needed()
-
-        self.tb_logfield.config(state=tkinter.DISABLED)
         self.master.after(self.update_ms, self.update_screen)
+
+    def push_to_screen(self, lines):
+        try:
+            iter(lines)
+        except TypeError:
+            lines = [lines]
+
+        if lines:
+            self.tb_logfield.config(state=tkinter.NORMAL)
+
+            self.tb_logfield.insert(tkinter.END, '\n' + "\n".join(lines))
+
+            self.line_num = int(self.tb_logfield.index(tkinter.END).split('.')[0]) - 1
+            if self.line_num >= self.max_line_num:
+                self.tb_logfield.delete('1.0', f'{1 + (self.line_num - self.max_line_num)}.0')
+
+            self.keep_end_visible_if_needed()
+
+            self.tb_logfield.config(state=tkinter.DISABLED)
 
     def keep_end_visible_if_needed(self):
         if self.sb_logscroll.get()[1] > (self.line_num - 2) / self.line_num:
@@ -85,6 +102,13 @@ class ScreenLogger(tkinter.Frame):
     def set_visible_line_number(self, visible_line_num: int):
         self.tb_logfield.configure(height=visible_line_num)
         self.logger.debug(f'Changed visible line number to: {visible_line_num}')
+
+    def on_btn_section_break(self):
+        tb_w = self.tb_logfield.winfo_width()
+        tb_font = tkinter.font.nametofont(self.tb_logfield["font"])
+        font_w = tb_font.measure("-")
+        separator_row = "-" * int(numpy.floor(tb_w/font_w)-1)
+        self.push_to_screen([separator_row])
 
     def on_app_level_selection_changed(self, new_val):
         if new_val == "Debug":
