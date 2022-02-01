@@ -94,10 +94,10 @@
       format: '<B'
       fields: ['event']
 
-#    - name: nav data
-#      type: 0x22
-#      format: 'string'
-#      fields: ['msg']
+    - name: nav data
+      type: 0x22
+      format: 'string'
+      fields: ['msg']
 
     - name: lab event
       type: 0x26
