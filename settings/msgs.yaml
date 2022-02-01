@@ -94,20 +94,25 @@
       format: '<B'
       fields: ['event']
 
-    - name: nav data
-      type: 0x22
-      format: 'string'
-      fields: ['msg']
+#    - name: nav data
+#      type: 0x22
+#      format: 'string'
+#      fields: ['msg']
+
+    - name: lab event
+      type: 0x26
+      format: '<B'
+      fields: ['event']
 
     - name: nav state
       type: 0x25
       format: '<Bbb'
       fields: ['node id','node dir','car dir']
 
-    - name: lab event
-      type: 0x26
+    - name: lcd button
+      type: 0x27
       format: '<B'
-      fields: ['event']
+      fields: ['UDLR']
 
     - name: start
       type: 0x20
