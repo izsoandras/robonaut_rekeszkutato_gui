@@ -82,8 +82,10 @@ class CourseMap(tkinter.Frame):
         self.car_img = ImageTk.PhotoImage(self.fig_imgs_resiz[CAR_IMG])
         self.car_img_id = self.canvas.create_image((100, 50), image=self.car_img)
 
-        self.disabled = []
-        self.goal = {'idx': None, 'tag': None}
+        self.disabled_gui = []
+        self.goal_gui = {'idx': None, 'tag': None}
+        self.goal_car = {'idx': None, 'tag': None}
+        self.disabled_car = [{'idx': None, 'tag': None} for i in range(0, 4)]
         self.marker_rad = self.fig_imgs_resiz[0].height * self.car_ratio
 
         self.send_btn = tkinter.Button(self.canvas, text="Send", bg='RoyalBlue1', activebackground='navy', command=self.on_btn_send_click)
@@ -92,7 +94,6 @@ class CourseMap(tkinter.Frame):
                             y=self.canvas_img.height()-10,
                             width=self.canvas_img.width()/8, height=self.canvas_img.height()/12, anchor=tkinter.SE)
 
-        self.car_goal_marker = None
 
         self.canvas.pack(side=tkinter.LEFT, expand=True, fill=tkinter.BOTH, anchor=tkinter.NW)
         self.bind('<Configure>', self.on_resize)
@@ -108,24 +109,17 @@ class CourseMap(tkinter.Frame):
     def redraw(self):
         self._invalid = False
 
-        if self.car_goal_marker is not None:
-            self.canvas.delete(self.car_goal_marker)
+        self._draw_marker(self.goal_car, 'DarkGoldenrod3', False)
 
-        if self.car_state['goal node'] is not None:
-            g_x = self.node_info['coords'][self.car_state['goal node']][0]
-            g_y = self.node_info['coords'][self.car_state['goal node']][1]
-            self.car_goal_marker = self.canvas.create_oval(self.ratio * (g_x - self.marker_rad),
-                                                   self.ratio * (g_y - self.marker_rad),
-                                                   self.ratio * (g_x + self.marker_rad),
-                                                   self.ratio * (g_y + self.marker_rad),
-                                                   fill=None, outline='DarkGoldenrod3', width=self.ratio*self.marker_rad/2)
+        for d in self.disabled_car:
+            self._draw_marker(d, 'IndianRed1', False)
 
-        for d in self.disabled:
+        for d in self.disabled_gui:
             self._draw_marker(d, 'IndianRed1')
 
-        self.disabled = [d for d in self.disabled if d['idx'] is not None]
+        self.disabled_gui = [d for d in self.disabled_gui if d['idx'] is not None]
 
-        self._draw_marker(self.goal, 'gold')
+        self._draw_marker(self.goal_gui, 'gold')
 
         self.update_car()
 
@@ -135,7 +129,7 @@ class CourseMap(tkinter.Frame):
 
 
 
-    def _draw_marker(self, marker, color):
+    def _draw_marker(self, marker, color, filled=True):
         if marker['tag'] is not None:
             self.canvas.delete(marker['tag'])
             marker['tag'] = None
@@ -144,11 +138,19 @@ class CourseMap(tkinter.Frame):
             x_c = self.node_info["coords"][marker['idx']][0]
             y_c = self.node_info["coords"][marker['idx']][1]
 
-            marker["tag"] = self.canvas.create_oval(self.ratio * (x_c - self.marker_rad),
-                                               self.ratio * (y_c - self.marker_rad),
-                                               self.ratio * (x_c + self.marker_rad),
-                                               self.ratio * (y_c + self.marker_rad),
-                                               fill=color)
+            if filled:
+                marker["tag"] = self.canvas.create_oval(self.ratio * (x_c - self.marker_rad),
+                                                   self.ratio * (y_c - self.marker_rad),
+                                                   self.ratio * (x_c + self.marker_rad),
+                                                   self.ratio * (y_c + self.marker_rad),
+                                                   fill=color)
+            else:
+                self.car_goal_marker = self.canvas.create_oval(self.ratio * (g_x - self.marker_rad),
+                                                               self.ratio * (g_y - self.marker_rad),
+                                                               self.ratio * (g_x + self.marker_rad),
+                                                               self.ratio * (g_y + self.marker_rad),
+                                                               fill=None, outline=color,
+                                                               width=self.ratio * self.marker_rad / 2)
 
     def on_resize(self, event):
         width_rat = event.width / self.base_width
@@ -251,11 +253,27 @@ class CourseMap(tkinter.Frame):
         img = self.make_car(self.car_state['orientation'], self.car_state['direction'], self.car_state['maneuver'])
         self.put_car(img, self.car_state['current node'], self.car_state['node_dir'])
 
+    def node_name2idx(self, name):
+        if type(name) is str:
+            name = ord(name)
+
+        if name == ord(' '):
+            idx = 1 + name - ord('A')
+        else:
+            idx = None
+
+        return idx
+
     def update_view(self):
         if self.dataholder.hasNew:
             data = self.dataholder.getData()
             for key in data.keys():
                 self.car_state[key] = data[key][-1]
+
+            for i, c_int in enumerate([self.car_state['disabled1'], self.car_state['disabled2'],self.car_state['disabled3'],self.car_state['disabled4']]):
+                self.disabled_car[i]['idx'] = self.node_name2idx(c_int)
+
+            self.goal_car['idx'] = self.node_name2idx(self.car_state['goal node'])
 
             self.invalidate()
             if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
@@ -289,15 +307,15 @@ class CourseMap(tkinter.Frame):
                     self.logger.warning(f"Node {idx} has no name, so it can't be goal!")
                     return
 
-                for d in self.disabled:
+                for d in self.disabled_gui:
                     if d['idx'] == idx:
                         self.logger.warning(f'Node {idx} is disabled! Cannot be goal!')
                         return
 
-                if self.goal['idx'] == idx:
-                    self.goal['idx'] = None
+                if self.goal_gui['idx'] == idx:
+                    self.goal_gui['idx'] = None
                 else:
-                    self.goal['idx'] = idx
+                    self.goal_gui['idx'] = idx
 
                 self.invalidate()
 
@@ -313,20 +331,20 @@ class CourseMap(tkinter.Frame):
                     self.logger.warning(f"Node {idx} has no name, so it can't be disabled!")
                     return
 
-                if idx == self.goal['idx']:
+                if idx == self.goal_gui['idx']:
                     self.logger.warning(f"Node {idx} is the goal node! Cannot be disabled!")
                     return
 
                 deleted = False
-                for d in self.disabled:
+                for d in self.disabled_gui:
                     if d['idx'] == idx:
                         d['idx'] = None
                         deleted = True
                         break
 
                 if not deleted:
-                    if len(self.disabled) < 4:
-                        self.disabled.append({
+                    if len(self.disabled_gui) < 4:
+                        self.disabled_gui.append({
                             "idx": idx,
                             "tag": None
                         })
@@ -343,13 +361,13 @@ class CourseMap(tkinter.Frame):
         self.master.after(20, self.continous_update)
 
     def on_btn_send_click(self):
-        if self.goal['idx'] is None:
+        if self.goal_gui['idx'] is None:
             self.logger.warning("No goal is given! Cannot send message!")
             return
 
-        msg = self.node_info['name'][self.goal['idx']]
+        msg = self.node_info['name'][self.goal_gui['idx']]
 
-        for d in self.disabled:
+        for d in self.disabled_gui:
             if self.node_info['name'][d['idx']] is not None:
                 msg = msg + str(self.node_info['name'][d['idx']]).lower()
 

@@ -59,8 +59,8 @@
 
     - name: 'navigation telemetry'
       type: 0x09
-      format: '<BBbbbBB'
-      fields: ['current node', 'goal node', 'node_dir', 'orientation', 'direction', 'event', 'maneuver']
+      format: '<BBbbbBBBBBB'
+      fields: ['current node', 'goal node', 'node_dir', 'orientation', 'direction', 'event', 'maneuver', 'disabled1', 'disabled2', 'disabled3', 'disabled4']
 
 - name: comm
   messages:
