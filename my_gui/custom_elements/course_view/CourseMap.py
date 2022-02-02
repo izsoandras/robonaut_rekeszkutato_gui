@@ -145,10 +145,10 @@ class CourseMap(tkinter.Frame):
                                                    self.ratio * (y_c + self.marker_rad),
                                                    fill=color)
             else:
-                self.car_goal_marker = self.canvas.create_oval(self.ratio * (g_x - self.marker_rad),
-                                                               self.ratio * (g_y - self.marker_rad),
-                                                               self.ratio * (g_x + self.marker_rad),
-                                                               self.ratio * (g_y + self.marker_rad),
+                self.car_goal_marker = self.canvas.create_oval(self.ratio * (x_c - self.marker_rad),
+                                                               self.ratio * (y_c - self.marker_rad),
+                                                               self.ratio * (x_c + self.marker_rad),
+                                                               self.ratio * (y_c + self.marker_rad),
                                                                fill=None, outline=color,
                                                                width=self.ratio * self.marker_rad / 2)
 
