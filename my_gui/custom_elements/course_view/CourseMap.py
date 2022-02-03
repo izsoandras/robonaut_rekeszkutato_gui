@@ -36,7 +36,8 @@ NAVI_EVENT_CROSSING_LEFT = 2
 NAVI_EVENT_EXIT_LEFT = 3
 NAVI_EVENT_START_ROUTE = 4
 NAVI_EVENT_TURN_COMPLETE = 5
-NAVI_EVENT_INVALID = 6
+NAVI_EVENT_DEAD_END = 6
+NAVI_EVENT_INVALID = 7
 
 
 class CourseMap(tkinter.Frame):
@@ -155,12 +156,12 @@ class CourseMap(tkinter.Frame):
                                                         self.ratio * (y_c + self.marker_rad),
                                                         fill=color)
             else:
-                self.car_goal_marker = self.canvas.create_oval(self.ratio * (x_c - self.marker_rad),
-                                                               self.ratio * (y_c - self.marker_rad),
-                                                               self.ratio * (x_c + self.marker_rad),
-                                                               self.ratio * (y_c + self.marker_rad),
-                                                               fill=None, outline=color,
-                                                               width=self.ratio * self.marker_rad / 2)
+                marker["tag"] = self.car_goal_marker = self.canvas.create_oval(self.ratio * (x_c - self.marker_rad),
+                                                                               self.ratio * (y_c - self.marker_rad),
+                                                                               self.ratio * (x_c + self.marker_rad),
+                                                                               self.ratio * (y_c + self.marker_rad),
+                                                                               fill=None, outline=color,
+                                                                               width=self.ratio * self.marker_rad)
 
     def on_resize(self, event):
         width_rat = event.width / self.base_width
@@ -267,10 +268,13 @@ class CourseMap(tkinter.Frame):
         self.put_car(img, self.car_state['current node'], self.car_state['node_dir'])
 
     def node_name2idx(self, name):
-        if type(name) is str:
-            name = ord(name)
+        if not type(name) is str:
+            name = chr(name)
 
-        if name == ord(' '):
+        name = name.upper()
+        name = ord(name)
+
+        if not name == ord(' '):
             idx = 1 + name - ord('A')
         else:
             idx = None
@@ -288,25 +292,27 @@ class CourseMap(tkinter.Frame):
                      self.car_state['disabled4']]):
                 self.disabled_car[i]['idx'] = self.node_name2idx(c_int)
 
-            self.goal_car['idx'] = self.node_name2idx(self.car_state['goal node'])
+            self.goal_car['idx'] = self.car_state['goal node']
 
             self.invalidate()
-            if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
-                msg = 'NAVI_EVENT_CROSSING_FRONT'
-            elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
-                msg = 'NAVI_EVENT_CROSSING_REAR'
-            elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
-                msg = 'NAVI_EVENT_CROSSING_LEFT'
-            elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
-                msg = 'NAVI_EVENT_START_ROUTE'
-            elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
-                msg = 'NAVI_EVENT_EXIT_LEFT'
-            elif self.car_state['event'] == NAVI_EVENT_INVALID:
-                msg = 'NAVI_EVENT_INVALID'
-            else:
-                msg = 'Unknown navigation event!'
-
-            self.logger.info(msg)
+            # if self.car_state['event'] == NAVI_EVENT_CROSSING_FRONT:
+            #     msg = 'NAVI_EVENT_CROSSING_FRONT'
+            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_REAR:
+            #     msg = 'NAVI_EVENT_CROSSING_REAR'
+            # elif self.car_state['event'] == NAVI_EVENT_CROSSING_LEFT:
+            #     msg = 'NAVI_EVENT_CROSSING_LEFT'
+            # elif self.car_state['event'] == NAVI_EVENT_START_ROUTE:
+            #     msg = 'NAVI_EVENT_START_ROUTE'
+            # elif self.car_state['event'] == NAVI_EVENT_EXIT_LEFT:
+            #     msg = 'NAVI_EVENT_EXIT_LEFT'
+            # elif self.car_state['event'] == NAVI_EVENT_DEAD_END:
+            #     msg = 'NAVI_EVENT_DEAD_END'
+            # elif self.car_state['event'] == NAVI_EVENT_INVALID:
+            #     msg = 'NAVI_EVENT_INVALID'
+            # else:
+            #     msg = 'Unknown navigation event!'
+            #
+            # self.logger.debug(msg)
 
         if self._invalid:
             self.redraw()
@@ -413,6 +419,6 @@ class CourseMap(tkinter.Frame):
         for i in range(disabled_num, 4):
             self.disabled_gui[i]['idx'] = None
 
-        self.logger.info(f"New Random goal: {goal_idx}, disableds: {disabled_idxs}")
+        self.logger.debug(f"New Random goal: {goal_idx}, disableds: {disabled_idxs}")
         self.invalidate()
         self.on_btn_send_click()
