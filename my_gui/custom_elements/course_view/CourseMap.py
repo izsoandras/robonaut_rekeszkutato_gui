@@ -91,7 +91,7 @@ class CourseMap(tkinter.Frame):
         self.goal_gui = {'idx': None, 'tag': None}
         self.goal_car = {'idx': None, 'tag': None}
         self.disabled_car = [{'idx': None, 'tag': None} for i in range(0, 4)]
-        self.marker_rad = self.fig_imgs_resiz[0].height * self.car_ratio
+        self.marker_rad = self.fig_imgs_resiz[0].height * self.car_ratio *0.6
 
         self.send_btn = tkinter.Button(self.canvas, text="Send", bg='RoyalBlue1', activebackground='navy',
                                        command=self.on_btn_send_click)
