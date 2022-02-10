@@ -28,7 +28,9 @@ MANEUVER_TURN_FOLLOW_RIGHT = 6
 MANEUVER_EXIT_THROUGH = 7
 MANEUVER_LANE_SW_LEFT = 8
 MANEUVER_LANE_SW_RIGHT = 9
-MANEUVER_STOP = 10
+MANEUVER_LANE_SW_LEFT_OVER = 10
+MANEUVER_LANE_SW_RIGHT_OVER = 11
+MANEUVER_STOP = 12
 
 NAVI_EVENT_CROSSING_FRONT = 0
 NAVI_EVENT_CROSSING_REAR = 1
@@ -210,9 +212,9 @@ class CourseMap(tkinter.Frame):
         new_img = None
         if maneuver == MANEUVER_STOP:
             new_img = self.fig_imgs_resiz[STOP_IMG]
-        elif maneuver == MANEUVER_LANE_SW_LEFT:
+        elif maneuver in [MANEUVER_LANE_SW_LEFT,MANEUVER_LANE_SW_LEFT_OVER]:
             new_img = self.fig_imgs_resiz[LANE_LEFT_IMG]
-        elif maneuver == MANEUVER_LANE_SW_RIGHT:
+        elif maneuver in [MANEUVER_LANE_SW_RIGHT,MANEUVER_LANE_SW_RIGHT_OVER]:
             new_img = ImageOps.mirror(self.fig_imgs_resiz[LANE_RIGHT_IMG])
         else:
             if maneuver == MANEUVER_EXIT_THROUGH:
@@ -232,6 +234,12 @@ class CourseMap(tkinter.Frame):
 
             if new_img is not None and car_ori * car_dir < 0:
                 new_img = new_img.rotate(180)
+
+        if maneuver in [MANEUVER_LANE_SW_LEFT_OVER, MANEUVER_LANE_SW_RIGHT_OVER]:
+            exit_img = self.fig_imgs_resiz[EXIT_IMG]
+            if car_ori * car_dir < 0:
+                exit_img = exit_img.rotate(180)
+            new_img.paste(exit_img, (0,0), exit_img)
 
         if new_img is not None:
             img.paste(new_img, (0, 0), new_img)
