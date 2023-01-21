@@ -16,7 +16,7 @@ import clients.mqtt.listeners.LogListener
 import my_gui.paramsetter.SetParamsFrame
 import clients.mqtt.listeners.MyMQTTllistener
 import utils.dataholder_factory
-import clients.serial.RKIUartListener
+# import clients.serial.RKIUartListener
 import random
 import threading
 import my_gui.custom_elements
